@@ -17,4 +17,7 @@
 | 为什么开发者元信息（HANDOFF/MEMORY/AUDIT_REPORT）不发布 | 发布清洁 | 这些文件是 agent-compass 项目自身的开发过程记录和偏好，用户 clone 后不需要知道"上次修了什么 bug"或"开发者回答风格偏好"。模板（templates/）中已有对应空白副本供用户使用 |
 | 为什么加入首次邂逅检测 | 自举体验 | Agent clone agent-compass 后主动三选一（当前项目/全局 Skill/暂不），把安装决策从"需要先读文档"变成"Agent 主动问"。当前项目安装为推荐默认——AGENTS.md 是行业标准，Claude Code/Cursor/CodeWhale/OpenCode/Copilot/Windsurf 全自动读取 |
 | 为什么模板 project-graph.yaml 初始值用 {} / [] / [] 而非空字段 | 空值安全 | YAML 空字段（`structure:` 后无值）被解析为 None，导致 sync-graph.py 在 `k not in None` 处抛 TypeError。显式写空集合阻断此路径。sync-graph.py 同步加固 `.get("key") or default` |
+| 为什么 sync-graph.py 的 relations 保留完整子模块路径 | 粒度正确 | 旧代码 `imp.split(".")[0]` 把 `test_ac.services` 砍成 `test_ac`——5 条模块间依赖全部丢失。修复后 `to` 保留原文，`from` 和 `to` 精确到子模块 |
+| 为什么标准库排除列表用集合而非列表 | 可维护性 | 提取为 `STDLIB_ROOTS` 模块级常量，扩展时只加一行。覆盖了 dataclasses/enum/abc 等旧代码遗漏的标准库 |
+| 为什么 relations 全量替换而非追加 | 清洁性 | 旧代码"只追加不清洗"导致历史错误关系永久残留。代码 import 是唯一真实来源——每次 sync 直接覆盖 |
 | 为什么 00-lifecycle 作为入口 | 认知顺序 | 先见森林（循环），再见树木（各阶段细节） |

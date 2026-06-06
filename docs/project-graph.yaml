@@ -76,41 +76,7 @@ structure:
     stability: stable
     children:
     - cli.py
-relations:
-- from: AGENTS.md
-  to: methodology/00-lifecycle.md
-  type: references
-  note: Agent 级别的操作映射
-- from: INDEX.md
-  to: methodology/
-  type: indexes
-- from: INDEX.md
-  to: templates/
-  type: indexes
-- from: INDEX.md
-  to: examples/
-  type: indexes
-- from: methodology/00-lifecycle.md
-  to: methodology/07-dev-workflow.md
-  type: details
-- from: methodology/00-lifecycle.md
-  to: methodology/08-engineering.md
-  type: details
-- from: methodology/00-lifecycle.md
-  to: templates/
-  type: references
-  note: 阶段 3 文档初始化引用模板
-- from: examples/todo-api/
-  to: templates/
-  type: demonstrates
-  note: 展示模板如何落地
-- from: reference/six-layer-graph.md
-  to: methodology/06-three-layer-graph.md
-  type: extends
-  note: 三层图的进阶版本
-- from: agent_compass/cli.py
-  to: subprocess
-  type: depends_on
+relations: []
 evolution:
 - id: ADR-001
   topic: 为什么用 MIT 许可证

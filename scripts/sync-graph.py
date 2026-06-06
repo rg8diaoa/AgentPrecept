@@ -3,11 +3,26 @@
 用法: python scripts/sync-graph.py src/ docs/project-graph.yaml
 
 用 tree 生成结构层（不覆盖 stability 和 description），
-用 grep import 生成关系层（追加到现有 relations）。
+用 grep import 生成关系层（全量替换 relations）。
 不覆盖 evolution 层和人类手动修改的条目。
 """
 import os, re, sys, yaml
 from pathlib import Path
+
+# 标准库 + 常见第三方库首段（被排除，不记录为项目依赖）
+STDLIB_ROOTS = {
+    # Python 标准库
+    "os", "sys", "re", "json", "logging", "datetime",
+    "typing", "pathlib", "collections", "functools",
+    "dataclasses", "enum", "abc", "contextlib", "itertools",
+    "math", "random", "hashlib", "uuid", "io", "time",
+    "threading", "subprocess", "shutil", "tempfile", "atexit",
+    "copy", "textwrap", "argparse", "traceback", "warnings",
+    "unittest", "doctest", "pdb",
+    # 常见第三方
+    "fastapi", "uvicorn", "pytest", "sqlalchemy",
+    "pydantic", "flask", "django", "asyncio",
+}
 
 
 def build_structure(src_dir: str) -> dict:
@@ -32,7 +47,7 @@ def build_structure(src_dir: str) -> dict:
 
 
 def build_relations(src_dir: str) -> list:
-    """从 import 语句生成关系层"""
+    """从 import 语句生成关系层（保留完整子模块路径）"""
     import_pattern = re.compile(r'^(?:from|import)\s+(\S+)', re.MULTILINE)
     relations = []
     src = Path(src_dir)
@@ -43,17 +58,15 @@ def build_relations(src_dir: str) -> list:
         content = f_py.read_text(encoding="utf-8")
         imports = import_pattern.findall(content)
         for imp in imports:
-            imp_clean = imp.split(".")[0]
-            # 只记录项目内部导入（不是标准库/第三方）
-            if imp_clean in ["os", "sys", "re", "json", "logging", "datetime",
-                              "typing", "pathlib", "collections", "functools",
-                              "fastapi", "uvicorn", "pytest", "sqlalchemy",
-                              "pydantic", "flask", "django", "asyncio"]:
+            # 用首段判断是否为标准库/第三方（排除）
+            root = imp.split(".")[0]
+            if root in STDLIB_ROOTS:
                 continue
+            # 保留完整模块路径（eg test_ac.services），不砍子模块
             rel = str(f_py.relative_to(src.parent)).replace("\\", "/")
             relations.append({
                 "from": rel,
-                "to": f"{imp_clean}",
+                "to": imp,
                 "type": "depends_on",
             })
     return relations
@@ -82,22 +95,14 @@ def main():
                  if kk not in old_structure[k]}
             )
 
-    new_relations = build_relations(src_dir)
-    # .get("relations") 可能返回 None（YAML 空字段），用 `or []` 防御
-    old_relations = existing.get("relations") or []
-    seen = {(r["from"], r["to"]) for r in old_relations}
-    for r in new_relations:
-        if (r["from"], r["to"]) not in seen:
-            old_relations.append(r)
-            seen.add((r["from"], r["to"]))
-
+    # relations 全量替换——代码 import 是唯一真实来源，不追加残留
+    existing["relations"] = build_relations(src_dir)
     existing["structure"] = old_structure
-    existing["relations"] = old_relations
     existing.setdefault("evolution", [])
 
     graph_file.write_text(yaml.dump(existing, allow_unicode=True, sort_keys=False, default_flow_style=False),
                           encoding="utf-8")
-    print(f"[OK] project-graph synced: {len(old_structure)} structure / {len(old_relations)} relations / {len(existing['evolution'])} evolution")
+    print(f"[OK] project-graph synced: {len(old_structure)} structure / {len(existing['relations'])} relations / {len(existing['evolution'])} evolution")
 
 
 if __name__ == "__main__":

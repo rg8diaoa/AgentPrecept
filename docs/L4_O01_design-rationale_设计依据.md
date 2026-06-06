@@ -22,4 +22,5 @@
 | 为什么 relations 全量替换而非追加 | 清洁性 | 旧代码"只追加不清洗"导致历史错误关系永久残留。代码 import 是唯一真实来源——每次 sync 直接覆盖 |
 | 为什么 relations 精确到符号级（from X import Y → X.Y） | 信息密度 | 模块级 `services.py → test_ac.models` 只知道"依赖 models"。符号级 `services.py → test_ac.models.Task` 知道"依赖 Task 这个类"——改一个类就知道影响范围。实现：正则在 `import` 后捕获逗号分隔的符号名 |
 | 为什么 init 脚本必须产出 7 个文件而非 4 个 | 一等公民完整性 | 旧 init.ps1/sh 只复制 AGENTS.md + project-graph + HANDOFF + L4_O01，遗漏 INDEX.md + 命名规范 + 术语表——导致初始化后的项目缺少一等公民文档。修复后产出 7 文件：4 一等公民 + 3 核心支撑 |
+| 为什么加入设计先行原则 | 工程质量 | Agent 容易跳过设计直接写代码（test-ac 即为案例——sync 后直接编码，架构和接口全在脑子里未落文档）。原则强制"设计文档 → 人类确认 → 写代码"的顺序，覆盖 L2_D01/L2_F07/L2_G01/L2_G03/L4_O01 五种前置设计 |
 | 为什么 00-lifecycle 作为入口 | 认知顺序 | 先见森林（循环），再见树木（各阶段细节） |

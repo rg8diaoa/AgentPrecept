@@ -17,6 +17,10 @@
 
 Agent 不得等待提醒、不得跳过、不得事后补做。Auto-Pilot 优先级高于工作模式（EXPLORE/PRECISE）。
 
+### 设计先行原则
+
+写代码前必须先有设计文档。新项目→架构设计(L2_D01)，新模块→模块设计(L2_F07)，数据变更→数据结构(L2_G01)，API 变更→API 契约(L2_G03)，技术选型→设计依据(L4_O01)。不满足→先出草稿→标注[NEEDS_HUMAN_REVIEW]→等确认→再写代码。EXPLORE 下可简化但不可为零；PRECISE 下必须达到对应模板的完成标准。
+
 ### 首次邂逅检测（Auto-Pilot）
 
 当 Agent 检测到用户 clone/发送 agent-compass 仓库链接时，必须立即主动询问安装方式：

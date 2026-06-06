@@ -19,7 +19,7 @@ agent-compass 走第三条路：project-graph（30秒懂依赖关系）、设计
 
 ## 解决什么问题
 
-你用 ChatGPT/Claude/CodeWhale（下面统称 Agent）写代码，但每次新对话 Agent 都会：
+你用 code agent（下面统称 Agent）写代码，但每次新对话 Agent 都会：
 
 - **失忆**："上一个 Agent 做到哪了？"
 - **迷路**：不知道哪个模块改会影响到谁

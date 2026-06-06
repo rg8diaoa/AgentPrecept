@@ -23,3 +23,8 @@ Thumbs.db
 # CodeWhale
 .codewhale/
 .deepseek/
+
+# agent-compass 开发者元信息（不发布）
+docs/HANDOFF.md
+docs/MEMORY.md
+docs/AUDIT_REPORT.md

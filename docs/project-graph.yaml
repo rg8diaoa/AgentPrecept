@@ -7,6 +7,17 @@ structure:
     type: entrypoint
     stability: stable
     description: 门面
+  docs/:
+    type: package
+    stability: stable
+    description: agent-compass 自身文档体系（6 文件，不含开发者元信息）
+    children:
+    - INDEX.md
+    - L1_A01_quickstart_快速开始.md
+    - L2_D01_architecture_架构设计.md
+    - L4_M01_changelog_变更日志.md
+    - L4_O01_design-rationale_设计依据.md
+    - project-graph.yaml
   methodology/:
     type: package
     stability: stable

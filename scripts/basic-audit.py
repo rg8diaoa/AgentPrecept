@@ -37,17 +37,20 @@ def check_broken_links(docs_dir: str) -> list[dict]:
 
 
 def check_glossary(docs_dir: str) -> list[dict]:
-    """维度 6: 骨架残留 — TODO/FIXME/TBD"""
+    """维度 6: 骨架残留 — TODO:/FIXME:/TBD:（只匹配显式标记，不匹配项目名）"""
     findings = []
     for f in Path(docs_dir).glob("*.md"):
         content = f.read_text(encoding="utf-8")
-        for marker in ["TODO", "FIXME", "TBD"]:
-            if marker in content:
+        # 只匹配显式标记格式: TODO:/TODO /FIXME:/TBD:（排除项目名如 todo-api）
+        import_re = __import__("re")
+        for marker in ["TODO:", "TODO ", "FIXME:", "FIXME ", "TBD:", "TBD "]:
+            if import_re.search(marker, content):
                 findings.append({
                     "file": f.name,
-                    "issue": f"含 {marker}",
-                    "severity": "🟡"
+                    "issue": f"含 {marker.strip()}",
+                    "severity": "WARN"
                 })
+                break
     return findings
 
 
@@ -61,24 +64,25 @@ def main():
         (check_glossary, "骨架残留"),
     ]:
         findings = check(docs_dir)
-        status = "🟢" if not findings else "🔴" if any(f["severity"] == "🔴" for f in findings) else "🟡"
+        has_fail = any(item["severity"] == "FAIL" for item in findings)
+        status = "PASS" if not findings else "FAIL" if has_fail else "WARN"
         results.append((name, status, findings))
 
     print("# 审计报告\n")
     print(f"审计范围: {docs_dir}/")
     for name, status, findings in results:
-        print(f"## {status} {name}")
+        print(f"## [{status}] {name}")
         if findings:
             for f_item in findings:
-                print(f"- {f_item['severity']} {f_item['file']}: {f_item['issue']}")
+                print(f"- [{f_item['severity']}] {f_item['file']}: {f_item['issue']}")
         else:
             print("无问题")
         print()
 
-    total_red = sum(1 for _, s, _ in results if s == "🔴")
-    total_yellow = sum(1 for _, s, _ in results if s == "🟡")
-    print(f"---\n🔴 {total_red} 阻塞  🟡 {total_yellow} 建议")
-    exit(1 if total_red else 0)
+    total_fail = sum(1 for _, s, _ in results if s == "FAIL")
+    total_warn = sum(1 for _, s, _ in results if s == "WARN")
+    print(f"---\nFAIL {total_fail}  WARN {total_warn}")
+    exit(1 if total_fail else 0)
 
 
 if __name__ == "__main__":

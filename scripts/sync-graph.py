@@ -95,7 +95,7 @@ def main():
 
     graph_file.write_text(yaml.dump(existing, allow_unicode=True, sort_keys=False, default_flow_style=False),
                           encoding="utf-8")
-    print(f"✅ project-graph 已同步: {len(old_structure)} 结构 / {len(old_relations)} 关系 / {len(existing['evolution'])} 演变")
+    print(f"[OK] project-graph synced: {len(old_structure)} structure / {len(old_relations)} relations / {len(existing['evolution'])} evolution")
 
 
 if __name__ == "__main__":

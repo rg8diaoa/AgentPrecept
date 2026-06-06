@@ -4,6 +4,23 @@
 
 ---
 
+## 🎯 工作模式
+
+[EXPLORE] 探索模式（默认）: 用户说"做一个 X"→ 直接出 MVP，标注假设和边界。
+           遇到明显歧义时才追问。适用于快速原型和 vibecoding。
+
+[PRECISE] 精确模式: 用户说"重构 X"/"修复 X 的 bug"/"精确模式" →
+           严格遵循硬规则：动工前复述、> 2 文件列影响范围、先问再动手。
+           适用于生产级变动。
+
+Agent 默认为 EXPLORE。用户说"精确模式"或"go"时切换。
+
+## 能力自适应
+
+如果无法执行 shell 命令 → 跳过自动动作中的 git diff/上下文用量评估。
+如果无法确认模型类型 → 跳过硬规则 6（上下文评估）。
+弱 Agent 不必因无法完成全部指令而停止。
+
 ## 🔴 硬规则（MUST — 违反就阻断）
 
 1. **不懂就停**。任何不确定的概念/工具/术语 → 复述理解 → 等人类确认再动手。不许猜
@@ -30,9 +47,8 @@
 
 | 你做了什么 | Agent 自动 |
 |---|---|
-| 新建/删除模块 | 更新 project-graph.yaml structure（默认 stability=stable） |
+| 每次代码变更 | 运行 `python scripts/sync-graph.py src/ docs/project-graph.yaml` |
 | 新建模块且含认证/核心逻辑 | stability=critical |
-| 新增 import | 更新 project-graph.yaml relations |
 | 做了设计决策 | 追加 L4_O01 一行（决策 / 来源 / 证据） |
 | 会话结束 | 全量重写 HANDOFF：git diff + 上下文评估 + 状态标记 |
 | 提交代码 | 检查 HANDOFF 状态 + 对照 14-production-readiness 退出标准 |

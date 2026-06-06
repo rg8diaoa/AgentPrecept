@@ -8,7 +8,10 @@ init:
 	@bash scripts/init.sh $(PROJECT)
 
 audit:
-	python scripts/audit.py templates/
+	python scripts/basic-audit.py templates/
+
+sync-graph:
+	python scripts/sync-graph.py src/ docs/project-graph.yaml
 
 check-naming:
 	python scripts/check-naming.py templates/

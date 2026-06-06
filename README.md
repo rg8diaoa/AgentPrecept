@@ -9,18 +9,28 @@
 
 ## 快速开始
 
+### 第一选择：路径 A — 3 文件，30 秒
+
 ```bash
-# 方式 1: 一键初始化（30 秒）
 make init PROJECT=/path/to/your-project
-# 或 bash scripts/init.sh /path/to/your-project
-
-# 方式 2: 发给 Agent 自动初始化
-# 复制 examples/first-run.md 中的 prompt → 发给 Agent
-
-# 方式 3: 体验 demo
-make todo-api-test    # 跑示例项目测试
-make todo-api-run     # 启动示例项目
 ```
+
+只要 AGENTS.md + project-graph.yaml + HANDOFF.md。Agent 自动干活。适合 90% 的用户。
+
+### 完整体验：路径 C — 完整文档体系
+
+```bash
+cp -r templates/* /your-project/docs/
+```
+
+35 个模板，16/16 分类全齐。很少需要——新项目初始化时用。
+
+### 跑 demo
+
+```bash
+make todo-api-test    # 4/4 测试全绿
+```
+
 
 ## 核心机制
 

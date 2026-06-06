@@ -45,9 +45,10 @@ structure:
   # 格式:
   #   路径:
   #     type: package/module
-  #     stability: critical|stable|volatile
-  #     description: 一句话
-  #     children: [文件列表]
+#     stability: stable  # Agent 自动推断，未人工确认
+#                        # 人类审查后改为"已确认"或修正为 critical/volatile
+#     description: 一句话
+#     children: [文件列表]
 
 # ───────────────────────────────────────────────────────
 # 关系层：谁依赖谁、谁引用谁

@@ -1,8 +1,12 @@
 from pydantic import BaseModel
-
+from uuid import uuid4
 
 class Task(BaseModel):
-    """Task 数据模型 — 与 src/main.py 中的 Task 一致"""
-    id: str
+    id: str = ""
     title: str
-    priority: str
+    done: bool = False
+
+    def __init__(self, **data):
+        if not data.get("id"):
+            data["id"] = str(uuid4())[:8]
+        super().__init__(**data)

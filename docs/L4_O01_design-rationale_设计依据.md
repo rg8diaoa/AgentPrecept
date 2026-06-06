@@ -16,4 +16,5 @@
 | 为什么引入 Auto-Pilot 模式 | 执行纪律 | AGENTS.md 的"全局自动动作"在 Agent 会话中未被自动触发——Agent 将其当作参考知识而非必须执行的挂钩。Auto-Pilot 声明明确：无人打断时无例外执行，Agent 不得等待提醒或事后补做 |
 | 为什么开发者元信息（HANDOFF/MEMORY/AUDIT_REPORT）不发布 | 发布清洁 | 这些文件是 agent-compass 项目自身的开发过程记录和偏好，用户 clone 后不需要知道"上次修了什么 bug"或"开发者回答风格偏好"。模板（templates/）中已有对应空白副本供用户使用 |
 | 为什么加入首次邂逅检测 | 自举体验 | Agent clone agent-compass 后主动三选一（当前项目/全局 Skill/暂不），把安装决策从"需要先读文档"变成"Agent 主动问"。当前项目安装为推荐默认——AGENTS.md 是行业标准，Claude Code/Cursor/CodeWhale/OpenCode/Copilot/Windsurf 全自动读取 |
+| 为什么模板 project-graph.yaml 初始值用 {} / [] / [] 而非空字段 | 空值安全 | YAML 空字段（`structure:` 后无值）被解析为 None，导致 sync-graph.py 在 `k not in None` 处抛 TypeError。显式写空集合阻断此路径。sync-graph.py 同步加固 `.get("key") or default` |
 | 为什么 00-lifecycle 作为入口 | 认知顺序 | 先见森林（循环），再见树木（各阶段细节） |

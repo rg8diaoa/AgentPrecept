@@ -71,7 +71,8 @@ def main():
 
     new_structure = build_structure(src_dir)
     # 保留已有的 stability 和 description
-    old_structure = existing.get("structure", {})
+    # .get("structure") 可能返回 None（YAML 空字段），用 `or {}` 防御
+    old_structure = existing.get("structure") or {}
     for k, v in new_structure.items():
         if k not in old_structure:
             old_structure[k] = v
@@ -82,7 +83,8 @@ def main():
             )
 
     new_relations = build_relations(src_dir)
-    old_relations = existing.get("relations", [])
+    # .get("relations") 可能返回 None（YAML 空字段），用 `or []` 防御
+    old_relations = existing.get("relations") or []
     seen = {(r["from"], r["to"]) for r in old_relations}
     for r in new_relations:
         if (r["from"], r["to"]) not in seen:

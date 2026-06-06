@@ -1,82 +1,11 @@
-# 项目图 — 三层模型
-
-# 用法：
-# 1. 复制本文件到 docs/project-graph.yaml
-# 2. 将下面的 prompt 发给 Agent：
-#    "按 docs/project-graph.yaml 中的 AGENT 指令生成初始版本"
-# 3. Agent 自动执行 tree + grep → 填充结构层和关系层
-# 4. Agent 自动执行 git log → 反推几条设计依据
-#
-# 之后每次修改代码后，Agent 自动更新此文件。
-
-# ────────────────────────────────────────────────────────────────
-# AGENT: 初始化流程（一次性）
-# ────────────────────────────────────────────────────────────────
-# 1. 用 `tree src/ -d -L 2` 或 `tree docs/ -d -L 2` 列出目录
-# 2. 每个目录作为 structure 条目，type = package
-# 3. stability 字段判定:
-#    - critical: 修改它会影响 > 3 个下游模块 / 包含认证/密钥/核心业务逻辑
-#    - stable: 正常模块，改了不影响太多东西
-#    - volatile: 实验性模块 / 频繁变更 / 不希望被其他模块依赖
-# 4. 用 `ls` 列出每个目录下的文件 → 填到 children
-# 5. 用 `grep -rn "^from\|^import\|require(" src/` 提取所有导入
-#    代码项目: 每个 import 生成一条 relation
-#    文档项目: 用 `grep -rn "\[.*\](.*\.md)" docs/` 提取交叉引用
-# 6. 用 `git log --oneline -30` 提取关键变更
-#    从中反推 3-5 条设计决策 → 填入 evolution
-# 7. 输出完成报告: "结构层 X 条 / 关系层 Y 条 / 演变层 Z 条"
-#    + "critical 模块: A, B（改它们要列影响范围+等确认）"
-
-# ────────────────────────────────────────────────────────────────
-# AGENT: 日常维护规则（每次修改代码后）
-# ────────────────────────────────────────────────────────────────
-# 新建模块 → 追加 structure 条目 + 默认 stability=stable
-# 新增 import → 追加 relation
-# 做了设计决策 → 追加 evolution，同时同步到 L4_O01
-# 删除模块 → 移除对应条目 + 移除以它为 from/to 的所有 relation
-# stability=critical 的模块 → 改动前检查影响范围 → 如果 > 2 个下游受影响 → 等人类确认
-# stability=volatile 的模块 → 其他模块不应依赖它（grep import 检查）
-
-# ───────────────────────────────────────────────────────
-# 结构层：有什么、在哪里
-# ───────────────────────────────────────────────────────
 structure:
-  # AGENT: 用 tree 生成目录树后填充此区域
-  # 格式:
-  #   路径:
-  #     type: package/module
-#     stability: stable  # Agent 自动推断，未人工确认
-#                        # 人类审查后改为"已确认"或修正为 critical/volatile
-#     description: 一句话
-#     children: [文件列表]
-
-# ───────────────────────────────────────────────────────
-# 关系层：谁依赖谁、谁引用谁
-# ───────────────────────────────────────────────────────
+  agent_compass:
+    type: package
+    stability: stable
+    children:
+    - cli.py
 relations:
-  # AGENT: 用 grep import 提取后填充
-  # 代码项目格式: from: 源模块::函数, to: 目标模块::符号, type: calls/depends_on/tests/protects
-  # 文档项目格式: from: 源文档, to: 目标文档, type: references/extends/details
-
-# ───────────────────────────────────────────────────────
-# ───────────────────────────────────────────────────────
-# 完成标准
-# ───────────────────────────────────────────────────────
-# □ 结构层条目 ≥ 项目模块数的 80%
-# □ 关系层覆盖 ≥ 80% 的 import 关系
-# □ stability 字段全部标注（Agent 推断 + 人类已确认）
-# □ evolution 有 ≥ 3 条 ADR
-
-# ───────────────────────────────────────────────────────
-# 反模式
-# ───────────────────────────────────────────────────────
-# ❌ 手动更新每次 import → 用 sync-graph.py
-# ❌ 所有模块标 stable → critical 模块必须审核
-# ❌ evolution 为空 → 从 git log 反推
-
-# ───────────────────────────────────────────────────────
-# 演变层：决策和版本历史
-# ───────────────────────────────────────────────────────
-evolution:
-  # AGENT: 用 git log --oneline -20 提取主题 → 反推为 ADR
-  # 格式: id: ADR-001, topic: 标题, decision: 结论, date: 日期, rationale_ref: L4_O01
+- from: agent_compass/cli.py
+  to: subprocess
+  type: depends_on
+evolution: []

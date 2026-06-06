@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-compass"
+version = "0.1.0"
+description = "Agent 开发完整循环方法论 — CLI 工具包"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+dependencies = ["PyYAML>=6.0"]
+
+[project.scripts]
+agent-compass = "agent_compass.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["agent_compass*"]

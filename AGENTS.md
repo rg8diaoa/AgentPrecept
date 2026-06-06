@@ -53,7 +53,7 @@
 | "初始化"/"init" | examples/first-run.md |
 | "加功能"/"新端点" | L2_D01 + L3_J02 |
 | "修 bug"/"fix" | 00-lifecycle §阶段7 + L3_J02 |
-| "审计"/"audit" | methodology/04 + `agent-compass audit` |
+| "审计"/"audit" | methodology/04 + `python scripts/basic-audit.py docs/` |
 | "发布"/"release" | 14-production-readiness §阶段8 |
 | "交接"/"handoff" | 重写 docs/HANDOFF |
 

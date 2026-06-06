@@ -1,5 +1,11 @@
 # scripts/ — agent-compass 辅助脚本
 
+**依赖**: Python 3.10+ + PyYAML (`pip install pyyaml`)
+
+CLI 入口: `pip install -e .` → `agent-compass init|sync|audit|doctor`
+
+---
+
 | 脚本 | 用途 | 用法 |
 |------|------|------|
 | `init.sh` | Linux/macOS 一键复制核心文件到目标项目 | `bash init.sh /path/to/project` |

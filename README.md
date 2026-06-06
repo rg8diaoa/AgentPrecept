@@ -12,7 +12,9 @@
 ### 第一选择：路径 A — 3 文件，30 秒
 
 ```bash
-make init PROJECT=/path/to/your-project
+pip install agent-compass
+agent-compass init /path/to/your-project
+# 或 make init PROJECT=/path/to/your-project
 ```
 
 只要 AGENTS.md + project-graph.yaml + HANDOFF.md。Agent 自动干活。适合 90% 的用户。

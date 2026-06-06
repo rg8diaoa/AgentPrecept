@@ -7,6 +7,7 @@
 | `basic-audit.py` | 快速审计（命名/断链/骨架 3 维） | `python basic-audit.py docs/` |
 | `sync-graph.py` | 从代码自动同步 project-graph | `python sync-graph.py src/ docs/project-graph.yaml` |
 | `check-naming.py` | 命名规范检查 | `python check-naming.py docs/` |
+| `graph-to-mermaid.py` | project-graph → Mermaid 可视化 | `python graph-to-mermaid.py docs/project-graph.yaml` |
 
 ## 审计说明
 

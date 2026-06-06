@@ -23,7 +23,9 @@
 
 ### 可执行物
 
-- `scripts/`：init.sh / init.ps1 / audit.py / check-naming.py
+- `scripts/`：init.sh / init.ps1 / basic-audit.py / sync-graph.py / graph-to-mermaid.py / check-naming.py
+- `skills/`：5 个核心 skill（project-graph/design-rationale/session-handoff/test-cases/architecture-design）
+- `templates/MEMORY.md`：跨会话持久记忆模板
 - `Makefile`：make init / make audit / make todo-api-test
 - `.github/workflows/`：audit.yml + test-examples.yml
 - `examples/todo-api/`：可运行的 FastAPI demo（4 测试全绿）
@@ -31,8 +33,9 @@
 ### 参考与对比
 
 - 审计收敛历程 + 多维图案例
-- 横向对比（vs AGENTS.md / CLAUDE.md / Cursor Rules / CrewAI / CodeWhale Skill）
+- 横向对比（vs AGENTS.md / CLAUDE.md / Cursor Rules / CrewAI / CodeWhale Skill / ECC / Karpathy Skills）
 - Agent 自身评估（deepseek-v4-pro 真实看法）
+- 速查卡片（cheatsheet.md）
 
 ### 开源元文件
 

@@ -13,6 +13,9 @@ audit:
 sync-graph:
 	python scripts/sync-graph.py src/ docs/project-graph.yaml
 
+graph:
+	python scripts/graph-to-mermaid.py docs/project-graph.yaml
+
 check-naming:
 	python scripts/check-naming.py templates/
 

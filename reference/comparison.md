@@ -61,3 +61,13 @@ Agent 提交架构设计 → 对照 4 项:
 | 多人 + 多 Agent + 有人不太懂代码 | agent-compass 的核心价值在这里 |
 | 开源项目接受外部贡献 | project-graph 让新贡献者的 Agent 30 秒入戏 |
 | 你要的不是写文档的方法 | project-graph + L4_O01 + HANDOFF 就够了，跳过模板和方法论 |
+
+---
+
+## 致谢
+
+agent-compass 的设计思想受以下项目启发：
+
+- [ECC](https://github.com/affaan-m/ECC) — Claude Code 增强系统，启发了 Agent 命令映射、持久记忆和反模式
+- [Andrej Karpathy's LLM Coding Style](https://github.com/multica-ai/andrej-karpathy-skills) — 启发了目标驱动执行和单文件设计哲学
+- [CodeToFlow](https://moge.ai/zh/product/codetoflow) — 启发了 project-graph 可视化，我们实现了 graph-to-mermaid.py

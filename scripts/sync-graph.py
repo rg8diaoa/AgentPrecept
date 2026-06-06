@@ -46,29 +46,65 @@ def build_structure(src_dir: str) -> dict:
     return structure
 
 
+def _prep_imports(content: str) -> str:
+    """续行符/括号内换行 → 单行（不改变语义，只方便正则匹配）"""
+    content = re.sub(r'\\\s*\n\s*', ' ', content)
+    content = re.sub(r'\(\s*\n\s*', '(', content)
+    content = re.sub(r'\n\s*\)', ')', content)
+    return content
+
+
 def build_relations(src_dir: str) -> list:
-    """从 import 语句生成关系层（保留完整子模块路径）"""
-    import_pattern = re.compile(r'^(?:from|import)\s+(\S+)', re.MULTILINE)
-    relations = []
+    """从 import 语句生成关系层（from X import Y → X.Y 符号级）"""
+    from_import_re = re.compile(r'^from\s+(\S+)\s+import\s+(.+?)$', re.MULTILINE)
+    import_re = re.compile(r'^import\s+(.+?)$', re.MULTILINE)
     src = Path(src_dir)
+    relations = []
+    seen = set()
 
     for f_py in sorted(src.glob("**/*.py")):
         if f_py.name.startswith("_") or f_py.name.startswith("test"):
             continue
-        content = f_py.read_text(encoding="utf-8")
-        imports = import_pattern.findall(content)
-        for imp in imports:
-            # 用首段判断是否为标准库/第三方（排除）
-            root = imp.split(".")[0]
+        content = _prep_imports(f_py.read_text(encoding="utf-8"))
+        rel = str(f_py.relative_to(src.parent)).replace("\\", "/")
+
+        # from X import Y, Z, ...
+        for m in from_import_re.finditer(content):
+            module = m.group(1)
+            root = module.split(".")[0]
             if root in STDLIB_ROOTS:
                 continue
-            # 保留完整模块路径（eg test_ac.services），不砍子模块
-            rel = str(f_py.relative_to(src.parent)).replace("\\", "/")
-            relations.append({
-                "from": rel,
-                "to": imp,
-                "type": "depends_on",
-            })
+            for sym in m.group(2).split(","):
+                sym = sym.strip()
+                if not sym or sym == "*":
+                    continue
+                key = (rel, f"{module}.{sym}")
+                if key not in seen:
+                    seen.add(key)
+                    relations.append({
+                        "from": rel,
+                        "to": f"{module}.{sym}",
+                        "type": "depends_on",
+                    })
+
+        # import X, Y, ...（纯模块级，不深入符号）
+        for m in import_re.finditer(content):
+            for module in m.group(1).split(","):
+                module = module.strip()
+                if not module:
+                    continue
+                root = module.split(".")[0]
+                if root in STDLIB_ROOTS:
+                    continue
+                key = (rel, module)
+                if key not in seen:
+                    seen.add(key)
+                    relations.append({
+                        "from": rel,
+                        "to": module,
+                        "type": "depends_on",
+                    })
+
     return relations
 
 

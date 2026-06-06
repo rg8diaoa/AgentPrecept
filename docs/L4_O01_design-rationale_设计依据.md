@@ -20,4 +20,5 @@
 | 为什么 sync-graph.py 的 relations 保留完整子模块路径 | 粒度正确 | 旧代码 `imp.split(".")[0]` 把 `test_ac.services` 砍成 `test_ac`——5 条模块间依赖全部丢失。修复后 `to` 保留原文，`from` 和 `to` 精确到子模块 |
 | 为什么标准库排除列表用集合而非列表 | 可维护性 | 提取为 `STDLIB_ROOTS` 模块级常量，扩展时只加一行。覆盖了 dataclasses/enum/abc 等旧代码遗漏的标准库 |
 | 为什么 relations 全量替换而非追加 | 清洁性 | 旧代码"只追加不清洗"导致历史错误关系永久残留。代码 import 是唯一真实来源——每次 sync 直接覆盖 |
+| 为什么 relations 精确到符号级（from X import Y → X.Y） | 信息密度 | 模块级 `services.py → test_ac.models` 只知道"依赖 models"。符号级 `services.py → test_ac.models.Task` 知道"依赖 Task 这个类"——改一个类就知道影响范围。实现：正则在 `import` 后捕获逗号分隔的符号名 |
 | 为什么 00-lifecycle 作为入口 | 认知顺序 | 先见森林（循环），再见树木（各阶段细节） |

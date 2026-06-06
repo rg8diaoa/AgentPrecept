@@ -13,6 +13,41 @@
 
 ---
 
+## 首次邂逅检测（Auto-Pilot）
+
+当 Agent 在当前会话中检测到以下任一信号：
+- 用户发送了 agent-compass 仓库链接（GitHub/Gitee/本地路径）
+- 用户要求 clone/fetch/下载 agent-compass
+- agent-compass 目录刚出现在工作区中
+- 用户说"安装 agent-compass"或类似表述
+
+Agent 必须立即（同一 turn 内）主动询问，不得跳过：
+
+> 检测到 agent-compass。安装方式？
+> **[A] 全局安装** — SKILL.md → `~/.deepseek/skills/agent-compass/`（所有项目可用，CodeWhale 原生 Skill）
+> **[B] 当前项目安装** — 复制 AGENTS.md + 4 核心文档到当前项目根目录（仅本项目可用）
+> **[C] 暂不安装** — 跳过，以后再说
+
+用户选择 A/B/C 后立即执行对应操作：
+
+**A — 全局安装**：
+```powershell
+mkdir -Force ~/.deepseek/skills/agent-compass
+Copy-Item SKILL.md ~/.deepseek/skills/agent-compass/
+Write-Host "[agent-compass] 全局安装完成。重启会话生效。"
+```
+
+**B — 当前项目安装**：
+```powershell
+.\scripts\init.ps1 .
+# Linux/macOS: bash scripts/init.sh .
+Write-Host "[agent-compass] 当前项目安装完成。AGENTS.md + 4 核心文档已就位。"
+```
+
+安装完成后提示用户重启会话（全局安装）或直接进入首次初始化（当前项目安装）。用户说 C 则跳过，不追问。
+
+---
+
 ## 会话启动（Auto-Pilot 自动）
 
 1. 读 `docs/project-graph.yaml` → 项目结构

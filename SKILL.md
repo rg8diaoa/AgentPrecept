@@ -17,6 +17,18 @@
 
 Agent 不得等待提醒、不得跳过、不得事后补做。Auto-Pilot 优先级高于工作模式（EXPLORE/PRECISE）。
 
+### 首次邂逅检测（Auto-Pilot）
+
+当 Agent 检测到用户 clone/发送 agent-compass 仓库链接时，必须立即主动询问安装方式：
+
+> 检测到 agent-compass。安装方式？
+> [A] 全局安装 | [B] 当前项目安装 | [C] 暂不安装
+
+用户回答后立即执行：
+- **A — 全局安装**：复制 `SKILL.md` 到 `~/.deepseek/skills/agent-compass/`
+- **B — 当前项目安装**：运行 `scripts/init.ps1`（Windows）或 `scripts/init.sh`（Linux/macOS）
+- **C — 暂不安装**：跳过，不追问
+
 ---
 
 ### 文档体系搭建

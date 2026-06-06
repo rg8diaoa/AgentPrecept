@@ -2,7 +2,18 @@
 
 > 复制到项目根目录。Agent 每次会话自动读取。
 
-## 会话启动（50 秒）
+## Auto-Pilot 模式（默认开启）
+
+以下全部流程自动执行，除非用户在当前对话中明确：
+- 说"停"/"跳过"/"不用"中断当前动作
+- 修改本文件（AGENTS.md）变更流程规则
+- 要求暂停或切换模式
+
+无人打断 = 无例外执行。Agent 不得等待提醒、不得跳过、不得事后补做。Auto-Pilot 高于 EXPLORE/PRECISE 模式——即使 EXPLORE 模式下也不得跳过自动动作。
+
+---
+
+## 会话启动（Auto-Pilot 自动）
 
 1. 读 `docs/project-graph.yaml` → 项目结构
 2. 读 `docs/HANDOFF.md` → 做到哪了
@@ -35,16 +46,18 @@
 - 如果 free → HANDOFF 加 [LOCKED] 条目
 - `project-graph.yaml` 可选字段：`locked_by` / `locked_until`
 
-## 全局自动动作
+## Auto-Pilot 自动动作（不可跳过）
 
-| 触发 | 动作 |
-|------|------|
-| 每次代码变更 | `agent-compass sync`（更新 project-graph） |
-| 做了设计决策 | 追加 L4_O01：决策 / 来源 / 证据 |
-| 会话结束 | 全量重写 HANDOFF（状态+上下文+下一步） |
-| 提交前 | 对照 14-production-readiness 退出标准 |
-| 上下文 > 60% | HANDOFF 加 [CLOSING]，提醒切新会话 |
-| 同一问题 3 轮无进展 | 停 → HANDOFF [BLOCKED] |
+以下动作在触发条件满足时自动执行，与任务是否"完成"无关。Agent 不得将其视为"可选"或"事后补做"。
+
+| 触发 | 动作 | 执行时机 |
+|------|------|----------|
+| 每次代码变更（edit_file / write_file / apply_patch） | `agent-compass sync`（更新 project-graph） | 同一 turn 内立即执行 |
+| 做了技术决策 | 追加 L4_O01：决策 / 来源 / 证据 | 同一 turn 内立即追加 |
+| 会话即将结束 | 全量重写 HANDOFF（状态+上下文+具体下一步） | 结束前最后一轮 |
+| git commit 之前 | 对照 14-production-readiness 退出标准 | commit 前 |
+| 上下文 > 60% | HANDOFF 加 [CLOSING]，提醒用户切新会话 | 发现时立即 |
+| 同一问题 3 轮无进展 | 停 → HANDOFF 加 [BLOCKED] | 第 3 轮结束时 |
 
 ## 用户口头禅映射
 

@@ -6,6 +6,19 @@
 
 ## Instructions
 
+### Auto-Pilot 模式（默认开启）
+
+加载本 Skill 后，以下流程自动执行，无需用户提醒。除非用户在当前对话中明确说"停"/"跳过"/"不用"，或修改 AGENTS.md 变更规则。
+
+- 代码变更后 → 立即 `agent-compass sync`
+- 设计决策后 → 立即追加 L4_O01
+- 会话结束前 → 全量重写 HANDOFF
+- git commit 前 → 对照 14-production-readiness
+
+Agent 不得等待提醒、不得跳过、不得事后补做。Auto-Pilot 优先级高于工作模式（EXPLORE/PRECISE）。
+
+---
+
 ### 文档体系搭建
 
 当在新项目中初始化文档体系时：

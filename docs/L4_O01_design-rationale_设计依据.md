@@ -13,4 +13,5 @@
 | 为什么分类覆盖 16/16 全齐 | 完整性 | 避免用户遇到"分类表有但从没找到模板"的落差 |
 | 为什么三层图不是六层图 | 通用性 | 三层覆盖 90% 项目；六层是特定领域扩展（见 reference/） |
 | 为什么脚本输出用 ASCII 标记代替 emoji | 跨平台 | Windows GBK 终端不兼容 emoji（UnicodeEncodeError）；[PASS]/[FAIL]/FAIL 在全部终端可正常输出。MEMORY.md 已记录此教训 |
+| 为什么引入 Auto-Pilot 模式 | 执行纪律 | AGENTS.md 的"全局自动动作"在 Agent 会话中未被自动触发——Agent 将其当作参考知识而非必须执行的挂钩。Auto-Pilot 声明明确：无人打断时无例外执行，Agent 不得等待提醒或事后补做 |
 | 为什么 00-lifecycle 作为入口 | 认知顺序 | 先见森林（循环），再见树木（各阶段细节） |

@@ -43,6 +43,8 @@
 - [x] 脚本层缺口修复：PyYAML 已安装，emoji → ASCII（check-naming.py + basic-audit.py）
 - [x] 全脚本验证通过（5/5）：check-naming / basic-audit / sync-graph / graph-to-mermaid / CLI doctor
 - [x] L4_O01 追加 ADR：emoji → ASCII 决策依据
+- [x] Auto-Pilot 模式改造：AGENTS.md + SKILL.md 顶部加入强制自动执行声明
+- [x] L4_O01 追加 ADR：Auto-Pilot 模式决策依据
 
 ---
 
@@ -51,14 +53,15 @@
 1. 验证 agent-compass 文档层 + 脚本层在 CodeWhale 环境中的可用性
 2. 安装缺失依赖 PyYAML
 3. 修复 check-naming.py / basic-audit.py 的 Windows GBK emoji 编码崩溃
-4. 运行 agent-compass sync 同步 project-graph
-5. 追加 L4_O01 设计依据
+4. Agent 合规改造：将 AGENTS.md 的"全局自动动作"升级为 Auto-Pilot 模式——无人打断时无例外执行
+5. SKILL.md 同步加入 Auto-Pilot 声明
+6. 全流程自动触发验证：代码变更 → sync → L4_O01 → HANDOFF（本 turn 含 commit）
 
 ---
 
 ## 下一步
 
-1. 推送 emoji→ASCII 修复到 GitHub（本会话未做 git commit）
-2. 在 Claude Code / Cursor / CodeWhale 中实测 AGENTS.md 解析效果
+1. git commit + push（本 turn 执行）
+2. 在后续会话中验证 Auto-Pilot 是否真正自动触发（不再需要人类提醒）
 3. 录端到端 demo：从零搭项目 + Agent 按循环走完 8 阶段
 4. 收集社区反馈

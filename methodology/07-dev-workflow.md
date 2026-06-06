@@ -1,0 +1,135 @@
+# 07 — 开发工作流：agent-compass 怎么帮你写代码
+
+> 前面 6 篇讲的是"建体系"。这一篇讲的是"用体系"——修 bug、加功能、重构时，这套东西怎么让 Agent 更可靠。
+
+---
+
+## 三个场景，三个流程
+
+### 场景 1：修 bug
+
+```
+出 bug 了：login 接口偶发返回 500，日志显示 token 过期判断异常。
+```
+
+**没有 agent-compass**：Agent 读代码 → 发现 `refresh_token()` 逻辑复杂 → 不知道改了会影响谁 → 可能引入新 bug → 修完不知道有没有违反之前的设计。
+
+**有 agent-compass**：
+
+1. Agent 查 `project-graph.yaml`：
+   ```
+   relations:
+     - from: src/auth/login.py::authenticate
+       to: src/models/user.py::UserModel
+       type: calls
+     - from: src/auth/login.py
+       to: src/lib/crypto.py
+       type: depends_on
+   ```
+   知道 `refresh_token()` 被 `login.py` 调用，`login.py` 依赖 `crypto.py`。修改影响面：2 个文件。
+
+2. Agent 查 `L4_O01_design-rationale.md`：
+   ```
+   | 为什么用 JWT 而不是 API Key | 2025-01 安全评估 | JWT 无状态... |
+   ```
+   知道 refresh token 的设计前提是无状态 JWT——不能引入服务端 session 检查。约束明确。
+
+3. Agent 修复代码。
+
+4. Agent 在 HANDOFF.md 记录：
+   ```
+   ## 阻塞项
+   - login 偶发 500：根因是 refresh_token 中 datetime.utcnow() 和数据库时间不一致。
+     修复：统一使用 db.func.now()。见 commit a4c2d1。
+   ```
+
+5. 如果是架构级修复（如"改变 token 过期判断策略"），追加一行到设计依据。
+
+**效果**：Agent 修 bug 不会引入新 bug，因为它在动手前知道了影响面和约束。
+
+---
+
+### 场景 2：加新功能
+
+```
+需求：给 Task 加一个"优先级"字段（P0-P3），按优先级排序。
+```
+
+**没有 agent-compass**：Agent 在 `tasks.py` 加字段 → 命名叫 `priority_level` → 前端拿到的是 `priorityLevel` → 一个月后另一个 Agent 加类似字段叫 `importance` → 术语混乱。
+
+**有 agent-compass**：
+
+1. Agent 查命名规范 → 字段命名：`priority`（snake_case），不是 `priority_level`。
+
+2. Agent 查术语表 → 如果已有"优先度"定义，复用。没有则加一行：
+   ```
+   | 优先级 | Priority | Task 的执行优先级，P0（紧急）到 P3（低） | L2_G01 |
+   ```
+
+3. Agent 加字段、写迁移、写测试。
+
+4. Agent 更新 `project-graph.yaml`：
+   ```yaml
+   relations:
+     - from: src/api/tasks.py::list_tasks
+       to: src/models/task.py::Task.priority
+       type: reads
+   ```
+
+5. 如果在实现中做了一个设计决策（如"排序在数据库层做而不是应用层"），追加设计依据。
+
+**效果**：新功能上线后，三个月后另一个 Agent 加功能时发现术语表已有 `priority`，不会发明 `importance`。图的依赖关系让后续修改有据可查。
+
+---
+
+### 场景 3：大重构
+
+```
+任务：把 auth 模块从手写 JWT 改成 OAuth2 库。
+```
+
+**没有 agent-compass**：Agent 改 `auth/` → 发现 `crypto.py` 也被其他模块用 → 不知道怎么改 → 改完跑了测试没报错 → 上线后 `admin.py` 的 token 验证逻辑悄悄坏了（因为 admin 的测试覆盖率不够）。
+
+**有 agent-compass**：
+
+1. Agent 查 `project-graph.yaml` → 发现 `auth/` 被以下模块依赖：
+   ```
+   login.py → 调用 → authenticate()
+   middleware.py → 调用 → verify_token()
+   admin.py → 调用 → verify_token()   ← 重点：admin 测试覆盖率 15%
+   ```
+
+2. Agent 查设计依据 → 确认 JWT 的约束是无状态。OAuth2 仍然无状态，约束兼容。
+
+3. Agent 制定重构计划，优先给 `admin.py` 补测试（因为影响面中它的覆盖率最低）。
+
+4. 重构执行。
+
+5. Agent 全量更新 `project-graph.yaml`（auth 模块的依赖关系全部变了）。
+
+6. Agent 追加设计依据：
+   ```
+   | 为什么从手写 JWT 迁移到 OAuth2 库 | 2025-06 重构 | 减少自定义加密代码，降低安全审计成本 |
+   ```
+
+7. HANDOFF.md 记录重构概要。
+
+**效果**：Agent 不会漏掉 `admin.py`，因为有图在。设计依据记录了"为什么迁移"，未来有人质疑为什么用 OAuth2 时有答案。
+
+---
+
+## 最小可行配置
+
+不是每个项目都需要完整 4 层文档体系。根据项目规模选择：
+
+| 项目规模 | 需要什么 |
+|---|---|
+| **小**（<5 模块，1 人） | `AGENTS.md` + `project-graph.yaml` |
+| **中**（5-20 模块，2-5 人+Agent） | 上面 + L1_A02 命名规范 + L4_O01 设计依据 + HANDOFF.md |
+| **大**（20+ 模块，多 Agent） | 完整四层文档体系 |
+
+---
+
+## 一句话
+
+**agent-compass 不是让你写更多文档。是让 Agent 在写代码前多花 30 秒查三样东西——图、设计依据、命名规范——然后少花 3 小时修引入的 bug。**

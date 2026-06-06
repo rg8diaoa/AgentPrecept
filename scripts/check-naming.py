@@ -16,11 +16,11 @@ def main():
         if not fname.startswith("L"):
             continue
         if not re.match(pattern, fname):
-            print(f"❌ {fname}")
+            print(f"[FAIL] {fname}")
             violations += 1
 
     if violations == 0:
-        print(f"✅ 所有 L 开头文件命名合规 ({docs_dir}/)")
+        print(f"[PASS] 所有 L 开头文件命名合规 ({docs_dir}/)")
         exit(0)
     else:
         print(f"\n{violations} 个文件命名不符合规范")

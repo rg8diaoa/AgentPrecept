@@ -1,8 +1,3 @@
-# agent-compass 项目图
-
-# 本仓库自身的 project-graph — 展示方法论如何用于方法论仓库本身
-# Agent 修改本仓库时先查此图
-
 structure:
   AGENTS.md:
     type: entrypoint
@@ -17,22 +12,22 @@ structure:
     stability: stable
     description: 方法论核心文档
     children:
-      - 00-lifecycle.md
-      - 01-why-docs-first.md
-      - 02-naming-is-navigation.md
-      - 03-design-rationale.md
-      - 04-audit-framework.md
-      - 05-handoff-pattern.md
-      - 06-three-layer-graph.md
-      - 07-dev-workflow.md
-      - 08-engineering.md
-      - 09-security.md
-      - 10-performance.md
-      - 11-existing-project.md
-      - 12-human-agent-collaboration.md
-      - 13-agent-self-management.md
-      - 14-production-readiness.md
-      - INDEX.md
+    - 00-lifecycle.md
+    - 01-why-docs-first.md
+    - 02-naming-is-navigation.md
+    - 03-design-rationale.md
+    - 04-audit-framework.md
+    - 05-handoff-pattern.md
+    - 06-three-layer-graph.md
+    - 07-dev-workflow.md
+    - 08-engineering.md
+    - 09-security.md
+    - 10-performance.md
+    - 11-existing-project.md
+    - 12-human-agent-collaboration.md
+    - 13-agent-self-management.md
+    - 14-production-readiness.md
+    - INDEX.md
   skills/:
     type: package
     stability: stable
@@ -45,65 +40,80 @@ structure:
     type: package
     stability: stable
     description: 16 分类可拷贝模板
-    children: [INDEX.md, HANDOFF.md, AUDIT_REPORT.md, project-graph.yaml]
+    children:
+    - INDEX.md
+    - HANDOFF.md
+    - AUDIT_REPORT.md
+    - project-graph.yaml
   examples/:
     type: package
     stability: stable
     description: 示例项目
-    children: [prompt-templates.md, todo-api/, todo-api-node/]
+    children:
+    - prompt-templates.md
+    - todo-api/
+    - todo-api-node/
   reference/:
     type: package
     stability: stable
     description: 方法论有效性的参考案例
-    children: [audit-journey.md, six-layer-graph.md]
-
+    children:
+    - audit-journey.md
+    - six-layer-graph.md
+  agent_compass:
+    type: package
+    stability: stable
+    children:
+    - cli.py
 relations:
-  - from: AGENTS.md
-    to: methodology/00-lifecycle.md
-    type: references
-    note: Agent 级别的操作映射
-  - from: INDEX.md
-    to: methodology/
-    type: indexes
-  - from: INDEX.md
-    to: templates/
-    type: indexes
-  - from: INDEX.md
-    to: examples/
-    type: indexes
-  - from: methodology/00-lifecycle.md
-    to: methodology/07-dev-workflow.md
-    type: details
-  - from: methodology/00-lifecycle.md
-    to: methodology/08-engineering.md
-    type: details
-  - from: methodology/00-lifecycle.md
-    to: templates/
-    type: references
-    note: 阶段 3 文档初始化引用模板
-  - from: examples/todo-api/
-    to: templates/
-    type: demonstrates
-    note: 展示模板如何落地
-  - from: reference/six-layer-graph.md
-    to: methodology/06-three-layer-graph.md
-    type: extends
-    note: 三层图的进阶版本
-
+- from: AGENTS.md
+  to: methodology/00-lifecycle.md
+  type: references
+  note: Agent 级别的操作映射
+- from: INDEX.md
+  to: methodology/
+  type: indexes
+- from: INDEX.md
+  to: templates/
+  type: indexes
+- from: INDEX.md
+  to: examples/
+  type: indexes
+- from: methodology/00-lifecycle.md
+  to: methodology/07-dev-workflow.md
+  type: details
+- from: methodology/00-lifecycle.md
+  to: methodology/08-engineering.md
+  type: details
+- from: methodology/00-lifecycle.md
+  to: templates/
+  type: references
+  note: 阶段 3 文档初始化引用模板
+- from: examples/todo-api/
+  to: templates/
+  type: demonstrates
+  note: 展示模板如何落地
+- from: reference/six-layer-graph.md
+  to: methodology/06-three-layer-graph.md
+  type: extends
+  note: 三层图的进阶版本
+- from: agent_compass/cli.py
+  to: subprocess
+  type: depends_on
 evolution:
-  - id: ADR-001
-    topic: 为什么用 MIT 许可证
-    decision: MIT（最大化传播，零使用门槛）
-    date: 2026-06-06
-  - id: ADR-002
-    topic: 为什么方法论用 00-14 编号而非 L{Level}_{CAT}{NN}
-    decision: methodology/ 是教学材料，序号保持线性阅读顺序；项目文档才用 L 格式
-    date: 2026-06-06
-  - id: ADR-003
-    topic: 为什么 AGENTS.md 和 SKILL.md 并存
-    decision: AGENTS.md 覆盖所有 Agent 工具；SKILL.md 给支持 Skill 机制的工具（CodeWhale/OpenCode 等）提供一键安装
-    date: 2026-06-06
-  - id: ADR-004
-    topic: 为什么模板不全部预设为 📝
-    decision: ⏳ 待撰写是模板的正确状态——表示"待用户填入"。只有通用性极高的模板（命名规范、设计依据等）设为 📝
-    date: 2026-06-06
+- id: ADR-001
+  topic: 为什么用 MIT 许可证
+  decision: MIT（最大化传播，零使用门槛）
+  date: 2026-06-06
+- id: ADR-002
+  topic: 为什么方法论用 00-14 编号而非 L{Level}_{CAT}{NN}
+  decision: methodology/ 是教学材料，序号保持线性阅读顺序；项目文档才用 L 格式
+  date: 2026-06-06
+- id: ADR-003
+  topic: 为什么 AGENTS.md 和 SKILL.md 并存
+  decision: AGENTS.md 覆盖所有 Agent 工具；SKILL.md 给支持 Skill 机制的工具（CodeWhale/OpenCode 等）提供一键安装
+  date: 2026-06-06
+- id: ADR-004
+  topic: 为什么模板不全部预设为 📝
+  decision: ⏳ 待撰写是模板的正确状态——表示"待用户填入"。只有通用性极高的模板（命名规范、设计依据等）设为 📝
+  date: 2026-06-06

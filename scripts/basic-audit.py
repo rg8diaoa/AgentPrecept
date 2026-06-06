@@ -15,7 +15,7 @@ def check_naming(docs_dir: str) -> list[dict]:
         if not f.name.startswith("L"):
             continue
         if not re.match(pattern, f.name):
-            findings.append({"file": f.name, "issue": "命名不符合规范", "severity": "🔴"})
+            findings.append({"file": f.name, "issue": "命名不符合规范", "severity": "FAIL"})
     return findings
 
 
@@ -31,7 +31,7 @@ def check_broken_links(docs_dir: str) -> list[dict]:
                 findings.append({
                     "file": f.name,
                     "issue": f"引用不存在: {ref}",
-                    "severity": "🔴"
+                    "severity": "FAIL"
                 })
     return findings
 

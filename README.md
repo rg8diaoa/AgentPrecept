@@ -26,13 +26,13 @@ agent-compass 给 Agent 三样它天生没有的东西：
 
 ## 项目独特性
 
-| 市面上所有 Agent 工具 | agent-compass |
+| 常见 Agent 配置方式 | agent-compass 的做法 |
 |------|------|
-| 散文指令（Agent 读一次就忘） | **结构化数据**——project-graph.yaml 是数据，Agent 30 秒重建心智模型 |
-| 只强化 Agent 能力 | **人也审 Agent**——8 阶段退出标准 + 4 项及格线，不懂架构也能判断产出好坏 |
-| "你应该"的道德说教 | **教训驱动**——每条规则背后有实际踩过的坑，三轮审计从 12 问题收敛到 0 |
-| 绑定特定工具 | **跨工具**——一个 AGENTS.md 覆盖 Claude Code / Cursor / CodeWhale / OpenCode / Copilot |
-| 一次性使用 | **渐进接入**——第 1 天 3 个文件，第 1 周建图，按需扩展 |
+| 散文指令为主 | **结构化数据**——project-graph.yaml 作为 Agent 可直接消费的数据格式 |
+| 偏重增强 Agent 能力 | **兼顾人审 Agent**——8 阶段退出标准 + 4 项及格线 |
+| 原则性建议居多 | **教训驱动**——每条规则背后有实际踩过的坑，三轮审计从 12 问题收敛到 0 |
+| 多绑定特定工具 | **跨工具**——一个 AGENTS.md 覆盖 Claude Code / Cursor / CodeWhale / OpenCode / Copilot |
+| 一次性全部导入 | **渐进接入**——第 1 天 3 个文件，第 1 周建图，按需扩展 |
 
 ---
 

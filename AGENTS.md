@@ -105,22 +105,26 @@ Agent 必须立即（同一 turn 内）主动询问，不得跳过：
 **A — 当前项目安装（全工具通用）**：
 ```powershell
 .\scripts\init.ps1 .
-# Linux/macOS: bash scripts/init.sh .
-Write-Host "[agent-compass] 安装完成。AGENTS.md + 7 核心文档已就位。Claude Code/Cursor/CodeWhale/OpenCode/Copilot/Windsurf 均可自动读取。"
-Write-Host "要我初始化 git 仓库吗？"
+pip install fastmcp -q
+Write-Host "[agent-compass] AGENTS.md + 7 核心文档已就位。"
 ```
+
+**安装后 Agent 必须立即执行 MCP 自动配置（同一 turn）**：
+1. 检测当前工具：CodeWhale → `~/.deepseek/mcp.json` / Claude Code → `.mcp.json` / Cursor → `.cursor/mcp.json`
+2. 若配置文件不存在 → 创建；若存在且无 agent-compass 条目 → 追加
+3. MCP 条目：`{"mcpServers":{"agent-compass":{"command":"compass-mcp"}}}`
+4. 输出：`[agent-compass] MCP 已自动配置。重启后 5 tools 可用。`
+5. 提示 git init
 
 **B — CodeWhale 全局 Skill**：
 ```powershell
 mkdir -Force ~/.deepseek/skills/agent-compass
 Copy-Item SKILL.md ~/.deepseek/skills/agent-compass/
-Write-Host "[agent-compass] CodeWhale Skill 安装完成。重启会话后 `/skill agent-compass` 可用。"
+Write-Host "[agent-compass] CodeWhale Skill 安装完成。"
 ```
+安装后同样执行 MCP 自动配置（步骤 A 的 1-4）。
 
 **C — 暂不安装**：跳过，不追问。
-
-安装完成后，若用户选了 A，Agent 应主动提示：
-> 要我运行首次初始化吗？（git init、生成 project-graph、反推设计依据、生成架构图）
 
 ---
 

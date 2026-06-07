@@ -29,6 +29,7 @@ agent-compass 的完整方法论文档。
 | 12 | [12-human-agent-collaboration.md](12-human-agent-collaboration.md) | 人机协作：什么时候停下/追问/等确认 |
 | 13 | [13-agent-self-management.md](13-agent-self-management.md) | Agent 自我管理：上下文/漂移/死循环/并行 |
 | 14 | [14-production-readiness.md](14-production-readiness.md) | **8 阶段退出标准 + 人类评判 Agent 产出及格线** |
+| **15** | [**15-agent-ops.md**](15-agent-ops.md) | **Agent 操作实战：git/GBK/批量/子代理跨工具经验** |
 > 04-06 是支撑型方法论，按需阅读。07-14 是操作型和进阶篇。 |
 
 ---

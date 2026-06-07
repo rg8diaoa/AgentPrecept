@@ -133,3 +133,70 @@
 ## 一句话
 
 **agent-compass 不是让你写更多文档。是让 Agent 在写代码前多花 30 秒查三样东西——图、设计依据、命名规范——然后少花 3 小时修引入的 bug。**
+
+---
+
+## 双分支实验模式
+
+当项目面临重大架构变更、技术选型替换、或两种互斥实现方案时，
+不做"在 main 上试错"的赌博。双分支让你同时看到两种选择的**完整差异**——
+不只是代码，还包括文档、测试、审计结果。
+
+### 流程
+
+1. **切两个实验分支**：
+   ```bash
+   git checkout -b exp/方案A  main
+   git checkout -b exp/方案B  main
+   ```
+
+2. **两个分支独立实施，不交叉**。
+   - 代码变更：按 agent-compass 标准流程（设计先行 → 确认 → 代码 → 测试）
+   - 每次代码变更后自动 sync project-graph
+   - 每个决策追加 L4_O01
+
+3. **全链路审计**（不在 main 上执行）：
+   ```bash
+   # 文档审计
+   python scripts/basic-audit.py docs/
+
+   # 代码 lint（按项目工具链适配）
+   ruff check src/ 2>/dev/null || pylint src/ 2>/dev/null
+
+   # 测试
+   pytest tests/ -q 2>/dev/null || python -m pytest tests/ -q
+   ```
+   至少跑文档审计 + 测试。Agent 不只是用来写文档的——审计不能只审 docs/。
+
+4. **对比后选优合并**：
+   ```bash
+   git checkout main
+   git merge exp/方案A   # 选择方案 A
+   git branch -d exp/方案B
+   ```
+
+5. **合并 project-graph**（两条分支各自产出不同的图）：
+   - 优先保留 merge 目标分支（方案 A）的 project-graph
+   - 如果方案 B 有 A 没有的 relations，手动补充
+   - 合并后立即跑 sync 确认无冲突
+
+6. **原始 main 备份**：
+   ```bash
+   git branch main-backup main~1   # 保留合并前状态 30 天
+   ```
+
+7. **确认稳定后删除备份**：
+   ```bash
+   git branch -d main-backup
+   ```
+
+### 为什么不是 feature 分支
+
+feature 分支只有一条路径。双分支同时验证两种选择，
+成本是 2 倍实现时间，收益是避免合并后推倒重来的风险。
+
+### 适用场景
+
+- 架构重构（新老结构全链路对比）
+- 技术选型替换（如 Peewee → SQLAlchemy，对比 model 定义/迁移/测试）
+- agent-compass 集成（方案 A 纯文档 / 方案 B 文档+代码提升）

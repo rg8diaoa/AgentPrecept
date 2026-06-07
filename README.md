@@ -15,6 +15,10 @@
 
 agent-compass 走第三条路：project-graph（30秒懂依赖关系）、设计依据（一行表记住为什么这样选）、会话交接（换班不丢进度）。文件是活的，项目长它也长。
 
+### 不侵入代码——全部新增在 docs/ 层
+
+agent-compass 的集成方式是"外挂层"——不修改任何现有 .py/.yaml 文件，全部产出在 AGENTS.md + docs/ 目录下。适合已有项目的渐进式引入，也适合新项目的零风险冷启动。
+
 ---
 
 ## 解决什么问题
@@ -172,7 +176,7 @@ make todo-api-test   # 4/4 测试全绿
 
 ## 实战效果
 
-在一个 41 份文档/46 个配置维度的多 Agent 协作项目中验证。三轮审计从 12 个问题收敛到 0 阻塞项。外部评审 9.0/10。
+在一个 41 份文档/46 个配置维度的大型多 Agent 协作项目中验证。三轮审计从 12 个问题收敛到 0 阻塞项。外部评审 9.0/10。
 
 ---
 
@@ -188,7 +192,7 @@ agent-compass/
 ├── scripts/           ← sync-graph(符号级)/graph-to-mermaid/basic-audit(8维)/check-naming
 ├── skills/            ← 5 个核心 Skill（可加载能力包）
 │
-├── methodology/       ← 15 篇方法论（00循环 + 01-14专题）
+├── methodology/       ← 16 篇方法论（00循环 + 01-14专题 + 15-agent-ops）
 ├── templates/         ← 35 个模板（16分类全齐，🔥核心5个）
 ├── examples/          ← Python/Node 示例 + prompt 模板 + first-run
 ├── reference/         ← 审计案例/多维图/横向对比/速查卡片

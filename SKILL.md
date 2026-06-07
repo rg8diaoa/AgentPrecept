@@ -15,6 +15,7 @@
 - 会话结束信号 → 全量重写 HANDOFF（用户说"结束/交接/handoff/compact"、全部 checklist 完成且 2 轮无新任务、> 15 轮）
 - git commit 前 → 对照 14-production-readiness
 - 默认行为：完成任一模块后 → 追加测试任务到 checklist；每 5 轮自问"缺设计文档吗"
+- 批量创建文件 > 15 个时 → 分子代理并行（单个子代理 ≤ 15 文件，超时 180s。依据：世界模拟器 37 文件迁移时 230s 超时）
 
 Agent 不得等待提醒、不得跳过、不得事后补做。Auto-Pilot 优先级高于工作模式（EXPLORE/PRECISE）。
 

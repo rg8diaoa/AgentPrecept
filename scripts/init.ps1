@@ -5,7 +5,11 @@ param([string]$Project = ".")
 
 Write-Host "agent-compass 初始化 → $Project"
 
-Copy-Item "AGENTS.md" "$Project/"
+if (Test-Path "$Project\AGENTS.md") {
+    Write-Host "⚠ AGENTS.md 已存在，跳过覆盖。如需更新请手动替换。"
+} else {
+    Copy-Item "AGENTS.md" "$Project/"
+}
 New-Item -ItemType Directory -Force -Path "$Project\docs" | Out-Null
 
 # 一等公民（4 份，不可缺）

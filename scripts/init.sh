@@ -6,7 +6,11 @@ PROJECT="${1:-.}"
 
 echo "agent-compass 初始化 → $PROJECT"
 
-cp AGENTS.md "$PROJECT/"
+if [ -f "$PROJECT/AGENTS.md" ]; then
+    echo "⚠ AGENTS.md 已存在，跳过覆盖。如需更新请手动替换。"
+else
+    cp AGENTS.md "$PROJECT/"
+fi
 mkdir -p "$PROJECT/docs"
 
 # 一等公民（4 份，不可缺）

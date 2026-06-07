@@ -137,7 +137,7 @@ dry-run 同步——不写文件，返回待变更清单。
 
 ```toml
 [mcp_servers.agent-compass]
-command = "compass-mcp"
+command = "python -m agent_compass.mcp_server"
 ```
 
 ### Cursor / OpenCode

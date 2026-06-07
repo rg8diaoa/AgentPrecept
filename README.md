@@ -201,8 +201,13 @@ agent-compass/
 │
 ├── agent_compass/     ← CLI（init/sync/audit/doctor）+ MCP Server（5 tools）
 ├── scripts/           ← sync-graph(符号级)/graph-to-mermaid/basic-audit(8维)/check-naming
-├── docs/              ← mcp-tools(5 tool API)+自身完整文档体系（吃自己的狗粮）
-├── skills/            ← 5 个核心 Skill（可加载能力包）
+├── docs/
+│ ├── project-graph.yaml  ← 项目结构图
+│ ├── HANDOFF.md          ← 会话交接
+│ ├── MEMORY.md           ← 持久记忆（自动生长）
+│ ├── L4_O01              ← 设计依据（44+ ADR）
+│ └── mcp-tools.md        ← MCP 5 tool API
+├── skills/            ← 5 个核心 Skill
 │
 ├── methodology/       ← 16 篇方法论（00循环 + 01-14专题 + 15-agent-ops）
 ├── templates/         ← 36 个模板（16分类全齐，init 核心 8 个）

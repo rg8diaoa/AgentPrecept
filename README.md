@@ -184,7 +184,7 @@ agent-compass/
 ├── SKILL.md           ← 一键加载 Skill
 ├── pyproject.toml     ← pip install agent-compass
 │
-├── agent_compass/     ← CLI（init/sync/audit/doctor）
+├── agent_compass/     ← CLI（init/sync/audit/doctor）+ MCP Server（5 tools）
 ├── scripts/           ← sync-graph(符号级)/graph-to-mermaid/basic-audit(8维)/check-naming
 ├── docs/              ← mcp-tools(5 tool API)+gnhf-task-template(夜间自动同步)
 ├── skills/            ← 5 个核心 Skill（可加载能力包）

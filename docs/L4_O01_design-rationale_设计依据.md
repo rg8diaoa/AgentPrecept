@@ -41,3 +41,8 @@
 | 为什么首次邂逅要自动配 MCP | 全自动闭环 | 用户发 GitHub 链接→Agent 三选一→安装完后自动检测当前工具(CodeWhale/Claude/Cursor)→创建或追加 MCP 配置文件。用户从发链接到全部可用只需选一个字母 |
 | 为什么 L2_D01 必须反映当前架构 | 狗粮自指 | 本次架构变更方案中 Agent 跳过了更新 L2_D01——因为 L2_D01 本身已过时（只画了 4 层，实际 8 层）。修复：L2_D01 重写为当前全貌 + 设计先行表加自指规则 + 默认行为层加狗粮检查 |
 | 为什么用 MCP Server 暴露 agent-compass 功能 | Code Agent 原生集成 | 当前 Agent 靠读 YAML/MD 文件获取项目知识，MCP Server 把 sync/audit/query/decision/handoff 变为结构化 API——Agent 通过 MCP 协议直接调用，不需遍历文件系统。FastMCP 一行装饰器暴露现有函数 |
+| 为什么 MCP Server 需要 PYTHONIOENCODING=utf-8 | Windows 兼容 | MCP Server 在 CodeWhale 中 5 个 tool 全部未注册。诊断排除 Python/fastmcp/包/配置后，发现 mcp-stderr.log 为非 UTF-8 编码。Windows GBK 终端下 Python stderr 输出中文导致 MCP 握手消息损坏→Server 注册失败。修复：mcp.json 中 agent-compass 条目加 env.PYTHONIOENCODING=utf-8 + env.PYTHONUTF8=1；备选方案 cmd 包装 + 完整路径 |
+| 为什么 mcp-tools.md 需要重构而非自动修复 | 编码修复 | 原始文件 UTF-16-LE 编码（无 BOM），Git 提交时已损坏——字节中多处 3f（ASCII ?）替代了合法 UTF-8 续字节，无法自动恢复。基于 Git 可见内容重构全文为 UTF-8，audit_run 恢复为 8 维全 PASS。教训：agent-compass 自身文档必须用 UTF-8 保存，basic-audit.py 未做编码容错 |
+| 为什么 mcp-tools.md 的 CodeWhale 配置段使用 mcp.json 而非 TOML | 配置正确性 | 原文档用了 `[mcp_servers]` TOML 格式，但 CodeWhale 实际读取 `~/.deepseek/mcp.json`（JSON 格式）。错误的配置示例会误导用户。修正为正确的 mcp.json 格式 + 补充 `cwd`/`env`/`PYTHONIOENCODING` 的 Windows 注意事项 |
+| 为什么 MCP Resources 暂不实现 | 兼容性优先 | agent-compass 宣称支持 Claude Code/Cursor/CodeWhale/OpenCode/Copilot/Windsurf。MCP Tools 是所有工具的最大公约数（全支持），Resources 仅 Claude/CodeWhale 明确支持。加 Resource 时保留 Tool 作为 fallback——计划未来版本实现 |
+| 为什么 L2_D01 要加入 MCP Server 层 | 狗粮自指 | 本次会话修改 mcp-tools.md 后触发了狗粮检查——L2_D01 的 CLI 层描述只有 cli.py 四命令，遗漏了 mcp_server.py 和 5 个 MCP tools。修正：CLI 层 → CLI+MCP 层，数据流加入 MCP 通道 |

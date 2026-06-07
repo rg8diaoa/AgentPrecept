@@ -12,20 +12,22 @@ if (Test-Path "$Project\AGENTS.md") {
 }
 New-Item -ItemType Directory -Force -Path "$Project\docs" | Out-Null
 
-# 一等公民（4 份，不可缺）
+# 一等公民（5 份，不可缺）
 Copy-Item "templates\INDEX.md" "$Project\docs\"
 Copy-Item "templates\L1_A02_naming-convention_命名规范.md" "$Project\docs\"
 Copy-Item "templates\L1_B01_glossary_术语表.md" "$Project\docs\"
 Copy-Item "templates\HANDOFF.md" "$Project\docs\"
+Copy-Item "templates\MEMORY.md" "$Project\docs\"
 # 核心支撑
 Copy-Item "templates\project-graph.yaml" "$Project\docs\"
 Copy-Item "templates\L4_O01_design-rationale_设计依据.md" "$Project\docs\"
 
-Write-Host "✅ 一等公民文档（4/4）:"
+Write-Host "✅ 一等公民文档（5/5）:"
 Write-Host "   $Project\docs\INDEX.md              — 文档目录"
 Write-Host "   $Project\docs\L1_A02_*.md           — 命名规范"
 Write-Host "   $Project\docs\L1_B01_*.md           — 术语表"
 Write-Host "   $Project\docs\HANDOFF.md            — 会话交接"
+Write-Host "   $Project\docs\MEMORY.md             — 持久记忆（自动生长）"
 Write-Host ""
 Write-Host "✅ 核心支撑:"
 Write-Host "   $Project\AGENTS.md                  — Agent 入口"

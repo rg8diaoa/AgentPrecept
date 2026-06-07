@@ -112,7 +112,10 @@ Write-Host "[agent-compass] AGENTS.md + 7 核心文档已就位。"
 **安装后 Agent 必须立即执行 MCP 自动配置（同一 turn）**：
 1. 检测当前工具：CodeWhale → `~/.deepseek/mcp.json` / Claude Code → `.mcp.json` / Cursor → `.cursor/mcp.json`
 2. 若配置文件不存在 → 创建；若存在且无 agent-compass 条目 → 追加
-3. MCP 条目：`{"mcpServers":{"agent-compass":{"command":"python","args":["-m","agent_compass.mcp_server"]}}}`
+3. MCP 条目（含 cwd 和编码兼容）：
+   - `cwd` 设为 agent-compass 仓库的绝对路径
+   - `env.PYTHONIOENCODING=utf-8` + `env.PYTHONUTF8=1`（Windows 必需，防止 GBK 编码损坏 MCP 握手消息）
+   - 完整 JSON：`{"mcpServers":{"agent-compass":{"command":"python","args":["-m","agent_compass.mcp_server"],"cwd":"<agent-compass绝对路径>","env":{"PYTHONIOENCODING":"utf-8","PYTHONUTF8":"1"}}}}`
 4. 输出：`[agent-compass] MCP 已自动配置。重启后 5 tools 可用。`
 5. 提示 git init
 

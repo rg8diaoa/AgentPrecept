@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
-> **Agent 不会失忆的施工图。** 把项目关键信息写成你与 Agent 共同维护的数据文件——格式固定、可审计、跨会话不漂移。
+> **Agent 不会失忆的施工图。** 结构化数据文件 + MCP 原生集成——格式固定、可审计、跨会话不漂移。
 
 ---
 

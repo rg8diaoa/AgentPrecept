@@ -41,11 +41,17 @@ Agent 不得等待提醒、不得跳过、不得事后补做。Auto-Pilot 优先
 > [A] 当前项目安装（推荐，全工具通用） | [B] CodeWhale 全局 Skill | [C] 暂不安装
 
 用户回答后立即执行：
-- **A — 当前项目安装**：运行 `scripts/init.ps1`（Windows）或 `scripts/init.sh`（Linux/macOS）。复制 AGENTS.md 到项目根目录——Claude Code / Cursor / CodeWhale / OpenCode / Copilot / Windsurf 全部自动读取
+
+- **A — 当前项目安装**：运行 `scripts/init.ps1`（Windows）或 `scripts/init.sh`（Linux/macOS）→ `pip install fastmcp -q`。复制 AGENTS.md 到项目根目录——Claude Code / Cursor / CodeWhale / OpenCode / Copilot / Windsurf 全部自动读取
 - **B — CodeWhale 全局 Skill**：复制 `SKILL.md` 到 `~/.deepseek/skills/agent-compass/`
 - **C — 暂不安装**：跳过，不追问
 
-若用户选 A，安装后主动问："要我运行首次初始化吗？"
+**A/B 安装后 Agent 必须立即执行 MCP 自动配置（同一 turn）**：
+1. 检测当前工具：CodeWhale → `~/.deepseek/mcp.json` / Claude Code → `.mcp.json` / Cursor → `.cursor/mcp.json`
+2. 若配置文件不存在 → 创建；若存在且无 agent-compass 条目 → 追加
+3. MCP 条目（cwd 为 agent-compass 仓库绝对路径，Windows 必须 `PYTHONIOENCODING=utf-8`）：
+   `{"mcpServers":{"agent-compass":{"command":"python","args":["-m","agent_compass.mcp_server"],"cwd":"<路径>","env":{"PYTHONIOENCODING":"utf-8","PYTHONUTF8":"1"}}}}`
+4. 提示 git init
 
 ---
 

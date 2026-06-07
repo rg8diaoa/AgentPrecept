@@ -46,3 +46,6 @@
 | 为什么 mcp-tools.md 的 CodeWhale 配置段使用 mcp.json 而非 TOML | 配置正确性 | 原文档用了 `[mcp_servers]` TOML 格式，但 CodeWhale 实际读取 `~/.deepseek/mcp.json`（JSON 格式）。错误的配置示例会误导用户。修正为正确的 mcp.json 格式 + 补充 `cwd`/`env`/`PYTHONIOENCODING` 的 Windows 注意事项 |
 | 为什么 MCP Resources 暂不实现 | 兼容性优先 | agent-compass 宣称支持 Claude Code/Cursor/CodeWhale/OpenCode/Copilot/Windsurf。MCP Tools 是所有工具的最大公约数（全支持），Resources 仅 Claude/CodeWhale 明确支持。加 Resource 时保留 Tool 作为 fallback——计划未来版本实现 |
 | 为什么 L2_D01 要加入 MCP Server 层 | 狗粮自指 | 本次会话修改 mcp-tools.md 后触发了狗粮检查——L2_D01 的 CLI 层描述只有 cli.py 四命令，遗漏了 mcp_server.py 和 5 个 MCP tools。修正：CLI 层 → CLI+MCP 层，数据流加入 MCP 通道 |
+| 为什么 MEMORY.md 要从填空模板改为自动生长 | 记忆机制 | 旧 MEMORY.md 是静态填空模板，依赖用户手动维护；同时 agent-compass 自身 MEMORY.md 混了全局偏好（"回复风格"等）和项目约束。设计：agent-compass 自身 MEMORY 瘦身为纯项目级；templates/MEMORY.md 改为引导型模板（含 Agent 注释），配合 AGENTS.md 自动生长规则；init 脚本补复制 MEMORY.md（5/5 一等公民）。用户全局偏好移至 CodeWhale note |
+| 为什么需要双向 MCP 发现检测 | 安装闭环 | 全局 instructions 检测到"MCP 可用 + 项目未 init"→ 提示 init；项目 AGENTS.md 检测到"有 AGENTS.md + 无 MCP"→ 提示配置 MCP。两者对称，确保无论从哪条路径进入，缺失的部分都会被提醒补全 |
+| 为什么 init 脚本要从 4 一等公民扩展到 5 | 记忆就绪 | 新增 MEMORY.md 为一等公民。之前只有 INDEX/命名规范/术语表/HANDOFF，缺少 MEMORY 导致新项目无法使用自动生长机制。init.ps1 和 init.sh 同步更新 |

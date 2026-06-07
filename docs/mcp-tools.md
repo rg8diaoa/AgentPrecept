@@ -124,7 +124,8 @@ dry-run 同步——不写文件，返回待变更清单。
 {
   "mcpServers": {
     "agent-compass": {
-      "command": "compass-mcp"
+      "command": "python",
+      "args": ["-m", "agent_compass.mcp_server"]
     }
   }
 }
@@ -145,7 +146,8 @@ command = "compass-mcp"
 {
   "mcpServers": {
     "agent-compass": {
-      "command": "compass-mcp",
+      "command": "python",
+      "args": ["-m", "agent_compass.mcp_server"],
       "args": []
     }
   }

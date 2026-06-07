@@ -83,7 +83,8 @@ def cmd_setup():
     mcp_config = {
         "mcpServers": {
             "agent-compass": {
-                "command": "compass-mcp",
+                "command": "python",
+                "args": ["-m", "agent_compass.mcp_server"]
             }
         }
     }

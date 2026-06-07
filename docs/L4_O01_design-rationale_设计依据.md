@@ -36,3 +36,4 @@
 | 为什么需要 Agent 操作手册 | 操作知识沉淀 | 子代理超时、git 锁、Windows 分支命名、GBK 编码——这些都是实战踩坑但 agent-compass 没有文档化的 Agent 操作经验。新设 methodology/15-agent-ops.md |
 | 为什么 README 声明外挂层不侵入 | 降低集成门槛 | 世界模拟器集成验证了 agent-compass 的最大优势——全部新增在 docs/ 层，零代码侵入。这是区别于其他框架的核心卖点 |
 | 为什么 L2_D01 必须反映当前架构 | 狗粮自指 | 本次架构变更方案中 Agent 跳过了更新 L2_D01——因为 L2_D01 本身已过时（只画了 4 层，实际 8 层）。修复：L2_D01 重写为当前全貌 + 设计先行表加自指规则 + 默认行为层加狗粮检查 |
+| 为什么用 MCP Server 暴露 agent-compass 功能 | Code Agent 原生集成 | 当前 Agent 靠读 YAML/MD 文件获取项目知识，MCP Server 把 sync/audit/query/decision/handoff 变为结构化 API——Agent 通过 MCP 协议直接调用，不需遍历文件系统。FastMCP 一行装饰器暴露现有函数 |

@@ -13,6 +13,17 @@
 
 ---
 
+## 默认行为（无条件执行）
+
+以下行为不需要触发条件，每个会话默认执行。Agent 不得跳过：
+
+- **会话首次启动**：读 `docs/project-graph.yaml` → `docs/HANDOFF.md` → `docs/MEMORY.md`
+- **完成任一模块后**：检查 checklist 中是否有对应测试任务，没有则追加
+- **每 5 轮对话**：自问"有没有该写但还没写的设计文档？"
+- **项目首次初始化后**：提醒创建 `docs/HANDOFF.md` 和 `docs/MEMORY.md` 空模板
+
+---
+
 ## 设计先行原则
 
 Agent 不是码农——是工程师。工程师动工前必有图纸。
@@ -64,7 +75,8 @@ Agent 必须立即（同一 turn 内）主动询问，不得跳过：
 ```powershell
 .\scripts\init.ps1 .
 # Linux/macOS: bash scripts/init.sh .
-Write-Host "[agent-compass] 安装完成。AGENTS.md + 4 核心文档已就位。Claude Code/Cursor/CodeWhale/OpenCode/Copilot/Windsurf 均可自动读取。"
+Write-Host "[agent-compass] 安装完成。AGENTS.md + 7 核心文档已就位。Claude Code/Cursor/CodeWhale/OpenCode/Copilot/Windsurf 均可自动读取。"
+Write-Host "要我初始化 git 仓库吗？"
 ```
 
 **B — CodeWhale 全局 Skill**：
@@ -76,7 +88,8 @@ Write-Host "[agent-compass] CodeWhale Skill 安装完成。重启会话后 `/ski
 
 **C — 暂不安装**：跳过，不追问。
 
-安装完成后，若用户选了 A，Agent 应主动提示下一步："要我运行首次初始化吗？（生成 project-graph、反推设计依据、生成架构图）"
+安装完成后，若用户选了 A，Agent 应主动提示：
+> 要我运行首次初始化吗？（git init、生成 project-graph、反推设计依据、生成架构图）
 
 ---
 
@@ -101,10 +114,11 @@ Write-Host "[agent-compass] CodeWhale Skill 安装完成。重启会话后 `/ski
 
 ## 防偷懒（Anti-Laziness）
 
-- 审计时：必须实际运行 `agent-compass audit`。不许凭记忆说"之前确认过"
+- 审计时：必须实际运行 `agent-compass audit`；若 CLI 不可用则运行 `python scripts/basic-audit.py`。不许凭记忆说"之前确认过"
 - 验证时：必须读回写入的文件内容。不许假设"写成功了"
 - 跨文件引用时：必须 `grep` 验证路径存在。不许凭记忆说"应该有"
 - 工具失败时：报告中标注 [无法验证]。不许跳过也不许造假
+- 完成任一模块公开函数后：在 checklist 末尾追加对应测试任务。来不及写时在 HANDOFF 标注原因
 
 ## 并行安全
 
@@ -117,14 +131,33 @@ Write-Host "[agent-compass] CodeWhale Skill 安装完成。重启会话后 `/ski
 
 以下动作在触发条件满足时自动执行，与任务是否"完成"无关。Agent 不得将其视为"可选"或"事后补做"。
 
-| 触发 | 动作 | 执行时机 |
-|------|------|----------|
-| 每次代码变更（edit_file / write_file / apply_patch） | `agent-compass sync`（更新 project-graph） | 同一 turn 内立即执行 |
-| 做了技术决策 | 追加 L4_O01：决策 / 来源 / 证据 | 同一 turn 内立即追加 |
-| 会话即将结束 | 全量重写 HANDOFF（状态+上下文+具体下一步） | 结束前最后一轮 |
-| git commit 之前 | 对照 14-production-readiness 退出标准 | commit 前 |
-| 上下文 > 60% | HANDOFF 加 [CLOSING]，提醒用户切新会话 | 发现时立即 |
-| 同一问题 3 轮无进展 | 停 → HANDOFF 加 [BLOCKED] | 第 3 轮结束时 |
+| 触发 | 动作 | 降级（工具不可用时） | 执行时机 |
+|------|------|---------------------|----------|
+| 每次代码变更（edit_file / write_file / apply_patch） | `agent-compass sync` 更新 project-graph | 手动编辑 project-graph.yaml，追加 structure/relations/evolution | 同一 turn 内立即执行 |
+| 做了技术决策 | 追加 L4_O01：决策 / 来源 / 证据 | 无降级——编辑 .md 文件始终可行 | 同一 turn 内立即追加 |
+| 会话结束信号（见下方列表） | 全量重写 HANDOFF（状态+上下文+具体下一步） | 同上 | 结束前最后一轮 |
+| git commit 之前 | 对照 14-production-readiness 退出标准 | 对照方法论 memory（已读过 14-production-readiness.md） | commit 前 |
+| 对话轮数 > 15 | HANDOFF 加 [CLOSING]，提醒用户切新会话 | — | 发现时立即 |
+| 同一问题 3 轮无进展 | 停 → HANDOFF 加 [BLOCKED] | — | 第 3 轮结束时 |
+
+### 会话结束信号（任一发生即触发 HANDOFF 重写）
+
+- 用户说"结束"/"交接"/"handoff"/"compact"
+- 用户说"下一个会话"/"换模型"
+- 全部 checklist 项 completed + 用户连续 2 轮未发新任务
+- 对话轮数 > 15（Agent 数自己回复次数）
+
+### "技术决策"定义（满足任一即触发 L4_O01 追加）
+
+技术决策包括但不限于：
+- 架构/库/框架选型（"选 X 而不是 Y"）
+- 因框架/库版本不兼容被迫改变 API 调用方式（适配性修改）
+- 因平台限制放弃设计特性（"X 平台不支持 Y，改用 Z"）
+- 第三方依赖替换或版本锁定
+- 数据结构 schema 变更
+- 安全策略变更
+
+**适配性修改也算决策。** 不是只有"选 A 还是选 B"才算——被迫改调用方式同样需要记录为什么。
 
 ## 用户口头禅映射
 
@@ -143,13 +176,18 @@ Write-Host "[agent-compass] CodeWhale Skill 安装完成。重启会话后 `/ski
 |------|------|
 | project-graph.yaml | 每次代码变更 |
 | L4_O01 设计依据 | 做技术决策时 |
-| HANDOFF | 会话结束 |
-| L3_J02 测试用例 | 新增 API 端点 |
+| HANDOFF | 会话结束信号 |
+| L3_J02 测试用例 | 新增模块公开函数 / API 端点 / CLI 命令 |
 | L2_D01 架构设计 | 项目初始化 / 架构变更 |
 
-## 人类审 Agent（4 项及格线）
+## 人类审 Agent（4 项及格线 → 可验证）
 
-□ 模块 > 3 □ 有职责描述 □ L4_O01 有依据 □ 图已更新
+| 检查项 | 可验证方式 |
+|--------|-----------|
+| □ 模块 > 3 | `project-graph.yaml` 的 structure 键 ≥ 4 |
+| □ 有职责描述 | 每个模块 `description` 字段非空 |
+| □ L4_O01 有依据 | 文件行数 ≥ 5 + 最近一条日期在 7 天内 |
+| □ 图已更新 | `evolution` 最新条目与最后代码变更为同一会话 |
 
 ## 状态标记
 

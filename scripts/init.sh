@@ -29,4 +29,12 @@ echo "   $PROJECT/AGENTS.md                  — Agent 入口"
 echo "   $PROJECT/docs/project-graph.yaml    — 项目图"
 echo "   $PROJECT/docs/L4_O01_*.md           — 设计依据"
 echo ""
+echo ""
+echo -n "可选: 初始化 git 仓库？(y/n) "
+read -r git_answer
+if [ "$git_answer" = "y" ]; then
+    git init "$PROJECT" 2>/dev/null
+    echo "   git init done"
+fi
+echo ""
 echo "下一步: 复制 examples/first-run.md 中的 prompt 发给 Agent 自动初始化 project-graph"

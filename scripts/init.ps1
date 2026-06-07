@@ -28,4 +28,12 @@ Write-Host "   $Project\AGENTS.md                  — Agent 入口"
 Write-Host "   $Project\docs\project-graph.yaml    — 项目图"
 Write-Host "   $Project\docs\L4_O01_*.md           — 设计依据"
 Write-Host ""
+Write-Host ""
+Write-Host "可选: 初始化 git 仓库？(y/n)"
+$gitAnswer = Read-Host
+if ($gitAnswer -eq 'y') {
+    git init $Project 2>$null
+    Write-Host "   git init done"
+}
+Write-Host ""
 Write-Host "下一步: 复制 examples\first-run.md 中的 prompt 发给 Agent 自动初始化 project-graph"

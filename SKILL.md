@@ -10,10 +10,11 @@
 
 加载本 Skill 后，以下流程自动执行，无需用户提醒。除非用户在当前对话中明确说"停"/"跳过"/"不用"，或修改 AGENTS.md 变更规则。
 
-- 代码变更后 → 立即 `agent-compass sync`
-- 设计决策后 → 立即追加 L4_O01
-- 会话结束前 → 全量重写 HANDOFF
+- 代码变更后 → `agent-compass sync`；若 CLI 不可用 → 手动编辑 project-graph
+- 设计决策后 → 立即追加 L4_O01（适配性修改也算决策）
+- 会话结束信号 → 全量重写 HANDOFF（用户说"结束/交接/handoff/compact"、全部 checklist 完成且 2 轮无新任务、> 15 轮）
 - git commit 前 → 对照 14-production-readiness
+- 默认行为：完成任一模块后 → 追加测试任务到 checklist；每 5 轮自问"缺设计文档吗"
 
 Agent 不得等待提醒、不得跳过、不得事后补做。Auto-Pilot 优先级高于工作模式（EXPLORE/PRECISE）。
 

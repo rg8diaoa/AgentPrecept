@@ -10,13 +10,14 @@ structure:
   docs/:
     type: package
     stability: stable
-    description: agent-compass 自身文档体系（6 文件，不含开发者元信息）
+    description: agent-compass 自身文档体系（7 文件，不含开发者元信息）
     children:
     - INDEX.md
     - L1_A01_quickstart_快速开始.md
     - L2_D01_architecture_架构设计.md
     - L4_M01_changelog_变更日志.md
     - L4_O01_design-rationale_设计依据.md
+    - mcp-tools.md
     - project-graph.yaml
   methodology/:
     type: package
@@ -46,7 +47,21 @@ structure:
   agent_compass/:
     type: package
     stability: stable
-    description: CLI 入口
+    description: CLI + MCP 层（init/sync/audit/doctor/mcp_server 5 tools）
+    children:
+    - cli.py
+    - mcp_server.py
+  scripts/:
+    type: package
+    stability: stable
+    description: 核心引擎（sync-graph 5维扫描/basic-audit 8维审计/init）
+    children:
+    - sync-graph.py
+    - basic-audit.py
+    - init.ps1
+    - init.sh
+    - graph-to-mermaid.py
+    - check-naming.py
   templates/:
     type: package
     stability: stable
@@ -54,8 +69,10 @@ structure:
     children:
     - INDEX.md
     - HANDOFF.md
+    - MEMORY.md
     - AUDIT_REPORT.md
     - project-graph.yaml
+    - L4_O01_design-rationale_设计依据.md
   examples/:
     type: package
     stability: stable
@@ -71,12 +88,51 @@ structure:
     children:
     - audit-journey.md
     - six-layer-graph.md
-  agent_compass:
-    type: package
-    stability: stable
-    children:
-    - cli.py
-relations: []
+relations:
+# agent_compass/ → scripts/
+- from: agent_compass/mcp_server.py
+  to: scripts/basic-audit.py
+  type: import
+- from: agent_compass/mcp_server.py
+  to: scripts/sync-graph.py
+  type: import
+- from: agent_compass/cli.py
+  to: scripts/sync-graph.py
+  type: import
+- from: agent_compass/cli.py
+  to: scripts/basic-audit.py
+  type: import
+# AGENTS.md → 代码层
+- from: AGENTS.md
+  to: agent_compass/cli.py
+  type: reference
+- from: AGENTS.md
+  to: scripts/sync-graph.py
+  type: reference
+- from: AGENTS.md
+  to: scripts/basic-audit.py
+  type: reference
+# docs/ → methodology/ + templates/
+- from: docs/L2_D01_architecture_架构设计.md
+  to: methodology/
+  type: reference
+- from: docs/INDEX.md
+  to: templates/
+  type: reference
+# scripts/ → docs/
+- from: scripts/sync-graph.py
+  to: docs/project-graph.yaml
+  type: write
+- from: scripts/basic-audit.py
+  to: docs/
+  type: read
+# MCP 通道
+- from: mcp_server.py
+  to: docs/HANDOFF.md
+  type: read
+- from: mcp_server.py
+  to: docs/L4_O01_design-rationale_设计依据.md
+  type: read
 evolution:
 - id: ADR-001
   topic: 为什么用 MIT 许可证

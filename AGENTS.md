@@ -24,6 +24,8 @@
 - **⏳ 待补检测**：会话首次启动时，若 docs/ 中 ⏳ 待撰写状态的文档超过 3 份，Agent 应主动提醒"有 N 份文档待补充，要我填充吗？"。用户确认后按设计先行原则逐份填充——先出草稿→标注[NEEDS_HUMAN_REVIEW]→等确认→再写
 - **狗粮检查**：当变更发生在 agent-compass/ 或 scripts/ 目录时，必须先检查 docs/L2_D01 是否反映当前架构——过期则先更新架构设计再写代码。agent-compass 自身必须吃自己的狗粮
 - **记忆自动生长**：Agent 在对话中发现新的用户偏好、项目约束、踩坑教训时，自动追加到 `docs/MEMORY.md` 对应小节。用户说"记住"→立即追加。不重复已有条目。模板注释（`<!-- ... -->`）仅第一次追加时删除
+- **MCP 缺失检测**：当项目已有 AGENTS.md 但 `mcp_agent-compass_*` tools 不可用时，Agent 应提示用户配置 MCP（`agent-compass setup` 或手动编辑 mcp.json）
+- **模板外脑**：docs/ 只有核心 8 文件。需要 API 契约、测试策略、部署方案等模板时，Agent 应知道从 agent-compass 仓库的 `templates/`（35 个）和 `methodology/`（16 篇）按需取用
 
 ---
 

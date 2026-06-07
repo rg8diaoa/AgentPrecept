@@ -14,7 +14,7 @@
 - 设计决策后 → 立即追加 L4_O01（适配性修改也算决策）
 - 会话结束信号 → 全量重写 HANDOFF（用户说"结束/交接/handoff/compact"、全部 checklist 完成且 2 轮无新任务、> 15 轮）
 - git commit 前 → 对照 14-production-readiness
-- 默认行为：完成任一模块后 → 追加测试任务到 checklist；每 5 轮自问"缺设计文档吗"；发现偏好/约束/教训 → 自动追加 MEMORY.md
+- 默认行为：完成任一模块后 → 追加测试任务到 checklist；每 5 轮自问"缺设计文档吗"；发现偏好/约束/教训 → 自动追加 MEMORY.md；MCP 未配 → 提示配置；缺模板 → 从 agent-compass templates/ 取
 - 批量创建文件 > 15 个时 → 分子代理并行（单个子代理 ≤ 15 文件，超时 180s。依据：世界模拟器 37 文件迁移时 230s 超时）
 - MCP Server：`python -m agent_compass.mcp_server`，5 个 tool（query/audit/diff/decision/handoff），配置见 docs/mcp-tools.md
 - 首次安装 → `agent-compass setup` 一键完成初始化 + MCP 配置指南

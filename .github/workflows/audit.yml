@@ -19,5 +19,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: Check naming convention
         run: python scripts/check-naming.py templates/
-      - name: Run basic audit (命名/断链/骨架)
-        run: python scripts/basic-audit.py templates/
+      - name: Run basic audit (8 维: 命名/引用/编号/骨架/图格式/设计追溯/覆盖率/狗粮)
+        run: python scripts/basic-audit.py docs/

@@ -2,7 +2,7 @@
 
 ## Description
 
-让多个 Agent 在同一项目上协作不踩脚。核心机制：project-graph（秒懂结构）+ L4_O01（不推翻决策）+ HANDOFF（无缝交接）。Agent 按需读取模板，按指令自动产出。
+让多个 Agent 在同一项目上协作不踩脚。核心机制：project-graph（秒懂结构）+ L4_O01（不推翻决策）+ HANDOFF（无缝交接）+ MCP Server（Code Agent 原生集成）+ gnhf（夜间自动同步）。Agent 按需读取模板，按指令自动产出。
 
 ## Instructions
 

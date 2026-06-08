@@ -65,4 +65,4 @@
 | 为什么狗粮从 4 项存在性升级为自治健康度 | 狗粮即 Precept | 旧狗粮只检查 4 个文件在不在。新狗粮：图覆盖率（structure vs 实际文件）、审计自治（维度自检）、工具链就位（hook+CI）、规则一致性。项目是否被自己管理——不是 checklist，是健康报告 |
 | 为什么 design_gate 逻辑要和 hook 共享 | 单源码双入口 | Agent 可跳过 MCP tool——但 pre-commit hook Gate 2 调用同一份 design_gate_check.py。Agent 不调→hook 兜底。不再有两个实现各自漂移 |
 | 为什么 instructions.md 需要从 AGENTS.md 同步 | CodeWhale 全局配置一致性 | v0.4.0 新增 5 条默认行为（checklist 粒度/反馈提示/分支纪律/自选维度/版本规则）仅写入 AGENTS.md，`~/.deepseek/instructions.md` 遗漏。templates 数量 35→36（后修正为 37）、MCP tools 5→6 两处过时。instructions.md 是 AGENTS.md 的 CodeWhale 全局镜像，不同步导致 Agent 行为不一致 |
-| 为什么方法论要从时间序 NN 重命名为 M 体系 | 主题段预留 + 命名规范兼容 | 当前 16 篇方法论按创建时间递增编号（00-15），新增只能追加末尾，无法按主题插入。M 体系（M{1-4}_{A-D}{NN}）四个难度层级 × 四个方法类别，段内独立编号，新增不引发涟漪。与 docs/ 的 L 体系独立，命名规范中各占一节 | [NEEDS_HUMAN_REVIEW]
+| 为什么方法论要从时间序 NN 重命名为 M 体系 | 主题段预留 + 命名规范兼容 | 当前 16 篇方法论按创建时间递增编号（00-15），新增只能追加末尾，无法按主题插入。M 体系（M{1-4}_{A-D}{NN}）四个难度层级 × 四个方法类别，段内独立编号，新增不引发涟漪。与 docs/ 的 L 体系独立，命名规范中各占一节 |

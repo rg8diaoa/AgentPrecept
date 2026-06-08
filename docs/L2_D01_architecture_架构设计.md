@@ -2,7 +2,7 @@
 
 > 分类: D | 层级: L2 | 编号: L2_D01
 > 状态: ✅ 已锁定 | 目标读者: 设计审查
-> 最后更新: 2026-06-08
+> 最后更新: 2026-06-09
 
 ---
 
@@ -20,19 +20,21 @@ AgentPrecept/
 │   └── 默认行为层（无条件执行）
 │
 ├── CLI + MCP 层 (agentprecept/)          ← 用户和 Agent 的命令入口
-│   ├── cli.py              — init(6阶段)/sync/audit(10维)/doctor/setup/hooks/gnhf
+│   ├── cli.py              — init(6阶段)/sync/audit(15维)/setup/hooks/gnhf
 │   └── mcp_server.py       — MCP Server（6 个 Tool: query/audit/diff/decision/handoff/design_gate）
 │
 ├── 脚本层 (scripts/)                     ← 核心引擎
-│   ├── sync-graph.py       — 多语言 5 维扫描 + design_docs 注释
-│   ├── basic-audit.py      — 15 维自动化审计（--gate）+ 4-scope（docs/code/git/config）+ ripple_check
+│   ├── sync-graph.py       — 多语言 6 维扫描 + design_docs 注释
+│   ├── basic-audit.py      — 15 维 4-scope 自动化审计（--gate）
+│   ├── ripple_check.py     — 涟漪分析（DIRECT/INDIRECT/SAME_PKG）
+│   ├── design_gate_check.py— 设计文档前置检查（MCP + hook 共享）
 │   ├── graph-to-mermaid.py — YAML → Mermaid 可视化
 │   ├── check-naming.py
 │   ├── init.ps1 / init.sh  — 项目骨架生成
 │   └── README.md
 │
 ├── 方法论层 (methodology/)               ← 给人类和 Agent 的原理文档
-│   └── 16 篇：00-lifecycle + 01-14 + 15-agent-ops + INDEX
+│   └── 16 篇，v0.4.2 升级为 18 篇 M1-4 体系（四板块：入门/协作/工程/运维）
 │
 ├── 模板层 (templates/)                  ← 可拷贝的文档骨架
 │   └── 37 个（16/16 分类全齐），含 INDEX/HANDOFF/AUDIT_REPORT/project-graph/FEEDBACK
@@ -87,9 +89,9 @@ AGENTS.md ────→ agentprecept/cli.py（Agent 执行规则时调用 CLI 
 
 agentprecept/cli.py  ←→  agentprecept/mcp_server.py  ←→  scripts/
        │                         │
-       ├── init: 6 阶段            ├── design_gate tool（Layer 1）
-       ├── hooks: git hook 安装   ├── audit_run (10 维)
-       └── gnhf: 任务模板生成     └── 5 个原有 tool
+       ├── init: 6 阶段            ├── design_gate tool（Layer 1 软拦截）
+       ├── hooks: git hook 安装   ├── audit_run (15 维)
+       └── gnhf: 任务模板生成     └── query/diff/decision/handoff 4 个 tool
 
 .git/hooks/pre-commit  ←  init 自动安装（Layer 2）
 .github/workflows/agentprecept-gate.yml  ←  init 自动生成（Layer 3）
@@ -102,7 +104,7 @@ agentprecept/cli.py  ←→  agentprecept/mcp_server.py  ←→  scripts/
     │
     │  sync-graph.py（扫描，含 design_docs 注释）
     ▼
-project-graph.yaml ←── basic-audit.py（10 维审计，含 --gate 模式）
+project-graph.yaml ←── basic-audit.py（15 维审计，含 --gate 模式）
     │                       │
     ├── Agent 直接读取        ├── 结构化报告
     ├── MCP design_gate ─────┤
@@ -120,6 +122,22 @@ gnhf（可选）:
 | Layer 2 | Git pre-commit hook | init 自动安装 | `git commit --no-verify` |
 | Layer 3 | CI Pipeline Gate | init 自动生成配置 | ❌（硬拦截） |
 
+## 路线图
+
+### v0.4.2 — 方法论升级（PATCH，纯文档）
+- 全量重命名为 M 体系：M{1-4}_{A-D}{NN}_...md，四板块 18 篇
+- 12 项深化（反模式/实践步骤/新能力补全）
+- 新增 M1_A02 自然语言编程指南 + M2_B02 非技术审 Agent 产出
+- methodology/INDEX.md 板块分组重写
+- 连锁引用更新（~11 文件）
+
+### v0.5.0 — Agent 自主生长（MINOR）
+- C: 任务级思维框架（AGENTS.md +1 规则）
+- A: Git hook 自动记忆生长（memory-grow.py + gnhf 扩展）
+
+### v0.6.0 — 方法论模式（MINOR）
+- B: `agentprecept init --mode agile|waterfall`
+
 ## 关键设计决策
 
-见 `docs/L4_O01_design-rationale_设计依据.md`（含 Auto-Pilot、设计先行、三层拦截、init 一键接入、gnhf 可选、checklist 粒度、10 维审计等）。
+见 `docs/L4_O01_design-rationale_设计依据.md`（含 Auto-Pilot、设计先行、三层门禁、init 一键接入、gnhf 可选、checklist 粒度、15 维审计等）。

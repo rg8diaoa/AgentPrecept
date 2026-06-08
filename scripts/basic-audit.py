@@ -317,7 +317,7 @@ def check_dogfood(docs_dir: str) -> list[dict]:
     
     # 3. 工具链: pre-commit hook + CI gate
     hook = Path(".git/hooks/pre-commit")
-    ci_gate = Path(".github/workflows/agentprecept-gate.yml")
+    ci_gate = Path(".github/workflows/audit.yml")
     if not hook.exists():
         findings.append({"file": ".git/hooks/pre-commit", "issue": "pre-commit hook 未安装——运行 agentprecept hooks install", "severity": "WARN"})
     if not ci_gate.exists():

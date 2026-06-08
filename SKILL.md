@@ -15,6 +15,10 @@
 - 会话结束信号 → 全量重写 HANDOFF（用户说"结束/交接/handoff/compact"、全部 checklist 完成且 2 轮无新任务、> 15 轮）
 - git commit 前 → 对照 14-production-readiness
 - 默认行为：完成任一模块后 → 追加测试任务到 checklist（每项 1-3 commit 粒度）；每 5 轮自问"缺设计文档吗？有该写没写的 MEMORY 教训吗？"；发现偏好/约束/教训 → grep 后追加 MEMORY.md（可更新旧行不可重复，追加后读回验证）；MCP 未配 → 提示配置；缺模板 → 从 agentprecept templates/ 取
+- 反馈提示：HANDOFF 状态为 [CLOSING] 时，Agent 应提示："如果这次体验有用，花 2 分钟在 GitHub 填反馈模板"
+- 分支纪律：涉及架构/重命名/多文件（>10 文件）的变更必须在独立分支上执行
+- 自选维度检查：每 5 轮对话检查自选维度是否退化
+- 版本规则：严格 semver，PATCH 修 bug 累积 3+ 发版，MINOR 每个功能独立发版，MAJOR 破坏性变更
 - 批量创建文件 > 15 个时 → 分子代理并行（单个子代理 ≤ 15 文件，超时 180s。依据：世界模拟器 37 文件迁移时 230s 超时）
 - MCP Server：`python -m agentprecept.mcp_server`，6 个 tool（query/audit/diff/decision/handoff/design_gate），配置见 docs/mcp-tools.md
 - audit：`agentprecept audit --gate` 15 维自动化 + 4 维自选清单提示

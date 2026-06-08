@@ -345,6 +345,30 @@ def check_readme_claims(docs_dir: str) -> list[dict]:
     return findings
 
 
+def check_branch_policy(docs_dir: str) -> list[dict]:
+    """维度 11: 分支策略——是否有直接 push 到 main 的大变更"""
+    findings = []
+    # CI 侧检查：如果当前在 main 分支且 commit 变更 >10 文件，发出警告
+    import subprocess as sp
+    try:
+        branch = sp.run(["git", "rev-parse", "--abbrev-ref", "HEAD"],
+                        capture_output=True, text=True, timeout=5).stdout.strip()
+        if branch in ("main", "master"):
+            # 检查当前 commit 的变更文件数
+            changed = sp.run(["git", "diff", "--name-only", "HEAD~1", "HEAD"],
+                            capture_output=True, text=True, timeout=5).stdout.strip()
+            changed_files = [f for f in changed.split("\n") if f]
+            if len(changed_files) > 10:
+                findings.append({
+                    "file": "branch policy",
+                    "issue": f"直接 push {len(changed_files)} 文件到 {branch} 分支。重大变更应走 feature 分支 + PR",
+                    "severity": "WARN"
+                })
+    except Exception:
+        pass
+    return findings
+
+
 def check_design_coverage(docs_dir: str) -> list[dict]:
     """维度 10: 代码模块是否有对应的设计文档"""
     findings = []
@@ -408,6 +432,7 @@ def main():
     if gate_mode:
         checks.append((check_readme_claims, "README声明校验"))
         checks.append((check_design_coverage, "设计覆盖检查"))
+        checks.append((check_branch_policy, "分支策略检查"))
 
     for check, name in checks:
         findings = check(docs_dir)

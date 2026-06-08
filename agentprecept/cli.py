@@ -23,13 +23,31 @@ def _install_hook(project):
     hook_content = """#!/bin/bash
 # AgentPrecept pre-commit gate
 # Skip: git commit --no-verify
+
+# --- Gate 1: branch policy ---
+BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+CHANGED_COUNT=$(git diff --cached --name-only 2>/dev/null | wc -l | tr -d ' ')
+
+if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ]; then
+    if [ "$CHANGED_COUNT" -gt 10 ] 2>/dev/null; then
+        echo ""
+        echo "[AgentPrecept] WARNING: $CHANGED_COUNT files on $BRANCH branch"
+        echo "[AgentPrecept] Major changes should use feature branches."
+        echo "[AgentPrecept] Create: git checkout -b feature/your-change"
+        echo "[AgentPrecept] Skip:  git commit --no-verify"
+        exit 1
+    fi
+fi
+
+# --- Gate 2: design docs ---
 DESIGN_DOCS=("docs/L2_D01" "docs/L4_O01" "docs/project-graph.yaml")
-CHANGED=$(git diff --cached --name-only | grep -v '^docs/\\|\\.md$\\|\\.ya\\?ml$\\|\\.json$')
-[ -z "$CHANGED" ] && exit 0
+CHANGED_CODE=$(git diff --cached --name-only | grep -v '^docs/\\|\\.md$\\|\\.ya\\?ml$\\|\\.json$')
+[ -z "$CHANGED_CODE" ] && exit 0
+
 for doc in "${DESIGN_DOCS[@]}"; do
     if ! compgen -G "$doc*" >/dev/null && [ ! -f "$doc" ]; then
         echo ""
-        echo "[AgentPrecept] missing core docs: $doc"
+        echo "[AgentPrecept] missing core design doc: $doc"
         echo "[AgentPrecept] skip: git commit --no-verify"
         exit 1
     fi

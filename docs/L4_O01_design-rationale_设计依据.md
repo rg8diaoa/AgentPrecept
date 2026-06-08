@@ -55,4 +55,5 @@
 | 为什么 gnhf 作为可选阶段而非强制 | 外部依赖 | gnhf 是外部工具（git worktree 沙盒），不是 AgentPrecept 的运行时依赖。不捆绑不 vendoring，init 检测后询问 |
 | 为什么 CI Gate 询问用户而非自动追加 | 已有配置保护 | 项目可能已有复杂 CI 配置，自动追加可能破坏已有配置。init 检测后展示 Gate 说明并询问 |
 | 为什么 checklist 项必须对齐 commit 粒度 | 实战教训 | 粗粒度 checklist（"完成用户认证模块"）导致 item 停留过久，commit 过大不可独立 revert。标准：1-3 commit/item |
-| 为什么审计从 8 维扩展为 10 维 | 狗粮升级 | 外部评价指出"README 宣称与实现之间有落差"。新增维度 9（README 声明校验）+ 维度 10（设计覆盖检查）。之前只有 INDEX/命名规范/术语表/HANDOFF，缺少 MEMORY 导致新项目无法使用自动生长机制。init.ps1 和 init.sh 同步更新 |
+| 为什么审计从 8 维扩展为 10 维 | 狗粮升级 | 外部评价指出"README 宣称与实现之间有落差"。新增维度 9（README 声明校验）+ 维度 10（设计覆盖检查） |
+| 为什么分支检查要有工程化保障 | 规则空洞 | MEMORY.md 记录了"重大变更走分支"但 pre-commit hook 不检查。升级 hook 追加 Gate 1（>10 文件 on main → 阻止）+ CI 侧新增维度 11（分支策略检查）。规则不能只靠 Agent 自觉 |

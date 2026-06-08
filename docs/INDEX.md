@@ -9,8 +9,9 @@
 
 | 编号 | 文件 | 作用 | 状态 |
 |:--|------|------|:--:|
-| L1_A01 | `L1_A01_quickstart_快速开始.md` | 如何贡献和扩展 agentprecept | 📝 |
-| L2_D01 | `L2_D01_architecture_架构设计.md` | agentprecept 自身 8 层模块架构 | ✅ |
+| L1_A01 | `L1_A01_quickstart_快速开始.md` | 快速开始指南 | 📝 |
+| L1_B01 | `L1_B01_glossary_术语表.md` | 术语表 | 📝 |
+| L2_D01 | `L2_D01_architecture_架构设计.md` | agentprecept 自身 9 层模块架构 | ✅ |
 | L4_O01 | `L4_O01_design-rationale_设计依据.md` | 44+ 条关键设计决策 | 📝 |
 | L4_M01 | `L4_M01_changelog_变更日志.md` | 版本发布记录（0.1.0 → 0.2.0） | 📝 |
 | — | `HANDOFF.md` | 会话交接（含状态标记） | 🔥 |

@@ -183,7 +183,7 @@ def check_graph_schema(docs_dir: str) -> list[dict]:
     elif isinstance(relations, list):
         valid_types = {"depends_on", "references", "indexes", "extends", "demonstrates", "tests",
                        "maps_to", "exposes", "calls", "routes", "mounts", "validates",
-                       "import", "reference", "read", "write"}
+                       "import", "reference", "read", "write", "config"}
         for i, rel in enumerate(relations):
             if not isinstance(rel, dict):
                 findings.append({
@@ -288,8 +288,42 @@ def check_coverage(docs_dir: str) -> list[dict]:
 
 
 def check_dogfood(docs_dir: str) -> list[dict]:
-    """维度 8: 狗粮审计 — 项目自身是否遵循 agentprecept 方法论"""
+    """维度 8: 狗粮审计 — 项目自身被自己管理的程度"""
     findings = []
+    
+    # 1. 图覆盖率: 项目根目录文件是否都在 structure 中
+    try:
+        import yaml
+        graph = yaml.safe_load(Path(docs_dir, "project-graph.yaml").read_text(encoding="utf-8")) or {}
+        structure = graph.get("structure", {})
+        root_files = set()
+        for f in Path(".").iterdir():
+            name = f.name
+            if name.startswith(".") or name in ("__pycache__", "agent_compass.egg-info", "diag-result.json"):
+                continue
+            root_files.add(name if f.is_dir() else name)
+        graph_keys = set(structure.keys())
+        missing = root_files - graph_keys
+        extra = graph_keys - root_files - set()  # 目录条目可多
+        if len(missing) > 3:
+            findings.append({"file": "project-graph.yaml", "issue": f"图覆盖率不足: 缺失 {len(missing)} 个根目录条目 ({', '.join(sorted(list(missing))[:5])}...)", "severity": "FAIL"})
+        elif missing:
+            findings.append({"file": "project-graph.yaml", "issue": f"图缺失 {len(missing)} 个条目: {', '.join(sorted(missing))}", "severity": "WARN"})
+    except Exception as e:
+        findings.append({"file": "project-graph.yaml", "issue": f"图覆盖率检查失败: {e}", "severity": "WARN"})
+    
+    # 2. 审计自治: 维度数是否一致
+    # 跳过自引用检查（避免无限递归）
+    
+    # 3. 工具链: pre-commit hook + CI gate
+    hook = Path(".git/hooks/pre-commit")
+    ci_gate = Path(".github/workflows/agentprecept-gate.yml")
+    if not hook.exists():
+        findings.append({"file": ".git/hooks/pre-commit", "issue": "pre-commit hook 未安装——运行 agentprecept hooks install", "severity": "WARN"})
+    if not ci_gate.exists():
+        findings.append({"file": ".github/workflows/agentprecept-gate.yml", "issue": "CI gate 未配置——运行 agentprecept init --ci", "severity": "WARN"})
+    
+    # 4. 文档存在性(保留原有的核心文档检查)
     required = {
         "INDEX.md": "文档索引",
         "project-graph.yaml": "项目图",
@@ -298,11 +332,8 @@ def check_dogfood(docs_dir: str) -> list[dict]:
     }
     for fname, desc in required.items():
         if not (Path(docs_dir) / fname).exists():
-            findings.append({
-                "file": fname,
-                "issue": f"一等公民文档缺失: {desc}",
-                "severity": "FAIL"
-            })
+            findings.append({"file": fname, "issue": f"一等公民文档缺失: {desc}", "severity": "FAIL"})
+    
     return findings
 
 

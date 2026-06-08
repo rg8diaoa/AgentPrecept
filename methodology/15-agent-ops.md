@@ -78,6 +78,6 @@ Plan 模式禁写。此时用 `update_plan` 输出完整变更方案，等用户
 
 | 理念 | 实现 | 使用方式 |
 |------|------|----------|
-| gnnhf 夜间同步 | `agentprecept gnhf setup` | 可选，需 gnnhf CLI |
+| gnhf 夜间同步 | `agentprecept gnhf setup` | 可选，需 gnhf CLI |
 | git hook 四门 | pre-commit 分支/文档/粒度/确认 | `agentprecept init` 自动安装 |
 | MEMORY 自动生长 | AGENTS.md 规则 + 会话结束时追加 | Agent 自动执行 |

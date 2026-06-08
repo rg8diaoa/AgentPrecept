@@ -11,7 +11,7 @@
 
 - 完整循环方法论（00-lifecycle）：8 阶段 Agent 工作流
 - 11 篇专题方法论 + 人机协作 + 自我管理
-- 36 个模板（31 编号 + 5 工具，16/16 分类全齐）
+- 37 个模板（31 编号 + 6 工具，16/16 分类全齐）
 - Prompt 模板集（5 个）+ first-run 初始化工单
 - 双语言示例（Python + Node.js）
 - 自身完整文档体系（docs/）
@@ -85,3 +85,21 @@
 
 ### 环境部署
 - init.ps1/sh 双平台同步 + CodeWhale instructions 同步
+
+## [0.3.0] — 2026-06-08
+
+### 新增
+- 项目重命名 agent-compass → AgentPrecept（~86 文件 ~220 处替换）
+- `agentprecept init` 升级为 6 阶段一键接入（骨架/Git/Hook/gnhf/CI/MCP）
+- MCP Server 6 tools（新增 design_gate）+ 审计 15 维 4-scope（--gate 模式）
+- pre-commit 4 gates（分支策略/design_gate/commit 粒度/NEEDS_HUMAN_REVIEW）
+- PyPI 包发布 `agentprecept`
+
+## [0.4.0] — 2026-06-09
+
+### 新增
+- project-graph.yaml 全量重建（100% 覆盖率，27 relations）+ ripple_check.py 涟漪分析
+- basic-audit.py 4-scope 重构（docs/code/git/config）+ 狗粮维度重写（自治健康度）
+- L4_O01 追加 ADR-008~019（12 条设计决策）+ L2_D01 九层架构文档
+- 版本规则严格 semver + HANDOFF [CLOSING] 反馈提示
+- 模板 36→37（新增 MEMORY.md 为一等公民）

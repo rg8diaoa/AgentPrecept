@@ -35,7 +35,7 @@ AgentPrecept/
 │   └── 16 篇：00-lifecycle + 01-14 + 15-agent-ops + INDEX
 │
 ├── 模板层 (templates/)                  ← 可拷贝的文档骨架
-│   └── 36 个（16/16 分类全齐），含 INDEX/HANDOFF/AUDIT_REPORT/project-graph/FEEDBACK
+│   └── 37 个（16/16 分类全齐），含 INDEX/HANDOFF/AUDIT_REPORT/project-graph/FEEDBACK
 │
 ├── 示例层 (examples/)                   ← 给用户的 onboarding
 │

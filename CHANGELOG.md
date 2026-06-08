@@ -1,5 +1,31 @@
 # 变更日志
 
+## [0.4.0] — 2026-06-09
+
+### project-graph 全量重建
+
+- **100% 覆盖率**：27 条 relations，覆盖 agentprecept/ ↔ scripts/ ↔ docs/ ↔ templates/ ↔ methodology/
+- **ripple_check.py**：涟漪分析脚本，DIRECT / INDIRECT / SAME_PKG 三级影响分析
+
+### 审计深度升级
+
+- **basic-audit.py 4-scope 重构**：docs / code / git / config 四个维度独立审计 + `--scope` flag
+- **狗粮维度重写**：4 项存在性检查 → 自治健康度多维评估
+- **自选维度恢复**：从遗忘恢复 → 审计报告清单提示
+
+### 设计文档补全
+
+- **L4_O01**：追加 ADR-008 ~ ADR-019（12 条设计决策，含重命名/init 升级/三层拦截/gnhf 可选/CI 交互/checklist 粒度/审计扩展/涟漪分析）
+- **L2_D01**：九层架构 + 任务拆分粒度 + 强制拦截三层体系完整文档
+
+### 规则与体验优化
+
+- **版本规则**：严格 semver（主版本.次版本.修订号）
+- **反馈提示**：HANDOFF [CLOSING] 时提醒填写反馈模板
+- **模板扩展**：36 → 37（新增 MEMORY.md 为一等公民）
+
+---
+
 ## [0.3.0] — 2026-06-08
 
 ### init 能力接入器（文档复制器 → 6 阶段全自动接入）
@@ -88,7 +114,7 @@
 - **狗粮自检 4 项**：L2_D01 架构 + init 模板完整性 + project-graph relations + 规则一致性
 - **审计缓存陷阱**：MCP tool 返回 TOOL_RESULT_REF 必须重新获取实际结果
 - **讨论阶段拦截强化**：agentprecept 自身变更不豁免设计先行
-- **模板外脑**：Agent 知道 templates/（36 个）和 methodology/（16 篇）按需取用
+- **模板外脑**：Agent 知道 templates/（37 个）和 methodology/（16 篇）按需取用
 
 ### 全维度审计
 

@@ -350,9 +350,9 @@ def check_readme_claims(docs_dir: str) -> list[dict]:
     claims = [
         ("15 维审计", r"(\d+)\s*维审计[^框架]", "scripts/basic-audit.py", "regex", r"^def check_", 15),
         ("6 个 MCP tool", r"(\d+)\s*个\s*MCP\s*tool", "agentprecept/mcp_server.py", "regex", r"@mcp\.tool", 6),
-        ("5 维代码扫描", r"(\d+)\s*维代码扫描", "scripts/sync-graph.py", "regex", r"def build_.*_relations", 5),
+        ("6 维代码扫描", r"(\d+)\s*维代码扫描", "scripts/sync-graph.py", "regex", r"def build_.*_relations", 6),
         ("16 篇方法论", r"(\d+)\s*篇方法论", "methodology/", "glob", "[01][0-9]-*.md", 16),
-        ("36 个模板", r"(\d+)\s*个模板", "templates/", "glob", "*.md", 36),
+        ("37 个模板", r"(\d+)\s*个模板", "templates/", "glob", "*.md", 37),
         ("5 个 Skill", r"(\d+)\s*个\s*Skill", "skills/", "glob", "*.md", 5),
     ]
 

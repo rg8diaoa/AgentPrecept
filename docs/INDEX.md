@@ -13,7 +13,7 @@
 | L1_B01 | `L1_B01_glossary_术语表.md` | 术语表 | 📝 |
 | L2_D01 | `L2_D01_architecture_架构设计.md` | agentprecept 自身 9 层模块架构 | ✅ |
 | L4_O01 | `L4_O01_design-rationale_设计依据.md` | 44+ 条关键设计决策 | 📝 |
-| L4_M01 | `L4_M01_changelog_变更日志.md` | 版本发布记录（0.1.0 → 0.2.0） | 📝 |
+| L4_M01 | `L4_M01_changelog_变更日志.md` | 版本发布记录（0.1.0 → 0.4.0） | 📝 |
 | — | `HANDOFF.md` | 会话交接（含状态标记） | 🔥 |
 | — | `MEMORY.md` | 持久偏好与项目约束 | 🔥 |
 | — | `AUDIT_REPORT.md` | 15 维自动化审计报告（--gate 模式）+ 14 维方法论审计框架（含自选清单） | 📝 |

@@ -7,7 +7,7 @@
 
 ## §1 文件命名
 
-遵循 agent-compass 标准：
+遵循 AgentPrecept 标准：
 
 ```
 L{Level}_{Category}{NN}_{Slug}_{Title}.md

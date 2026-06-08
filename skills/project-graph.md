@@ -11,7 +11,7 @@
 ## 手动初始化
 
 ```bash
-agent-compass sync
+agentprecept sync
 ```
 
 ## 输出规范

@@ -1,8 +1,8 @@
-# scripts/ — agent-compass 辅助脚本
+# scripts/ — AgentPrecept 辅助脚本
 
 **依赖**: Python 3.10+ + PyYAML (`pip install pyyaml`)
 
-CLI 入口: `pip install -e .` → `agent-compass init|sync|audit|doctor`
+CLI 入口: `pip install -e .` → `agentprecept init|sync|audit|setup`
 
 ---
 

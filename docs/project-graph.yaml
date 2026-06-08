@@ -132,7 +132,7 @@ structure:
   templates/:
     type: package
     stability: stable
-    description: 36 个可拷贝模板（16/16 分类全齐）
+    description: 37 个可拷贝模板（16/16 分类全齐）
     children:
     - INDEX.md
     - HANDOFF.md

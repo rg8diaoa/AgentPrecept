@@ -342,4 +342,4 @@ Agent 不应该"重写第一个版本已经解决的问题"。每次维护动作
 | 代码→图同步 | `agentprecept sync` + `sync-graph.py` | `agentprecept sync` |
 | 审计 | `agentprecept audit --gate` 15 维自动化 | `agentprecept audit --gate` |
 | 会话交接 | `HANDOFF.md` 模板 + `handoff_read` MCP tool | `handoff_read()` |
-| gnnhf 夜间同步 | `agentprecept gnhf setup` | 可选，需 gnnhf CLI |
+| gnhf 夜间同步 | `agentprecept gnhf setup` | 可选，需 gnhf CLI |

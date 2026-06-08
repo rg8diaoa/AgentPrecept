@@ -1,6 +1,6 @@
 # agentprecept 初始化向导
 
-> 复制下面这段 prompt 发给 Agent，Agent 会自动走完初始化 4 步。
+> 复制下面这段 prompt 发给 Agent，Agent 会自动走完初始化 6 阶段。
 
 ---
 

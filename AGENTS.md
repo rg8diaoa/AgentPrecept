@@ -29,6 +29,7 @@
 - **模板外脑**：docs/ 只有核心 8 文件。需要 API 契约、测试策略、部署方案等模板时，Agent 应知道从 agentprecept 仓库的 `templates/`（35 个）和 `methodology/`（16 篇）按需取用
 - **反馈提示**：HANDOFF 状态为 [CLOSING] 时，Agent 应提示："如果这次体验有用，花 2 分钟在 GitHub 填反馈模板"
 - **分支纪律**：涉及架构/重命名/多文件（>10 文件）的变更必须在独立分支上执行。pre-commit hook 强制拦截 main/master 分支上 >10 文件的 commit（可 `--no-verify` 跳过）；CI gate 维度 11 不可跳过
+- **自选维度检查**：每 5 轮对话检查自选维度（用户旅程/定位审计/复用/社区就绪度）是否退化。`agentprecept audit --gate` 报告末尾有自选清单
 
 ---
 

@@ -58,3 +58,5 @@
 | 为什么审计从 8 维扩展为 10 维 | 狗粮升级 | 外部评价指出"README 宣称与实现之间有落差"。新增维度 9（README 声明校验）+ 维度 10（设计覆盖检查） |
 | 为什么分支检查要有工程化保障 | 规则空洞 | MEMORY.md 记录了"重大变更走分支"但 pre-commit hook 不检查。升级 hook 追加 Gate 1（>10 文件 on main → 阻止）+ CI 侧新增维度 11（分支策略检查）。规则不能只靠 Agent 自觉 |
 | 为什么 commit 粒度和 NEEDS_HUMAN_REVIEW 要进 hook | 最后两道防线 | 单 commit >15 代码文件（Gate 3）+ staged 含 NEEDS_HUMAN_REVIEW（Gate 4）——这两项在 hook 层可自动化检测。CI 侧维度 12 补冗余告警。语义判断（"真的需要 15 文件一起改？"）仍是 Agent 自觉，但极端异常已被拦截 |
+| 为什么术语/内容/体验进自动化审计 | 被遗忘的自选维度 | basic-audit 从 8→12 维时，原 14 维框架中的术语一致/内容一致/体验审计被彻底遗忘。维度 13 检查术语表存在→FAIL；维度 14 跨文档数字矛盾检测→FAIL；维度 15 文档巨墙>300行+代码块无语言标注→FAIL。不能代码化的维度（用户旅程/定位/复用/社区）作为自选清单在报告末尾提示 |
+| 为什么 design_gate 逻辑要和 hook 共享 | 单源码双入口 | Agent 可跳过 MCP tool——但 pre-commit hook Gate 2 调用同一份 design_gate_check.py。Agent 不调→hook 兜底。不再有两个实现各自漂移 |

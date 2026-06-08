@@ -58,7 +58,7 @@ structure:
   scripts/:
     type: package
     stability: stable
-    description: 核心引擎（sync-graph 5维扫描/basic-audit 12维审计/init/design_gate_check）
+    description: 核心引擎（sync-graph 5维扫描/basic-audit 15维审计/init/design_gate_check）
     design_docs:
       - L2_D01
     children:
@@ -179,6 +179,10 @@ evolution:
 - id: ADR-010
   topic: 为什么强制拦截分三层
   decision: AgentPrecept 无法拦截 Agent 工具的 write_file。三层分别在可达节点：MCP tool（软）、git commit（硬可跳过）、CI PR merge（硬不可跳过）。
+  date: 2026-06-08
+- id: ADR-009
+  topic: 为什么术语/内容/体验进自动化审计
+  decision: basic-audit 从 8→12 维时原 14 维框架中的术语一致/内容一致/体验审计被遗忘。维度 13/14/15 进自动化（--gate），维度 16-19 进自选清单。不能代码化的维度在报告末尾提示而非纳入 FAIL。
   date: 2026-06-08
 - id: ADR-011
   topic: 为什么 checklist 项必须对齐 commit 粒度

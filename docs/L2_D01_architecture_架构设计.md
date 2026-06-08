@@ -25,7 +25,7 @@ AgentPrecept/
 │
 ├── 脚本层 (scripts/)                     ← 核心引擎
 │   ├── sync-graph.py       — 多语言 5 维扫描 + design_docs 注释
-│   ├── basic-audit.py      — 10 维自动化审计（--gate 模式开启维度 9+10）
+│   ├── basic-audit.py      — 15 维自动化审计（--gate 模式）+ 4 维自选清单
 │   ├── graph-to-mermaid.py — YAML → Mermaid 可视化
 │   ├── check-naming.py
 │   ├── init.ps1 / init.sh  — 项目骨架生成

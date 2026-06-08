@@ -317,7 +317,7 @@ def check_readme_claims(docs_dir: str) -> list[dict]:
     content = readme.read_text(encoding="utf-8")
 
     claims = [
-        ("10 维审计", r"(\d+)\s*维审计[^框架]", "scripts/basic-audit.py", "regex", r"def check_", 10),
+        ("15 维审计", r"(\d+)\s*维审计[^框架]", "scripts/basic-audit.py", "regex", r"^def check_", 15),
         ("6 个 MCP tool", r"(\d+)\s*个\s*MCP\s*tool", "agentprecept/mcp_server.py", "regex", r"@mcp\.tool", 6),
         ("5 维代码扫描", r"(\d+)\s*维代码扫描", "scripts/sync-graph.py", "regex", r"def build_.*_relations", 5),
         ("16 篇方法论", r"(\d+)\s*篇方法论", "methodology/", "glob", "[01][0-9]-*.md", 16),
@@ -430,6 +430,126 @@ def check_design_coverage(docs_dir: str) -> list[dict]:
     return findings
 
 
+def check_terminology(docs_dir: str) -> list[dict]:
+    """维度 13: 术语表是否存在"""
+    findings = []
+    glossary = Path(docs_dir) / "L1_B01_glossary_术语表.md"
+    if not glossary.exists():
+        # 检查 templates/ 下是否存在（新项目 init 后会有）
+        tmpl = Path("templates") / "L1_B01_glossary_术语表.md"
+        if tmpl.exists():
+            findings.append({
+                "file": "L1_B01_glossary_术语表.md",
+                "issue": "术语表模板存在但 docs/ 下缺失——运行 agentprecept init 补全",
+                "severity": "FAIL"
+            })
+        else:
+            findings.append({
+                "file": "L1_B01_glossary_术语表.md",
+                "issue": "术语表不存在，无法验证术语一致性",
+                "severity": "FAIL"
+            })
+        return findings
+    content = glossary.read_text(encoding="utf-8")
+    if "placeholder" in content or "TODO:" in content:
+        findings.append({
+            "file": "L1_B01_glossary_术语表.md",
+            "issue": "术语表为空骨架，Agent 可能在不同文档中用不同词",
+            "severity": "WARN"
+        })
+    return findings
+
+
+def check_content_consistency(docs_dir: str) -> list[dict]:
+    """维度 14: 跨文档数字矛盾检测"""
+    findings = []
+    docs_path = Path(docs_dir)
+    # 定义关键概念及其在各文档中的声明
+    concepts = {
+        "架构层数": [
+            ("L2_D01*.md", r"(\d+)\s*层"),
+            ("README.md", r"(\d+)\s*层"),
+            ("INDEX.md", r"(\d+)\s*层"),
+        ],
+        "MCP工具数": [
+            ("mcp-tools.md", r"(\d+)\s*个\s*tool"),
+            ("README.md", r"(\d+)\s*个\s*tool"),
+            ("SKILL.md", r"(\d+)\s*个\s*tool"),
+            ("INDEX.md", r"(\d+)\s*个\s*tool"),
+        ],
+        "审计维数": [
+            ("basic-audit.py", r"(\d+)\s*维"),
+            ("README.md", r"(\d+)\s*维"),
+            ("INDEX.md", r"(\d+)\s*维"),
+        ],
+        "方法论篇数": [
+            ("methodology/", r"(\d+)\s*篇"),
+            ("README.md", r"(\d+)\s*篇"),
+        ],
+        "模板数": [
+            ("templates/", r"(\d+)\s*个模板"),
+            ("README.md", r"(\d+)\s*个模板"),
+        ],
+    }
+
+    for concept, sources in concepts.items():
+        values = {}
+        for pattern, regex in sources:
+            for f in docs_path.glob(pattern) if "*" in pattern else [Path(p) for p in [pattern] if Path(p).exists()]:
+                if not f.exists():
+                    continue
+                content = f.read_text(encoding="utf-8") if f.suffix in (".md", ".yaml") else ""
+                if not content and f.suffix == ".py":
+                    content = f.read_text(encoding="utf-8")
+                m = re.search(regex, content)
+                if m:
+                    val = int(m.group(1))
+                    if val not in values:
+                        values[val] = []
+                    values[val].append(str(f))
+        if len(values) > 1:
+            details = "; ".join(f"{v} in {', '.join(fs)}" for v, fs in values.items())
+            findings.append({
+                "file": concept,
+                "issue": f"数字矛盾: {details}",
+                "severity": "FAIL"
+            })
+    return findings
+
+
+def check_experience(docs_dir: str) -> list[dict]:
+    """维度 15: 体验审计——文档巨墙 + 代码块语言标注"""
+    findings = []
+    for f in Path(docs_dir).glob("*.md"):
+        content = f.read_text(encoding="utf-8")
+        lines = content.split("\n")
+        if len(lines) > 300:
+            findings.append({
+                "file": f.name,
+                "issue": f"文档 {len(lines)} 行（>300），建议拆分",
+                "severity": "FAIL"
+            })
+        # 检查代码块语言标注
+        code_blocks = re.findall(r'```(\S*)', content)
+        unlabeled = [i for i, lang in enumerate(code_blocks) if not lang and i > 0]
+        if unlabeled:
+            # 排除第一块（可能是纯文本块如 ASCII 图）
+            findings.append({
+                "file": f.name,
+                "issue": f"{len(unlabeled)} 个代码块未标注语言",
+                "severity": "WARN"
+            })
+    return findings
+
+
+SELF_SELECT_DIMS = [
+    ("用户旅程", "README 能否 30 秒理解？有差异化对比？有已有项目接入指南（methodology/11-existing-project.md）？"),
+    ("定位审计", "README 第一段说清楚 '是什么/不是什么' 了吗？定位是否贯穿始终？"),
+    ("复用与可移植", "模板能独立拷贝使用？跨 Agent 工具兼容（Claude Code/Cursor/CodeWhale）？"),
+    ("社区就绪度", "CHANGELOG 可读？Issue/PR 模板齐全？有反馈渠道（Discussion/FEEDBACK.md）？"),
+]
+
+
 def _safe(s: str) -> str:
     """Windows GBK 终端兼容——替换不可编码字符"""
     return s.encode("gbk", errors="replace").decode("gbk")
@@ -456,6 +576,9 @@ def main():
         checks.append((check_design_coverage, "设计覆盖检查"))
         checks.append((check_branch_policy, "分支策略检查"))
         checks.append((check_commit_size, "commit粒度检查"))
+        checks.append((check_terminology, "术语一致性"))
+        checks.append((check_content_consistency, "内容一致性"))
+        checks.append((check_experience, "体验审计"))
 
     for check, name in checks:
         findings = check(docs_dir)
@@ -477,6 +600,13 @@ def main():
     total_fail = sum(1 for _, s, _ in results if s == "FAIL")
     total_warn = sum(1 for _, s, _ in results if s == "WARN")
     print(f"---\nFAIL {total_fail}  WARN {total_warn}")
+
+    if gate_mode:
+        print("\n## 自选维度（需人工/Agent 检查，不纳入 FAIL 计数）")
+        for dim, desc in SELF_SELECT_DIMS:
+            print(f"- [  ] {dim}: {desc}")
+        print("\n运行 agentprecept audit --self-select 让 Agent 逐维度检查")
+
     exit(1 if total_fail else 0)
 
 

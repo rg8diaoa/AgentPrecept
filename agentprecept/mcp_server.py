@@ -128,64 +128,14 @@ def handoff_read() -> dict:
 @mcp.tool
 def design_gate(module: str = "", operation: str = "modify") -> dict:
     """Agent 准备修改代码前调用。返回模块的前置设计文档状态。"""
-    graph_path = Path("docs/project-graph.yaml")
-    gates = []
-
-    if not graph_path.exists():
-        return {"status": "WARN", "gates": [], "message": "project-graph.yaml not found—run agentprecept sync first"}
-
-    import yaml
-    doc = yaml.safe_load(graph_path.read_text(encoding="utf-8")) or {}
-    structure = doc.get("structure") or {}
-
-    target = structure.get(module, {})
-    if not target and module:
-        # 模糊匹配
-        for key in structure:
-            if key.startswith(module) or module.startswith(key):
-                target = structure[key]
-                break
-
-    design_docs = target.get("design_docs", []) if isinstance(target, dict) else []
-
-    if not design_docs:
-        return {
-            "status": "CLEAR",
-            "gates": [],
-            "message": f"模块 {module or '(root)'} 无前置设计文档要求。"
-        }
-
-    blocked = False
-    for dd in design_docs:
-        matches = list(Path("docs").glob(f"{dd}*.md"))
-        if not matches:
-            gates.append({
-                "type": "design_document",
-                "name": dd,
-                "status": "missing",
-                "action": "create_first",
-                "template": f"templates/{dd}_*.md" if dd.endswith("*") else f"templates/{dd}.md"
-            })
-            blocked = True
-        else:
-            for mf in matches:
-                content = mf.read_text(encoding="utf-8")
-                skeleton = "⏳" in content or "TODO:" in content
-                gates.append({
-                    "type": "design_document",
-                    "name": mf.name,
-                    "status": "skeleton" if skeleton else "exists",
-                    "action": "fill_content" if skeleton else "none",
-                    "path": str(mf)
-                })
-                if skeleton:
-                    blocked = True
-
-    return {
-        "status": "BLOCKED" if blocked else "CLEAR",
-        "gates": gates,
-        "message": f"模块 {module or '(root)'}: " + ("设计文档就绪" if not blocked else "以下设计文档需要创建或填充")
-    }
+    import json, subprocess, sys as _sys
+    result = subprocess.run(
+        [_sys.executable, str(_scripts / "design_gate_check.py"), "--module", module, "--json"],
+        capture_output=True, text=True, timeout=10
+    )
+    if result.returncode not in (0, 1, 2):
+        return {"status": "ERROR", "gates": [], "message": result.stderr}
+    return json.loads(result.stdout)
 
 
 def main():

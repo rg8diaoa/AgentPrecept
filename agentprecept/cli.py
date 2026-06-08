@@ -39,19 +39,17 @@ if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ]; then
     fi
 fi
 
-# --- Gate 2: design docs ---
-DESIGN_DOCS=("docs/L2_D01" "docs/L4_O01" "docs/project-graph.yaml")
-CHANGED_CODE=$(git diff --cached --name-only | grep -v '^docs/\\|\\.md$\\|\\.ya\\?ml$\\|\\.json$')
-[ -z "$CHANGED_CODE" ] && exit 0
-
-for doc in "${DESIGN_DOCS[@]}"; do
-    if ! compgen -G "$doc*" >/dev/null && [ ! -f "$doc" ]; then
+# --- Gate 2: design gate (shared logic with MCP tool) ---
+CHANGED_CODE=$(git diff --cached --name-only | grep -Ev '^docs/|\\.md$|\\.ya?ml$|\\.json$|\\.cfg$|\\.toml$')
+if [ -n "$CHANGED_CODE" ]; then
+    python scripts/design_gate_check.py --files $CHANGED_CODE
+    if [ $? -eq 1 ]; then
         echo ""
-        echo "[AgentPrecept] missing core design doc: $doc"
-        echo "[AgentPrecept] skip: git commit --no-verify"
+        echo "[AgentPrecept] Design docs missing. Create them first."
+        echo "[AgentPrecept] Skip: git commit --no-verify"
         exit 1
     fi
-done
+fi
 
 # --- Gate 3: commit size ---
 CHANGED_CODE_FILES=$(git diff --cached --name-only | grep -Ev '^docs/|\\.md$|\\.ya?ml$|\\.json$|\\.cfg$|\\.toml$' | wc -l | tr -d ' ')

@@ -47,15 +47,20 @@ structure:
   agentprecept/:
     type: package
     stability: stable
-    description: CLI + MCP 层（init/sync/audit/doctor/mcp_server）
+    description: CLI + MCP 层（init/sync/audit/doctor/mcp_server/hooks/gnhf）
+    design_docs:
+      - L2_D01
     children:
     - cli.py
     - mcp_server.py
     - gnhf_task.py
+    - design_gate_check.py
   scripts/:
     type: package
     stability: stable
-    description: 核心引擎（sync-graph 5维扫描/basic-audit 8维审计/init）
+    description: 核心引擎（sync-graph 5维扫描/basic-audit 12维审计/init/design_gate_check）
+    design_docs:
+      - L2_D01
     children:
     - sync-graph.py
     - basic-audit.py

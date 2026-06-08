@@ -1,5 +1,7 @@
 # 13 — Agent 自我管理：判断、压缩、交接
 
+> **AgentPrecept 落地**: Auto-Pilot 模式 + checklist 粒度规则 → AGENTS.md 硬规则，详见文末。
+
 > Agent 不只是干活——需要管理自己的上下文、判断何时停下、何时继续。
 
 ---
@@ -96,4 +98,14 @@ Agent 不需要每次会话读全部方法论。按需加载:
 加功能   → 读 00-lifecycle 阶段 4 + 对应模板
 修 bug   → 读 00-lifecycle 阶段 7 + 对应模板
 其他     → 按需查阅 methodology/INDEX
+
+---
+
+## AgentPrecept 工程化落地
+
+| 理念 | 实现 | 使用方式 |
+|------|------|----------|
+| Auto-Pilot | AGENTS.md 默认行为规则 | Agent 每次会话自动执行 |
+| checklist 粒度 | 1-3 commit/item 强制规则 | AGENTS.md 硬规则 |
+| 上下文管理 | HANDOFF + 轮数阈值 | 15 轮触发 CLOSING |
 ```

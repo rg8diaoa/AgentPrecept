@@ -1,5 +1,7 @@
 # 07 — 开发工作流：agentprecept 怎么帮你写代码
 
+> **AgentPrecept 落地**: `agentprecept init/sync/audit` + pre-commit 4 gates + CI gate，详见文末。
+
 > 前面 6 篇讲的是"建体系"。这一篇讲的是"用体系"——修 bug、加功能、重构时，这套东西怎么让 Agent 更可靠。
 
 ---
@@ -200,3 +202,15 @@ feature 分支只有一条路径。双分支同时验证两种选择，
 - 架构重构（新老结构全链路对比）
 - 技术选型替换（如 Peewee → SQLAlchemy，对比 model 定义/迁移/测试）
 - agentprecept 集成（方案 A 纯文档 / 方案 B 文档+代码提升）
+
+---
+
+## AgentPrecept 工程化落地
+
+| 理念 | 实现 | 使用方式 |
+|------|------|----------|
+| 项目接入 | `agentprecept init` 6 阶段 | `agentprecept init /project` |
+| 代码同步 | `agentprecept sync` | `agentprecept sync` |
+| 审计 | `agentprecept audit --gate` 15 维 | `agentprecept audit --gate` |
+| 提交门禁 | pre-commit 4 gates | git commit 自动触发 |
+| CI 门禁 | GitHub Actions PR 审计 | `agentprecept audit --gate` |

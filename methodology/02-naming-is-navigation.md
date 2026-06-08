@@ -1,5 +1,7 @@
 # 02 — 命名即导航
 
+> **AgentPrecept 落地**: `check-naming.py` + 审计维度 1（命名一致性）已自动化，详见文末。
+
 > Agent 找文件靠名字。名字好，Agent 秒找到。名字乱，Agent 永远迷路。
 
 ---
@@ -102,3 +104,13 @@ L2_D01_graph_model.md               ← 错误：没有中文标题
 1. **可 grep**：Slug 用英文 kebab-case，Agent 可以用文件搜索精确匹配
 2. **可排序**：层级+分类+序号，任何文件管理器里顺序都是对的
 3. **可预测**：Agent 看到 `L2_D04` 就知道这是"架构设计类第 4 份、第 2 层"——不需要打开文件
+
+---
+
+## AgentPrecept 工程化落地
+
+| 理念 | 实现 | 使用方式 |
+|------|------|----------|
+| 命名规范检查 | `check-naming.py` 自动扫描 | `python scripts/check-naming.py docs/` |
+| 审计维度 1 | 命名一致性自动化 | `agentprecept audit --gate` |
+| 模板规范 | `templates/L1_A02_*` 命名规范 | `agentprecept init` 自动复制 |

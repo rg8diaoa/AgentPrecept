@@ -1,5 +1,7 @@
 # 00 — 完整循环：Agent 开发方法论全景
 
+> **AgentPrecept 落地**: 8 阶段中 init/sync/audit/handoff 4 阶段有 CLI 支持，详见文末落地表。
+
 > agentprecept 不是"写文档的方法"。是从想法到维护，Agent 在每个阶段该做什么、查什么、产出什么的完整工作流。
 
 ---
@@ -329,3 +331,15 @@ Agent 不应该"重写第一个版本已经解决的问题"。每次维护动作
 ## 一句话
 
 **agentprecept 是一个循环，不是一份文档。Agent 从阶段 1 走到阶段 8，每走一圈，项目就更有序。**
+
+---
+
+## AgentPrecept 工程化落地
+
+| 理念 | 实现 | 使用方式 |
+|------|------|----------|
+| 项目初始化 | `agentprecept init` 6 阶段一键接入 | `agentprecept init /project` |
+| 代码→图同步 | `agentprecept sync` + `sync-graph.py` | `agentprecept sync` |
+| 审计 | `agentprecept audit --gate` 15 维自动化 | `agentprecept audit --gate` |
+| 会话交接 | `HANDOFF.md` 模板 + `handoff_read` MCP tool | `handoff_read()` |
+| gnnhf 夜间同步 | `agentprecept gnhf setup` | 可选，需 gnnhf CLI |

@@ -1,5 +1,7 @@
 # 03 — 设计依据：Agent 不推翻已验证的决策
 
+> **AgentPrecept 落地**: `L4_O01` 模板 + `decision_search` MCP tool + 审计维度 6（设计追溯），详见文末。
+
 > 每条设计决策都应该回答一个问题：我们试过什么？为什么这个更好？
 
 ---
@@ -64,3 +66,13 @@ Agent 读到这些之后，不会再把"已经被证明失败的模式"重新提
 ## 一句话
 
 **不给 Agent 设计依据，它会在每次会话中重新发明轮子——而且通常是对方轮子。**
+
+---
+
+## AgentPrecept 工程化落地
+
+| 理念 | 实现 | 使用方式 |
+|------|------|----------|
+| 设计决策模板 | `L4_O01_design-rationale` 表格 | `agentprecept init` 自动复制 |
+| 决策搜索 | `decision_search` MCP tool | `decision_search("关键词")` |
+| 审计维度 6 | 设计追溯存在性检查 | `agentprecept audit --gate` |

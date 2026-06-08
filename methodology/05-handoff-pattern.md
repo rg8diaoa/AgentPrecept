@@ -1,5 +1,7 @@
 # 05 — 会话交接：Agent 间的上下文传递
 
+> **AgentPrecept 落地**: `HANDOFF.md` 模板 + `handoff_read` MCP tool + AGENTS.md 规则，详见文末。
+
 > Agent 每次会话都是新的。HANDOFF.md 是上一个 Agent 给下一个 Agent 留的纸条。
 
 ---
@@ -89,3 +91,13 @@ HANDOFF 填补的是 commit message 和代码之间的空白。
 ## 一句话
 
 **如果每个 Agent 会话结束时都能留下一页纸条，Agent 协作就不再需要人类当"记忆中转站"。**
+
+---
+
+## AgentPrecept 工程化落地
+
+| 理念 | 实现 | 使用方式 |
+|------|------|----------|
+| 交接模板 | `HANDOFF.md` 标准模板 | `agentprecept init` 自动复制 |
+| 交接读取 | `handoff_read` MCP tool | `handoff_read()` |
+| 规则触发 | AGENTS.md 会话结束信号自动重写 | 每次会话结束自动执行 |

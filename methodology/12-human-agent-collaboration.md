@@ -1,5 +1,7 @@
 # 12 — 人机协作：Agent 如何与人类对话
 
+> **AgentPrecept 落地**: `[NEEDS_HUMAN_REVIEW]` 机制 → pre-commit Gate 4 + AGENTS.md 规则，详见文末。
+
 > Agent 不是替代人类——是辅助。这一篇讲 Agent 什么时候该停下来、什么时候该追问、什么时候该等确认。
 
 ---
@@ -89,3 +91,13 @@ Agent 完成以下动作后 → HANDOFF 标注 [NEEDS_HUMAN_REVIEW]:
 ## 沉默处理
 
 人类 3 轮无反馈 → Agent 不停下来循环尝试 → 停止并将当前状态写入 HANDOFF，状态改为 [BLOCKED]
+
+---
+
+## AgentPrecept 工程化落地
+
+| 理念 | 实现 | 使用方式 |
+|------|------|----------|
+| 设计确认 | `[NEEDS_HUMAN_REVIEW]` 机制 | AGENTS.md 规则强制 |
+| 提交拦截 | pre-commit Gate 4 | git commit 自动触发 |
+| 互动模式 | AGENTS.md 讨论阶段拦截 | Agent 自动执行 |

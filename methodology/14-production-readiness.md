@@ -1,5 +1,7 @@
 # 14 — 生产就绪：Agent 产出及格线
 
+> **AgentPrecept 落地**: `agentprecept audit --gate` + CI Gate 15 维全自动门禁，详见文末。
+
 > 每个阶段做到什么程度才算合格？不是"看起来可以"——是硬门槛。本指南同时服务两类读者：
 > - **Agent**：自我检查"我的产出够格提交吗"
 > - **人类**：评判"Agent 的产出应该通过哪些条件"
@@ -140,4 +142,14 @@ Agent 提交了架构设计 → 你对照:
   □ project-graph 已经更新
 
 4 项全 □ → 及格。少 1 项 → 告诉 Agent "补一下 X"
+
+---
+
+## AgentPrecept 工程化落地
+
+| 理念 | 实现 | 使用方式 |
+|------|------|----------|
+| 自动化门禁 | `agentprecept audit --gate` 15 维 | `agentprecept audit --gate` |
+| CI 强制执行 | GitHub Actions PR 审计 | `agentprecept init` 生成配置 |
+| 审计 0 FAIL | exit 0 才能 merge | CI gate 硬拦截 |
 ```

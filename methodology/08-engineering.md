@@ -1,5 +1,7 @@
 # 08 — 工程化：CI/CD + 审计自动化 + 发布
 
+> **AgentPrecept 落地**: CI gate 模板 + pre-commit hook + `agentprecept audit --gate`，详见文末。
+
 > Agent 写的代码不只是跑在本地。要跑在生产环境。这一篇讲 agentprecept 怎么嵌入工程流水线。
 
 ---
@@ -205,3 +207,14 @@ Agent 修改共享文件前的流程：
 ## 一句话
 
 **工程化不是另一套方法论。是把 agentprecept 的检查清单放进 CI 脚本里，让 Agent 每次提交前自动跑——不通过就阻断。**
+
+---
+
+## AgentPrecept 工程化落地
+
+| 理念 | 实现 | 使用方式 |
+|------|------|----------|
+| CI 门禁 | GitHub Actions workflow 模板 | `agentprecept init` 自动生成 |
+| pre-commit hook | 4 gates（分支/文档/粒度/确认） | `agentprecept init` 自动安装 |
+| 审计自动化 | `agentprecept audit --gate` 15 维 | `agentprecept audit --gate` |
+| 发布检查 | 审计 exit 0 才能 merge | CI gate 强制执行 |

@@ -1,5 +1,7 @@
 # 06 — 三层项目图：Agent 的认知模型
 
+> **AgentPrecept 落地**: `project-graph.yaml` + `agentprecept sync` + `project_graph_query` MCP tool + 审计维度 5/10，详见文末。
+
 > 文档是地图。图是 Agent 理解项目"长什么样"的方式。
 
 ---
@@ -160,3 +162,13 @@ evolution:
 ## 一句话
 
 **Agent 不会在文件系统里迷路——它会在关系里迷路。图是 Agent 的关系地图。**
+
+---
+
+## AgentPrecept 工程化落地
+
+| 理念 | 实现 | 使用方式 |
+|------|------|----------|
+| 三层模型 | `project-graph.yaml` structure/relations/evolution | `agentprecept sync` 自动扫描 |
+| 图查询 | `project_graph_query` MCP tool | `project_graph_query(module)` |
+| 图审计 | 审计维度 5（格式）+ 维度 10（覆盖） | `agentprecept audit --gate` |

@@ -17,9 +17,9 @@ _scripts = Path(__file__).resolve().parent.parent / "scripts"
 
 def _load_script(name):
     path = _scripts / f"{name}.py"
-    spec = __import__("importlib.util", fromlist=["util"]).util
-    mod_spec = spec.spec_from_file_location(name, path)
-    mod = spec.module_from_spec(mod_spec)
+    from importlib import util
+    mod_spec = util.spec_from_file_location(name, path)
+    mod = util.module_from_spec(mod_spec)
     mod_spec.loader.exec_module(mod)
     return mod
 

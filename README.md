@@ -133,7 +133,7 @@ python -m agentprecept.mcp_server   # 启动 MCP Server（6 tools）
 
 ## 数字
 
-- 16 篇方法论 + 37 个模板（16/16 分类全齐）+ 5 个 Skill
+- 18 篇方法论 + 37 个模板（16/16 分类全齐）+ 5 个 Skill
 - Python 和 Node.js 双语言可运行示例
 - 15 维审计框架 + 8 阶段生产就绪标准
 

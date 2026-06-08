@@ -22,7 +22,7 @@ cat docs/HANDOFF.md
 
 ## 工作流
 
-```
+```text
 gnhf_task.py                    gnhf                        agentprecept
 ─────────────                   ────                        ─────────────
 读取 project-graph 状态    →    创建 worktree

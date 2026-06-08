@@ -1,9 +1,9 @@
-# agent-compass 初始化脚本 (Windows PowerShell)
+# agentprecept 初始化脚本 (Windows PowerShell)
 # 用法: .\init.ps1 C:\path\to\your-project
 
 param([string]$Project = ".")
 
-Write-Host "agent-compass 初始化 → $Project"
+Write-Host "agentprecept 初始化 → $Project"
 
 if (Test-Path "$Project\AGENTS.md") {
     Write-Host "⚠ AGENTS.md 已存在，跳过覆盖。如需更新请手动替换。"
@@ -42,7 +42,7 @@ if ($gitAnswer -eq 'y') {
     Write-Host "   git init done"
 }
 Write-Host ""
-Write-Host "下一步: 1) 运行 agent-compass setup 获取 MCP 配置"
+Write-Host "下一步: 1) 运行 agentprecept setup 获取 MCP 配置"
 Write-Host "      2) 将 MCP 配置加入 Claude Code(.mcp.json) 或 CodeWhale(~/.deepseek/mcp.json)"
 Write-Host "      3) 重启 Agent, MCP tools 自动可用"
 Write-Host "      4) 或: 复制 examples\first-run.md 中的 prompt 发给 Agent 自动初始化 project-graph"

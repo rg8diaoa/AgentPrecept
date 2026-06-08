@@ -62,18 +62,18 @@
 
 ### MEMORY 机制重新设计
 - 自动生长：Agent 自动追加偏好/约束/教训
-- 全局与项目分离：agent-compass 自身 MEMORY 瘦身
+- 全局与项目分离：agentprecept 自身 MEMORY 瘦身
 - init 脚本支持：一等公民 4→5（新增 MEMORY.md），双平台同步
 
 ### 项目图补全
 - relations：空列表 → 14 条边（import/reference/read/write）
-- structure 修复：agent_compass 去重 + scripts/ 新增包
+- structure 修复：agentprecept 去重 + scripts/ 新增包
 
 ### 规则加固
 - go 语义钉死：两步确认不可合并
 - 狗粮自检 4 项：架构/模板/图/规则一致性
 - 审计缓存陷阱规则
-- 讨论阶段 agent-compass 自身不豁免
+- 讨论阶段 agentprecept 自身不豁免
 - 模板外脑规则：Agent 知道按需取用
 
 ### 全维度审计

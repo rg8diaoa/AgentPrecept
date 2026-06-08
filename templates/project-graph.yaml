@@ -1,11 +1,11 @@
 structure:
-  agent_compass:
+  agentprecept:
     type: package
     stability: stable
     children:
     - cli.py
 relations:
-- from: agent_compass/cli.py
+- from: agentprecept/cli.py
   to: subprocess
   type: depends_on
 evolution: []

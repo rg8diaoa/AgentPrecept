@@ -1,4 +1,4 @@
-# agent-compass 自身文档索引
+# agentprecept 自身文档索引
 
 > 分类: INDEX | 层级: — | 编号: INDEX
 > 状态: 📝 撰写中 | 目标读者: 全部
@@ -9,8 +9,8 @@
 
 | 编号 | 文件 | 作用 | 状态 |
 |:--|------|------|:--:|
-| L1_A01 | `L1_A01_quickstart_快速开始.md` | 如何贡献和扩展 agent-compass | 📝 |
-| L2_D01 | `L2_D01_architecture_架构设计.md` | agent-compass 自身 8 层模块架构 | ✅ |
+| L1_A01 | `L1_A01_quickstart_快速开始.md` | 如何贡献和扩展 agentprecept | 📝 |
+| L2_D01 | `L2_D01_architecture_架构设计.md` | agentprecept 自身 8 层模块架构 | ✅ |
 | L4_O01 | `L4_O01_design-rationale_设计依据.md` | 44+ 条关键设计决策 | 📝 |
 | L4_M01 | `L4_M01_changelog_变更日志.md` | 版本发布记录（0.1.0 → 0.2.0） | 📝 |
 | — | `HANDOFF.md` | 会话交接（含状态标记） | 🔥 |
@@ -20,7 +20,7 @@
 | — | `mcp-tools.md` | MCP Server 5 个 tool 参考 | ✅ |
 | — | `gnhf-task-template.md` | gnhf 夜间自动同步集成指南 | 📝 |
 
-**不填充的分类**（agent-compass 是方法论仓库，非软件项目）：
+**不填充的分类**（agentprecept 是方法论仓库，非软件项目）：
 C/E/F/G/H/I/J/K/L/N/P — 见 `docs/L2_D01` §架构说明
 
 ---

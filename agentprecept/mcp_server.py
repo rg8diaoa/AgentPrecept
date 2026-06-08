@@ -1,9 +1,9 @@
-"""agent-compass MCP Server
+"""agentprecept MCP Server
 
-启动: compass-mcp
-提供 5 个 tool: query / audit / diff / decision / handoff
+启动: agentprecept-mcp
+提供 6 个 tool: query / audit / diff / decision / handoff / design_gate
 """
-import sys, importlib.util
+import sys
 from pathlib import Path
 
 try:
@@ -14,24 +14,27 @@ except ImportError:
 
 _scripts = Path(__file__).resolve().parent.parent / "scripts"
 
+
 def _load_script(name):
     path = _scripts / f"{name}.py"
-    spec = importlib.util.spec_from_file_location(name, path)
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
+    spec = __import__("importlib.util", fromlist=["util"]).util
+    mod_spec = spec.spec_from_file_location(name, path)
+    mod = spec.module_from_spec(mod_spec)
+    mod_spec.loader.exec_module(mod)
     return mod
+
 
 basic_audit = _load_script("basic-audit")
 sync_graph = _load_script("sync-graph")
 
-mcp = FastMCP("agent-compass")
+mcp = FastMCP("agentprecept")
 
 
 @mcp.tool
 def project_graph_query(module: str = "", query_type: str = "relations") -> dict:
     graph_path = Path("docs/project-graph.yaml")
     if not graph_path.exists():
-        return {"error": "project-graph.yaml not found—run compass sync first"}
+        return {"error": "project-graph.yaml not found—run agentprecept sync first"}
     import yaml
     doc = yaml.safe_load(graph_path.read_text(encoding="utf-8")) or {}
     result = {}
@@ -120,6 +123,69 @@ def handoff_read() -> dict:
         elif in_next and l.strip().startswith(("1.","2.","3.","4.")):
             next_lines.append(l.strip())
     return {"status": status[0] if status else "", "next_step": " ".join(next_lines)}
+
+
+@mcp.tool
+def design_gate(module: str = "", operation: str = "modify") -> dict:
+    """Agent 准备修改代码前调用。返回模块的前置设计文档状态。"""
+    graph_path = Path("docs/project-graph.yaml")
+    gates = []
+
+    if not graph_path.exists():
+        return {"status": "WARN", "gates": [], "message": "project-graph.yaml not found—run agentprecept sync first"}
+
+    import yaml
+    doc = yaml.safe_load(graph_path.read_text(encoding="utf-8")) or {}
+    structure = doc.get("structure") or {}
+
+    target = structure.get(module, {})
+    if not target and module:
+        # 模糊匹配
+        for key in structure:
+            if key.startswith(module) or module.startswith(key):
+                target = structure[key]
+                break
+
+    design_docs = target.get("design_docs", []) if isinstance(target, dict) else []
+
+    if not design_docs:
+        return {
+            "status": "CLEAR",
+            "gates": [],
+            "message": f"模块 {module or '(root)'} 无前置设计文档要求。"
+        }
+
+    blocked = False
+    for dd in design_docs:
+        matches = list(Path("docs").glob(f"{dd}*.md"))
+        if not matches:
+            gates.append({
+                "type": "design_document",
+                "name": dd,
+                "status": "missing",
+                "action": "create_first",
+                "template": f"templates/{dd}_*.md" if dd.endswith("*") else f"templates/{dd}.md"
+            })
+            blocked = True
+        else:
+            for mf in matches:
+                content = mf.read_text(encoding="utf-8")
+                skeleton = "⏳" in content or "TODO:" in content
+                gates.append({
+                    "type": "design_document",
+                    "name": mf.name,
+                    "status": "skeleton" if skeleton else "exists",
+                    "action": "fill_content" if skeleton else "none",
+                    "path": str(mf)
+                })
+                if skeleton:
+                    blocked = True
+
+    return {
+        "status": "BLOCKED" if blocked else "CLEAR",
+        "gates": gates,
+        "message": f"模块 {module or '(root)'}: " + ("设计文档就绪" if not blocked else "以下设计文档需要创建或填充")
+    }
 
 
 def main():

@@ -1,6 +1,6 @@
 # 08 — 工程化：CI/CD + 审计自动化 + 发布
 
-> Agent 写的代码不只是跑在本地。要跑在生产环境。这一篇讲 agent-compass 怎么嵌入工程流水线。
+> Agent 写的代码不只是跑在本地。要跑在生产环境。这一篇讲 agentprecept 怎么嵌入工程流水线。
 
 ---
 
@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Run agent-compass audit
+      - name: Run agentprecept audit
         run: |
           # 8 维自动检查
           python scripts/basic-audit.py docs/ --format markdown > audit-report.md
@@ -204,4 +204,4 @@ Agent 修改共享文件前的流程：
 
 ## 一句话
 
-**工程化不是另一套方法论。是把 agent-compass 的检查清单放进 CI 脚本里，让 Agent 每次提交前自动跑——不通过就阻断。**
+**工程化不是另一套方法论。是把 agentprecept 的检查清单放进 CI 脚本里，让 Agent 每次提交前自动跑——不通过就阻断。**

@@ -1,5 +1,66 @@
 # 变更日志
 
+## [0.3.0] — 2026-06-08
+
+### init 能力接入器（文档复制器 → 6 阶段全自动接入）
+
+- **init 6 阶段**：骨架 / Git / Pre-commit Hook / gnhf / CI Gate / MCP —— 一键运行，全部就位
+- **hooks 子命令**：`agentprecept hooks install/uninstall/status`
+- **gnhf 子命令**：`agentprecept gnhf setup/task/status`
+- **CI Gate 模板**：`agentprecept init` 检测已有 CI 后询问是否追加 PR 门禁
+- **接入状态报告**：`agentprecept init --status` 输出完整能力矩阵
+- **Flag 支持**：`--yes / --dry-run / --status / --ci / --no-ci / --no-gnhf`
+
+### 强制拦截三层体系
+
+- **Layer 1 — MCP design_gate**：第 6 个 MCP tool，Agent 写代码前调用，返回模块的前置设计文档状态（CLEAR/BLOCKED）
+- **Layer 2 — Git Pre-commit Hook**：init 自动安装，代码变更时检查核心设计文档是否存在（`git commit --no-verify` 跳过）
+- **Layer 3 — CI Pipeline Gate**：`agentprecept audit --gate`（10 维），PR 不通过无法 merge
+
+### 审计升级：8 维 → 10 维
+
+- **维度 9 — README 声明校验**：README 中的数字声明 vs 实际代码/目录数量
+- **维度 10 — 设计覆盖检查**：project-graph 的 `design_docs` 字段 vs 实际存在的设计文档
+- **--gate flag**：`agentprecept audit --gate` 或 `python scripts/basic-audit.py docs/ --gate`
+
+### project-graph 扩展
+
+- `design_docs` 字段：structure 条目可声明所需的前置设计文档类型
+- `sync-graph.py` 支持扫描代码中的 `# design_docs:` 注释标记
+
+### 规则骨
+
+- **checklist 粒度规则**：每项 1-3 commit，架构边界即任务边界（L2_D01 + AGENTS.md + SKILL.md + MEMORY.md 四文件同步）
+- **重大设计变更走分支**：MEMORY.md 追加教训 → AGENTS.md 规则层融入
+- **反馈提示**：HANDOFF [CLOSING] 时 Agent 自动提示填写反馈模板
+
+### 社区基础设施
+
+- `templates/FEEDBACK.md`：2 分钟反馈模板
+- `L2_D01`：重写为九层结构 + 任务拆分粒度 + 强制拦截体系
+- `L4_O01`：追加 ADR-008 ~ ADR-014（重命名/init升级/三层拦截/gnhf可选/CI交互/checklist粒度/审计扩展）
+- `mcp-tools.md`：追加 design_gate tool 文档
+
+---
+
+## [0.2.1] — 2026-06-08
+
+### 项目重命名：agent-compass → AgentPrecept
+
+- **命名变更**：agent-compass → AgentPrecept（避免与 Future AGI "Agent Compass" 商业产品混淆）
+- **Python 模块**：`agent_compass/` → `agentprecept/`，所有 import 路径同步更新
+- **CLI 命令**：`agent-compass` → `agentprecept`，`compass-mcp` → `agentprecept-mcp`
+- **MCP Server**：注册名 `"agent-compass"` → `"agentprecept"`
+- **PyPI 包**：旧 `agent-compass` 包将标记 deprecated，新包 `agentprecept` 发布
+- **全局替换**：~86 文件中 ~220 处引用更新（Python/文档/模板/方法论/CI/脚本）
+- **README 新增**：名称区分声明块 + 横向定位对比表
+
+### 规则加固
+
+- **重大设计变更走分支**：MEMORY.md 追加教训——涉及架构/重命名/多文件（>10 文件）变更必须在独立分支执行
+
+---
+
 ## [0.2.0] — 2026-06-07
 
 ### MCP Server 上线
@@ -12,13 +73,13 @@
 ### MEMORY 机制重新设计
 
 - **自动生长**：MEMORY.md 从静态填空模板改为引导型模板，Agent 在对话中自动追加偏好/约束/教训
-- **全局偏好分离**：agent-compass 自身 MEMORY 瘦身为纯项目约束，用户全局偏好移至 CodeWhale note
+- **全局偏好分离**：agentprecept 自身 MEMORY 瘦身为纯项目约束，用户全局偏好移至 CodeWhale note
 - **init 脚本升级**：一等公民 4→5（新增 MEMORY.md），init.ps1 和 init.sh 双平台同步
 
 ### 项目图补全
 
-- **project-graph relations**：从空列表补全为 14 条边（import/reference/read/write），覆盖 agent_compass/↔scripts/↔docs/
-- **structure 修复**：agent_compass/ 去重 + 补 mcp_server.py；新增 scripts/ 包；docs/ 补 mcp-tools.md
+- **project-graph relations**：从空列表补全为 14 条边（import/reference/read/write），覆盖 agentprecept/↔scripts/↔docs/
+- **structure 修复**：agentprecept/ 去重 + 补 mcp_server.py；新增 scripts/ 包；docs/ 补 mcp-tools.md
 - **templates 补文件**：创建 templates/HANDOFF.md 和 templates/L4_O01_design-rationale_设计依据.md（init 脚本引用的空白模板）
 
 ### 规则加固
@@ -26,7 +87,7 @@
 - **"go" 语义钉死**：确认的是上一轮的设计草稿，不是讨论；两步确认不可合并
 - **狗粮自检 4 项**：L2_D01 架构 + init 模板完整性 + project-graph relations + 规则一致性
 - **审计缓存陷阱**：MCP tool 返回 TOOL_RESULT_REF 必须重新获取实际结果
-- **讨论阶段拦截强化**：agent-compass 自身变更不豁免设计先行
+- **讨论阶段拦截强化**：agentprecept 自身变更不豁免设计先行
 - **模板外脑**：Agent 知道 templates/（36 个）和 methodology/（16 篇）按需取用
 
 ### 全维度审计

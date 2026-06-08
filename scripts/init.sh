@@ -1,10 +1,10 @@
 #!/bin/bash
-# agent-compass 初始化脚本
+# agentprecept 初始化脚本
 # 用法: bash init.sh /path/to/your-project
 
 PROJECT="${1:-.}"
 
-echo "agent-compass 初始化 → $PROJECT"
+echo "agentprecept 初始化 → $PROJECT"
 
 if [ -f "$PROJECT/AGENTS.md" ]; then
     echo "⚠ AGENTS.md 已存在，跳过覆盖。如需更新请手动替换。"
@@ -43,7 +43,7 @@ if [ "$git_answer" = "y" ]; then
     echo "   git init done"
 fi
 echo ""
-echo "下一步: 1) 运行 agent-compass setup 获取 MCP 配置"
+echo "下一步: 1) 运行 agentprecept setup 获取 MCP 配置"
 echo "      2) 将 MCP 配置加入 Claude Code(.mcp.json) 或 CodeWhale(~/.deepseek/mcp.json)"
 echo "      3) 重启 Agent, MCP tools 自动可用"
 echo "      4) 或: 复制 examples/first-run.md 中的 prompt 发给 Agent 自动初始化 project-graph"

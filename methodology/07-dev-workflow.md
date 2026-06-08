@@ -1,4 +1,4 @@
-# 07 — 开发工作流：agent-compass 怎么帮你写代码
+# 07 — 开发工作流：agentprecept 怎么帮你写代码
 
 > 前面 6 篇讲的是"建体系"。这一篇讲的是"用体系"——修 bug、加功能、重构时，这套东西怎么让 Agent 更可靠。
 
@@ -12,9 +12,9 @@
 出 bug 了：login 接口偶发返回 500，日志显示 token 过期判断异常。
 ```
 
-**没有 agent-compass**：Agent 读代码 → 发现 `refresh_token()` 逻辑复杂 → 不知道改了会影响谁 → 可能引入新 bug → 修完不知道有没有违反之前的设计。
+**没有 agentprecept**：Agent 读代码 → 发现 `refresh_token()` 逻辑复杂 → 不知道改了会影响谁 → 可能引入新 bug → 修完不知道有没有违反之前的设计。
 
-**有 agent-compass**：
+**有 agentprecept**：
 
 1. Agent 查 `project-graph.yaml`：
    ```
@@ -55,9 +55,9 @@
 需求：给 Task 加一个"优先级"字段（P0-P3），按优先级排序。
 ```
 
-**没有 agent-compass**：Agent 在 `tasks.py` 加字段 → 命名叫 `priority_level` → 前端拿到的是 `priorityLevel` → 一个月后另一个 Agent 加类似字段叫 `importance` → 术语混乱。
+**没有 agentprecept**：Agent 在 `tasks.py` 加字段 → 命名叫 `priority_level` → 前端拿到的是 `priorityLevel` → 一个月后另一个 Agent 加类似字段叫 `importance` → 术语混乱。
 
-**有 agent-compass**：
+**有 agentprecept**：
 
 1. Agent 查命名规范 → 字段命名：`priority`（snake_case），不是 `priority_level`。
 
@@ -88,9 +88,9 @@
 任务：把 auth 模块从手写 JWT 改成 OAuth2 库。
 ```
 
-**没有 agent-compass**：Agent 改 `auth/` → 发现 `crypto.py` 也被其他模块用 → 不知道怎么改 → 改完跑了测试没报错 → 上线后 `admin.py` 的 token 验证逻辑悄悄坏了（因为 admin 的测试覆盖率不够）。
+**没有 agentprecept**：Agent 改 `auth/` → 发现 `crypto.py` 也被其他模块用 → 不知道怎么改 → 改完跑了测试没报错 → 上线后 `admin.py` 的 token 验证逻辑悄悄坏了（因为 admin 的测试覆盖率不够）。
 
-**有 agent-compass**：
+**有 agentprecept**：
 
 1. Agent 查 `project-graph.yaml` → 发现 `auth/` 被以下模块依赖：
    ```
@@ -132,7 +132,7 @@
 
 ## 一句话
 
-**agent-compass 不是让你写更多文档。是让 Agent 在写代码前多花 30 秒查三样东西——图、设计依据、命名规范——然后少花 3 小时修引入的 bug。**
+**agentprecept 不是让你写更多文档。是让 Agent 在写代码前多花 30 秒查三样东西——图、设计依据、命名规范——然后少花 3 小时修引入的 bug。**
 
 ---
 
@@ -151,7 +151,7 @@
    ```
 
 2. **两个分支独立实施，不交叉**。
-   - 代码变更：按 agent-compass 标准流程（设计先行 → 确认 → 代码 → 测试）
+   - 代码变更：按 agentprecept 标准流程（设计先行 → 确认 → 代码 → 测试）
    - 每次代码变更后自动 sync project-graph
    - 每个决策追加 L4_O01
 
@@ -199,4 +199,4 @@ feature 分支只有一条路径。双分支同时验证两种选择，
 
 - 架构重构（新老结构全链路对比）
 - 技术选型替换（如 Peewee → SQLAlchemy，对比 model 定义/迁移/测试）
-- agent-compass 集成（方案 A 纯文档 / 方案 B 文档+代码提升）
+- agentprecept 集成（方案 A 纯文档 / 方案 B 文档+代码提升）

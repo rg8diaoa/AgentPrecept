@@ -1,6 +1,6 @@
 # 方法论索引
 
-agent-compass 的完整方法论文档。
+agentprecept 的完整方法论文档。
 
 ## 阅读路线
 

@@ -1,4 +1,4 @@
-# agent-compass
+# agentprecept
 
 ## Description
 
@@ -10,14 +10,14 @@
 
 加载本 Skill 后，以下流程自动执行，无需用户提醒。除非用户在当前对话中明确说"停"/"跳过"/"不用"，或修改 AGENTS.md 变更规则。
 
-- 代码变更后 → `agent-compass sync`；若 CLI 不可用 → 手动编辑 project-graph
+- 代码变更后 → `agentprecept sync`；若 CLI 不可用 → 手动编辑 project-graph
 - 设计决策后 → 立即追加 L4_O01（适配性修改也算决策）
 - 会话结束信号 → 全量重写 HANDOFF（用户说"结束/交接/handoff/compact"、全部 checklist 完成且 2 轮无新任务、> 15 轮）
 - git commit 前 → 对照 14-production-readiness
-- 默认行为：完成任一模块后 → 追加测试任务到 checklist；每 5 轮自问"缺设计文档吗？有该写没写的 MEMORY 教训吗？"；发现偏好/约束/教训 → grep 后追加 MEMORY.md（可更新旧行不可重复，追加后读回验证）；MCP 未配 → 提示配置；缺模板 → 从 agent-compass templates/ 取
+- 默认行为：完成任一模块后 → 追加测试任务到 checklist（每项 1-3 commit 粒度）；每 5 轮自问"缺设计文档吗？有该写没写的 MEMORY 教训吗？"；发现偏好/约束/教训 → grep 后追加 MEMORY.md（可更新旧行不可重复，追加后读回验证）；MCP 未配 → 提示配置；缺模板 → 从 agentprecept templates/ 取
 - 批量创建文件 > 15 个时 → 分子代理并行（单个子代理 ≤ 15 文件，超时 180s。依据：世界模拟器 37 文件迁移时 230s 超时）
-- MCP Server：`python -m agent_compass.mcp_server`，5 个 tool（query/audit/diff/decision/handoff），配置见 docs/mcp-tools.md
-- 首次安装 → `agent-compass setup` 一键完成初始化 + MCP 配置指南
+- MCP Server：`python -m agentprecept.mcp_server`，5 个 tool（query/audit/diff/decision/handoff），配置见 docs/mcp-tools.md
+- 首次安装 → `agentprecept setup` 一键完成初始化 + MCP 配置指南
 
 Agent 不得等待提醒、不得跳过、不得事后补做。Auto-Pilot 优先级高于工作模式（EXPLORE/PRECISE）。
 
@@ -35,22 +35,22 @@ Agent 不得等待提醒、不得跳过、不得事后补做。Auto-Pilot 优先
 
 ### 首次邂逅检测（Auto-Pilot）
 
-当 Agent 检测到用户 clone/发送 agent-compass 仓库链接时，必须立即主动询问安装方式：
+当 Agent 检测到用户 clone/发送 agentprecept 仓库链接时，必须立即主动询问安装方式：
 
-> 检测到 agent-compass。安装方式？
+> 检测到 agentprecept。安装方式？
 > [A] 当前项目安装（推荐，全工具通用） | [B] CodeWhale 全局 Skill | [C] 暂不安装
 
 用户回答后立即执行：
 
 - **A — 当前项目安装**：运行 `scripts/init.ps1`（Windows）或 `scripts/init.sh`（Linux/macOS）→ `pip install fastmcp -q`。复制 AGENTS.md 到项目根目录——Claude Code / Cursor / CodeWhale / OpenCode / Copilot / Windsurf 全部自动读取
-- **B — CodeWhale 全局 Skill**：复制 `SKILL.md` 到 `~/.deepseek/skills/agent-compass/`
+- **B — CodeWhale 全局 Skill**：复制 `SKILL.md` 到 `~/.deepseek/skills/agentprecept/`
 - **C — 暂不安装**：跳过，不追问
 
 **A/B 安装后 Agent 必须立即执行 MCP 自动配置（同一 turn）**：
 1. 检测当前工具：CodeWhale → `~/.deepseek/mcp.json` / Claude Code → `.mcp.json` / Cursor → `.cursor/mcp.json`
-2. 若配置文件不存在 → 创建；若存在且无 agent-compass 条目 → 追加
-3. MCP 条目（cwd 为 agent-compass 仓库绝对路径，Windows 必须 `PYTHONIOENCODING=utf-8`）：
-   `{"mcpServers":{"agent-compass":{"command":"python","args":["-m","agent_compass.mcp_server"],"cwd":"<路径>","env":{"PYTHONIOENCODING":"utf-8","PYTHONUTF8":"1"}}}}`
+2. 若配置文件不存在 → 创建；若存在且无 agentprecept 条目 → 追加
+3. MCP 条目（cwd 为 agentprecept 仓库绝对路径，Windows 必须 `PYTHONIOENCODING=utf-8`）：
+   `{"mcpServers":{"agentprecept":{"command":"python","args":["-m","agentprecept.mcp_server"],"cwd":"<路径>","env":{"PYTHONIOENCODING":"utf-8","PYTHONUTF8":"1"}}}}`
 4. 提示 git init
 
 ---

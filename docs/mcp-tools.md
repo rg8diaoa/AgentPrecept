@@ -1,20 +1,20 @@
 # MCP Tools 参考
 
-agent-compass 通过 MCP Server 暴露 5 个 tool，供任何支持 MCP 的 Agent 调用。
+agentprecept 通过 MCP Server 暴露 5 个 tool，供任何支持 MCP 的 Agent 调用。
 
 ## 启动
 
 ```bash
 compass-mcp
 # 或
-python -m agent_compass.mcp_server
+python -m agentprecept.mcp_server
 ```
 
 前置条件：`pip install fastmcp`
 
 ## Tool 列表
 
-> **Tool vs Resource**：agent-compass 当前仅提供 MCP Tools（可调用的函数），不提供 MCP Resources（只读数据资源）。两者区别：Tool 是模型主动调用的 RPC 操作（如审计、查询），Resource 是模型被动读取的数据（如文件内容）。未来版本可能为 HANDOFF、project-graph 等高频读取数据追加 Resource 支持。
+> **Tool vs Resource**：agentprecept 当前仅提供 MCP Tools（可调用的函数），不提供 MCP Resources（只读数据资源）。两者区别：Tool 是模型主动调用的 RPC 操作（如审计、查询），Resource 是模型被动读取的数据（如文件内容）。未来版本可能为 HANDOFF、project-graph 等高频读取数据追加 Resource 支持。
 
 ### 1. project_graph_query
 
@@ -117,6 +117,49 @@ dry-run 同步——不写文件，返回待变更清单。
 }
 ```
 
+### 6. design_gate
+
+Agent 准备修改代码前调用。返回模块的前置设计文档状态。
+
+```json
+// design_gate(module="src/services", operation="modify")
+{
+  "status": "BLOCKED",
+  "gates": [
+    {
+      "type": "design_document",
+      "name": "L2_D01",
+      "status": "missing",
+      "action": "create_first",
+      "template": "templates/L2_D01*.md"
+    },
+    {
+      "type": "design_document",
+      "name": "L4_O01_design-rationale.md",
+      "status": "skeleton",
+      "action": "fill_content",
+      "path": "docs/L4_O01_design-rationale.md"
+    }
+  ],
+  "message": "module src/services: design docs need creation or filling"
+}
+```
+
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| module | string | 模块路径，如 "src/services" |
+| operation | string | "modify" / "create" |
+
+**返回值：**
+
+| 字段 | 说明 |
+|------|------|
+| status | "CLEAR" / "WARN" / "BLOCKED" |
+| gates | 每个前置文档的状态（exists/missing/skeleton）和动作（none/create_first/fill_content） |
+| message | 人类可读的摘要 |
+
+---
+
 ## 在 Code Agent 中配置
 
 ### Claude Code
@@ -125,9 +168,9 @@ dry-run 同步——不写文件，返回待变更清单。
 // .mcp.json
 {
   "mcpServers": {
-    "agent-compass": {
+    "agentprecept": {
       "command": "python",
-      "args": ["-m", "agent_compass.mcp_server"]
+      "args": ["-m", "agentprecept.mcp_server"]
     }
   }
 }
@@ -140,10 +183,10 @@ dry-run 同步——不写文件，返回待变更清单。
 ```json
 {
   "mcpServers": {
-    "agent-compass": {
+    "agentprecept": {
       "command": "python",
-      "args": ["-m", "agent_compass.mcp_server"],
-      "cwd": "/path/to/agent-compass",
+      "args": ["-m", "agentprecept.mcp_server"],
+      "cwd": "/path/to/agentprecept",
       "env": {
         "PYTHONIOENCODING": "utf-8",
         "PYTHONUTF8": "1"
@@ -160,9 +203,9 @@ dry-run 同步——不写文件，返回待变更清单。
 ```json
 {
   "mcpServers": {
-    "agent-compass": {
+    "agentprecept": {
       "command": "python",
-      "args": ["-m", "agent_compass.mcp_server"]
+      "args": ["-m", "agentprecept.mcp_server"]
     }
   }
 }

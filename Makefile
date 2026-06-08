@@ -1,4 +1,4 @@
-# agent-compass Makefile
+# agentprecept Makefile
 
 .PHONY: init audit check-naming todo-api-test todo-api-run
 

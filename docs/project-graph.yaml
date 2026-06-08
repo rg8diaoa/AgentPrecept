@@ -10,7 +10,7 @@ structure:
   docs/:
     type: package
     stability: stable
-    description: agent-compass 自身文档体系（7 文件，不含开发者元信息）
+    description: agentprecept 自身文档体系（7 文件，不含开发者元信息）
     children:
     - INDEX.md
     - L1_A01_quickstart_快速开始.md
@@ -44,13 +44,14 @@ structure:
     type: package
     stability: stable
     description: 5 个核心 Skill
-  agent_compass/:
+  agentprecept/:
     type: package
     stability: stable
-    description: CLI + MCP 层（init/sync/audit/doctor/mcp_server 5 tools）
+    description: CLI + MCP 层（init/sync/audit/doctor/mcp_server）
     children:
     - cli.py
     - mcp_server.py
+    - gnhf_task.py
   scripts/:
     type: package
     stability: stable
@@ -89,22 +90,22 @@ structure:
     - audit-journey.md
     - six-layer-graph.md
 relations:
-# agent_compass/ → scripts/
-- from: agent_compass/mcp_server.py
+# agentprecept/ → scripts/
+- from: agentprecept/mcp_server.py
   to: scripts/basic-audit.py
   type: import
-- from: agent_compass/mcp_server.py
+- from: agentprecept/mcp_server.py
   to: scripts/sync-graph.py
   type: import
-- from: agent_compass/cli.py
+- from: agentprecept/cli.py
   to: scripts/sync-graph.py
   type: import
-- from: agent_compass/cli.py
+- from: agentprecept/cli.py
   to: scripts/basic-audit.py
   type: import
 # AGENTS.md → 代码层
 - from: AGENTS.md
-  to: agent_compass/cli.py
+  to: agentprecept/cli.py
   type: reference
 - from: AGENTS.md
   to: scripts/sync-graph.py
@@ -156,9 +157,25 @@ evolution:
   date: 2026-06-07
 - id: ADR-006
   topic: 为什么 mcp-tools.md 配置示例从 TOML 改为 mcp.json
-  decision: 原文档 CodeWhale 配置段用了不存在的 `[mcp_servers]` TOML 格式，实际 CodeWhale 读取 `~/.deepseek/mcp.json`。修正为正确的 JSON 格式 + 补充 cwd/env/编码注意事项
+  decision: 原文档 CodeWhale 配置段用了不存在的 [mcp_servers] TOML 格式，实际 CodeWhale 读取 ~/.deepseek/mcp.json。修正为正确的 JSON 格式 + 补充 cwd/env/编码注意事项
   date: 2026-06-07
 - id: ADR-007
   topic: 为什么 MCP Resources 暂不实现
   decision: Tools 是所有 Agent 工具的最大公约数（全支持），Resources 仅 Claude/CodeWhale 明确支持。加 Resource 时保留 Tool fallback——计划未来版本实现
   date: 2026-06-07
+- id: ADR-008
+  topic: 为什么从 agent-compass 改名为 AgentPrecept
+  decision: 外部评价指出搜索 "Agent Compass" 70% 指向 Future AGI 商业产品。precept（戒律）比 compass（指南针）更精确覆盖"设计先行+强制拦截"。多候选池对比（AION/Stela/Knot/Herm/DevCompass）后选 AgentPrecept，基于小白+Agent 双群体口述传播测试。
+  date: 2026-06-08
+- id: ADR-009
+  topic: 为什么 init 从文档复制器升级为能力接入器
+  decision: 当前 init 只复制文件，用户需手动 git init/配 MCP/装 hook/配 CI。改为 6 阶段自动检测+配置，一键接入全部能力。
+  date: 2026-06-08
+- id: ADR-010
+  topic: 为什么强制拦截分三层
+  decision: AgentPrecept 无法拦截 Agent 工具的 write_file。三层分别在可达节点：MCP tool（软）、git commit（硬可跳过）、CI PR merge（硬不可跳过）。
+  date: 2026-06-08
+- id: ADR-011
+  topic: 为什么 checklist 项必须对齐 commit 粒度
+  decision: "实战教训——粗粒度 checklist 导致 commit 过大不可独立 revert。标准: 1-3 commit/item，架构边界 = 任务边界。"
+  date: 2026-06-08

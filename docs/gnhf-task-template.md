@@ -1,13 +1,13 @@
 # gnhf 集成模板
 
-agent-compass 与 [gnhf](https://github.com/kunchenguid/gnhf) 集成，
+agentprecept 与 [gnhf](https://github.com/kunchenguid/gnhf) 集成，
 让 AI Agent 在安全的 git worktree 中自动维护 `project-graph.yaml`。
 
 ## 快速开始
 
 ```bash
 # 1. 生成 gnhf 任务模板
-python agent_compass/gnhf_task.py
+python agentprecept/gnhf_task.py
 
 # 2. 使用 gnhf 安全执行
 gnhf --agent claude \
@@ -23,7 +23,7 @@ cat docs/HANDOFF.md
 ## 工作流
 
 ```
-gnhf_task.py                    gnhf                        agent-compass
+gnhf_task.py                    gnhf                        agentprecept
 ─────────────                   ────                        ─────────────
 读取 project-graph 状态    →    创建 worktree
 读取 git diff 摘要         →    --goal 传给 Agent       →   运行 sync-graph.py

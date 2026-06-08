@@ -1,7 +1,8 @@
-"""agent-compass 审计脚本 — 8 维自动化审计
+"""agentprecept 审计脚本 — 10 维自动化审计
 
 用法: python scripts/basic-audit.py docs/
-输出: 八维审计报告（markdown）
+      python scripts/basic-audit.py docs/ --gate  # 开启维度 9+10
+输出: 十维审计报告（markdown）
 """
 import os, re, sys
 from pathlib import Path
@@ -40,8 +41,7 @@ def check_numbering(docs_dir: str) -> list[dict]:
     """维度 3: 编号连续性 — 分类内 NN 是否从 01 连续无跳跃"""
     pattern = re.compile(r'^L([1-4])_([A-P])(\d{2})_')
     findings = []
-    groups = {}  # {(level, cat): [nn_int, ...]}
-    missing_groups = set()  # 已知分类码但全部缺失的
+    groups = {}
 
     for f in Path(docs_dir).glob("L*.md"):
         m = pattern.match(f.name)
@@ -64,21 +64,21 @@ def check_numbering(docs_dir: str) -> list[dict]:
             if gap > 1:
                 findings.append({
                     "file": f"L{level}_{cat}*",
-                    "issue": f"编号跳跃: {nns[i]:02d} → {nns[i+1]:02d}（缺 {gap-1} 个编号）",
+                    "issue": f"编号跳跃: {nns[i]:02d} -> {nns[i+1]:02d}（缺 {gap-1} 个编号）",
                     "severity": "WARN"
                 })
     return findings
 
 
 def check_skeleton(docs_dir: str) -> list[dict]:
-    """维度 4: 骨架残留 — ⏳ 待撰写 / TODO / FIXME / TBD"""
+    """维度 4: 骨架残留 — placeholder / TODO / FIXME / TBD"""
     findings = []
     for f in Path(docs_dir).glob("*.md"):
         content = f.read_text(encoding="utf-8")
-        if "⏳" in content:
+        if "placeholder" in content:
             findings.append({
                 "file": f.name,
-                "issue": "含 ⏳ 待撰写标记",
+                "issue": "含 placeholder 待撰写标记",
                 "severity": "WARN"
             })
         else:
@@ -182,7 +182,8 @@ def check_graph_schema(docs_dir: str) -> list[dict]:
         })
     elif isinstance(relations, list):
         valid_types = {"depends_on", "references", "indexes", "extends", "demonstrates", "tests",
-                       "maps_to", "exposes", "calls", "routes", "mounts", "validates"}
+                       "maps_to", "exposes", "calls", "routes", "mounts", "validates",
+                       "import", "reference", "read", "write"}
         for i, rel in enumerate(relations):
             if not isinstance(rel, dict):
                 findings.append({
@@ -237,7 +238,6 @@ def check_design_trace(docs_dir: str) -> list[dict]:
             "severity": "WARN"
         })
 
-    # 检查是否有表格行（| 决策 | 来源 | 证据 |）
     decision_rows = [l for l in content.split("\n") if l.strip().startswith("|") and "来源" not in l and "---" not in l]
     if len(decision_rows) < 1:
         findings.append({
@@ -263,7 +263,6 @@ def check_coverage(docs_dir: str) -> list[dict]:
         return findings
 
     content = index_path.read_text(encoding="utf-8")
-    # 提取 INDEX 中引用的文件
     refs = re.findall(r'`(L[1-4]_[A-P]\d{2}_.+?\.md)`', content)
     actual_files = {f.name for f in Path(docs_dir).glob("L*.md")}
 
@@ -276,7 +275,6 @@ def check_coverage(docs_dir: str) -> list[dict]:
             })
     extra = actual_files - set(refs)
     if extra:
-        # 过滤掉 INDEX 不引用但实际存在的文件，如 HANDOFF.md/MEMORY.md
         tool_files = {"HANDOFF.md", "AUDIT_REPORT.md", "MEMORY.md"}
         extra -= tool_files
         for fname in sorted(extra):
@@ -290,7 +288,7 @@ def check_coverage(docs_dir: str) -> list[dict]:
 
 
 def check_dogfood(docs_dir: str) -> list[dict]:
-    """维度 8: 狗粮审计 — 项目自身是否遵循 agent-compass 方法论"""
+    """维度 8: 狗粮审计 — 项目自身是否遵循 agentprecept 方法论"""
     findings = []
     required = {
         "INDEX.md": "文档索引",
@@ -308,16 +306,96 @@ def check_dogfood(docs_dir: str) -> list[dict]:
     return findings
 
 
+def check_readme_claims(docs_dir: str) -> list[dict]:
+    """维度 9: README 数字声明 vs 实际数量"""
+    findings = []
+    readme = Path("README.md")
+    if not readme.exists():
+        findings.append({"file": "README.md", "issue": "文件不存在", "severity": "FAIL"})
+        return findings
+
+    content = readme.read_text(encoding="utf-8")
+
+    claims = [
+        ("10 维审计", r"(\d+)\s*维审计[^框架]", "scripts/basic-audit.py", "regex", r"def check_", 10),
+        ("6 个 MCP tool", r"(\d+)\s*个\s*MCP\s*tool", "agentprecept/mcp_server.py", "regex", r"@mcp\.tool", 6),
+        ("5 维代码扫描", r"(\d+)\s*维代码扫描", "scripts/sync-graph.py", "regex", r"def build_.*_relations", 5),
+        ("16 篇方法论", r"(\d+)\s*篇方法论", "methodology/", "glob", "[01][0-9]-*.md", 16),
+        ("36 个模板", r"(\d+)\s*个模板", "templates/", "glob", "*.md", 36),
+        ("5 个 Skill", r"(\d+)\s*个\s*Skill", "skills/", "glob", "*.md", 5),
+    ]
+
+    for name, claim_re, path, method, pattern, expected in claims:
+        m = re.search(claim_re, content)
+        if not m:
+            continue
+        claimed = int(m.group(1))
+        p = Path(path)
+        if method == "glob":
+            actual = len(list(p.rglob(pattern))) if p.is_dir() else -1
+        else:
+            actual = len(re.findall(pattern, p.read_text(encoding="utf-8"), re.MULTILINE)) if p.is_file() else -1
+        if actual >= 0 and actual != claimed:
+            findings.append({
+                "file": "README.md",
+                "issue": f"{name}: 声明 {claimed}，实际 {actual}",
+                "severity": "FAIL" if actual < claimed else "WARN"
+            })
+
+    return findings
+
+
+def check_design_coverage(docs_dir: str) -> list[dict]:
+    """维度 10: 代码模块是否有对应的设计文档"""
+    findings = []
+    graph_path = Path(docs_dir) / "project-graph.yaml"
+    if not graph_path.exists():
+        return findings
+
+    try:
+        import yaml
+        doc = yaml.safe_load(graph_path.read_text(encoding="utf-8")) or {}
+    except Exception:
+        return findings
+
+    structure = doc.get("structure") or {}
+    for module_path, meta in structure.items():
+        if not isinstance(meta, dict):
+            continue
+        design_docs = meta.get("design_docs", [])
+        for dd in design_docs:
+            matches = list(Path(docs_dir).glob(f"{dd}*.md"))
+            if not matches:
+                findings.append({
+                    "file": module_path,
+                    "issue": f"design_docs 声明 {dd} 但文件不存在",
+                    "severity": "FAIL"
+                })
+                continue
+            for mf in matches:
+                content = mf.read_text(encoding="utf-8")
+                if "placeholder" in content or "TODO:" in content or "TBD:" in content:
+                    findings.append({
+                        "file": module_path,
+                        "issue": f"design_doc {mf.name} 含骨架残留",
+                        "severity": "WARN"
+                    })
+
+    return findings
+
+
 def _safe(s: str) -> str:
     """Windows GBK 终端兼容——替换不可编码字符"""
     return s.encode("gbk", errors="replace").decode("gbk")
 
 
 def main():
-    docs_dir = sys.argv[1] if len(sys.argv) > 1 else "docs"
+    gate_mode = "--gate" in sys.argv
+    args = [a for a in sys.argv[1:] if a != "--gate"]
+    docs_dir = args[0] if args else "docs"
     results = []
 
-    for check, name in [
+    checks = [
         (check_naming, "命名一致性"),
         (check_broken_links, "交叉引用完整性"),
         (check_numbering, "编号连续性"),
@@ -326,7 +404,12 @@ def main():
         (check_design_trace, "设计追溯"),
         (check_coverage, "覆盖率"),
         (check_dogfood, "狗粮审计"),
-    ]:
+    ]
+    if gate_mode:
+        checks.append((check_readme_claims, "README声明校验"))
+        checks.append((check_design_coverage, "设计覆盖检查"))
+
+    for check, name in checks:
         findings = check(docs_dir)
         has_fail = any(item["severity"] == "FAIL" for item in findings)
         status = "PASS" if not findings else "FAIL" if has_fail else "WARN"

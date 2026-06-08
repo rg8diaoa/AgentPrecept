@@ -1,6 +1,6 @@
 # 00 — 完整循环：Agent 开发方法论全景
 
-> agent-compass 不是"写文档的方法"。是从想法到维护，Agent 在每个阶段该做什么、查什么、产出什么的完整工作流。
+> agentprecept 不是"写文档的方法"。是从想法到维护，Agent 在每个阶段该做什么、查什么、产出什么的完整工作流。
 
 ---
 
@@ -8,7 +8,7 @@
 
 ```
             ┌─────────────────────────────────────────┐
-            │              agent-compass              │
+            │              agentprecept              │
             │          Agent 开发完整循环              │
             └─────────────────────────────────────────┘
 
@@ -120,7 +120,7 @@ structure:
 
 | | Agent 做什么 |
 |---|---|
-| **查什么** | agent-compass templates/ |
+| **查什么** | agentprecept templates/ |
 | **做什么** | 从 templates/ 复制文档骨架到 docs/，初始化术语表 |
 | **产出** | INDEX.md、L1_A02 命名规范、L1_B01 术语表、HANDOFF.md |
 | **更新图** | 不需要 |
@@ -154,7 +154,7 @@ docs/
 | **更新图** | 每新建/删除模块 → 更新 structure；每新增依赖 → 更新 relations |
 | **更新依据** | 如果实现中做了新的设计决策 → 追加 L4_O01 |
 
-**这是 agent-compass 最核心的价值时刻**——Agent 在写 `authenticate()` 之前，花 30 秒查图知道它依赖 `crypto.py`，查依据知道不能引入 session。30 秒避免 3 小时的连锁 bug。
+**这是 agentprecept 最核心的价值时刻**——Agent 在写 `authenticate()` 之前，花 30 秒查图知道它依赖 `crypto.py`，查依据知道不能引入 session。30 秒避免 3 小时的连锁 bug。
 
 详细流程见：[07-dev-workflow.md](07-dev-workflow.md)
 
@@ -322,10 +322,10 @@ Agent 不应该"重写第一个版本已经解决的问题"。每次维护动作
 | **7. 修复** | **出 bug 时** | **Agent 花 30 秒查 + 正常修 bug** |
 | 8. 维护 | 持续 | 按需 |
 
-加粗的三项占日常工作的 90%+。agent-compass 在这三项中为 Agent 节省的时间——每次查图/查依据/查命名 30 秒——是这套体系最直接的回报。
+加粗的三项占日常工作的 90%+。agentprecept 在这三项中为 Agent 节省的时间——每次查图/查依据/查命名 30 秒——是这套体系最直接的回报。
 
 ---
 
 ## 一句话
 
-**agent-compass 是一个循环，不是一份文档。Agent 从阶段 1 走到阶段 8，每走一圈，项目就更有序。**
+**agentprecept 是一个循环，不是一份文档。Agent 从阶段 1 走到阶段 8，每走一圈，项目就更有序。**

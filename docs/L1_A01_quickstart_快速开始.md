@@ -7,14 +7,14 @@
 
 ## 这是什么
 
-agent-compass 是一套 Agent 开发方法论。本文档是 agent-compass 自身的快速开始——如何贡献、修改、扩展这套方法论。
+agentprecept 是一套 Agent 开发方法论。本文档是 agentprecept 自身的快速开始——如何贡献、修改、扩展这套方法论。
 
 ## 项目结构
 
 ```
-agent-compass/
+agentprecept/
 ├── AGENTS.md + SKILL.md   ← 规范层（Agent 行为规则引擎）
-├── agent_compass/         ← CLI + MCP 层（init/sync/audit/doctor + MCP Server 5 tools）
+├── agentprecept/         ← CLI + MCP 层（init/sync/audit/doctor + MCP Server 5 tools）
 ├── scripts/               ← 脚本层（sync-graph 5维/basic-audit 8维/init/check-naming）
 ├── methodology/           ← 方法论层（16 篇：00-14 + 15-agent-ops）
 ├── templates/             ← 模板层（36 个，16/16 分类全齐，init 核心 8 个）

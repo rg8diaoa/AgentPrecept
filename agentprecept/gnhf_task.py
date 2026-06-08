@@ -1,6 +1,6 @@
 """gnHF 任务模板生成器
 
-用法: python agent_compass/gnhf_task.py [output_path]
+用法: python agentprecept/gnhf_task.py [output_path]
 
 读取当前 project-graph 状态 + git diff 摘要,
 渲染为 gnhf --goal 可消费的 markdown 任务模板。
@@ -48,7 +48,7 @@ def render_template(output_path: str = ".gnhf/sync-task.md") -> str:
     diff = git_diff_summary()
     state = current_graph_state()
 
-    template = f"""# agent-compass: Auto-Sync Task
+    template = f"""# agentprecept: Auto-Sync Task
 
 ## 目标
 根据最新代码结构更新 `docs/project-graph.yaml`。

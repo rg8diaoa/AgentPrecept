@@ -2,28 +2,81 @@ structure:
   AGENTS.md:
     type: entrypoint
     stability: critical
-    description: 所有 Agent 工具的自动入口
+    description: Agent 行为规则引擎——所有 Agent 工具的自动入口
+  SKILL.md:
+    type: entrypoint
+    stability: critical
+    description: CodeWhale Skill 入口——支持 Skill 机制的工具一键加载
   README.md:
     type: entrypoint
     stability: stable
-    description: 门面
+    description: 项目门面
+  CHANGELOG.md:
+    type: document
+    stability: stable
+    description: 版本变更日志
+  ACKNOWLEDGMENTS.md:
+    type: document
+    stability: stable
+    description: 致谢与灵感来源
+  CONTRIBUTING.md:
+    type: document
+    stability: stable
+    description: 贡献指南
+  CODE_OF_CONDUCT.md:
+    type: document
+    stability: stable
+    description: 行为准则
+  SECURITY.md:
+    type: document
+    stability: stable
+    description: 安全策略
+  SUPPORT.md:
+    type: document
+    stability: stable
+    description: 支持渠道
+  LICENSE:
+    type: document
+    stability: stable
+    description: MIT 许可证
+  Makefile:
+    type: config
+    stability: stable
+    description: 构建快捷命令
+  pyproject.toml:
+    type: config
+    stability: critical
+    description: Python 包配置+依赖声明
+  .gitignore:
+    type: config
+    stability: stable
+    description: Git 忽略规则
   docs/:
     type: package
-    stability: stable
-    description: agentprecept 自身文档体系（7 文件，不含开发者元信息）
+    stability: critical
+    description: AgentPrecept 自身文档体系（狗粮层）
+    design_docs:
+      - L2_D01
+      - L4_O01
     children:
     - INDEX.md
     - L1_A01_quickstart_快速开始.md
+    - L1_B01_glossary_术语表.md
     - L2_D01_architecture_架构设计.md
     - L4_M01_changelog_变更日志.md
     - L4_O01_design-rationale_设计依据.md
     - mcp-tools.md
     - project-graph.yaml
+    - HANDOFF.md
+    - MEMORY.md
+    - AUDIT_REPORT.md
+    - gnhf-task-template.md
   methodology/:
     type: package
     stability: stable
-    description: 方法论核心文档
+    description: 方法论核心文档（16 篇）
     children:
+    - INDEX.md
     - 00-lifecycle.md
     - 01-why-docs-first.md
     - 02-naming-is-navigation.md
@@ -39,76 +92,100 @@ structure:
     - 12-human-agent-collaboration.md
     - 13-agent-self-management.md
     - 14-production-readiness.md
-    - INDEX.md
+    - 15-agent-ops.md
   skills/:
     type: package
     stability: stable
     description: 5 个核心 Skill
+    children:
+    - project-graph.md
+    - design-rationale.md
+    - session-handoff.md
+    - test-cases.md
+    - architecture-design.md
   agentprecept/:
     type: package
-    stability: stable
-    description: CLI + MCP 层（init/sync/audit/doctor/mcp_server/hooks/gnhf）
+    stability: critical
+    description: CLI + MCP 层（init/sync/audit/doctor/hooks/gnhf + 6 MCP tools）
     design_docs:
       - L2_D01
     children:
+    - __init__.py
     - cli.py
     - mcp_server.py
     - gnhf_task.py
-    - design_gate_check.py
   scripts/:
     type: package
-    stability: stable
-    description: 核心引擎（sync-graph 5维扫描/basic-audit 15维审计/init/design_gate_check）
+    stability: critical
+    description: 核心引擎（sync-graph 5维/basic-audit 15维/init/design_gate_check/ripple_check）
     design_docs:
       - L2_D01
     children:
     - sync-graph.py
     - basic-audit.py
+    - design_gate_check.py
+    - check-naming.py
+    - graph-to-mermaid.py
     - init.ps1
     - init.sh
-    - graph-to-mermaid.py
-    - check-naming.py
+    - README.md
   templates/:
     type: package
     stability: stable
-    description: 16 分类可拷贝模板
+    description: 36 个可拷贝模板（16/16 分类全齐）
     children:
     - INDEX.md
     - HANDOFF.md
     - MEMORY.md
     - AUDIT_REPORT.md
+    - FEEDBACK.md
     - project-graph.yaml
     - L4_O01_design-rationale_设计依据.md
   examples/:
     type: package
     stability: stable
-    description: 示例项目
+    description: 示例项目+Prompt 模板
     children:
     - prompt-templates.md
+    - first-run.md
     - todo-api/
     - todo-api-node/
   reference/:
     type: package
     stability: stable
-    description: 方法论有效性的参考案例
+    description: 方法论有效性参考案例
     children:
     - audit-journey.md
     - six-layer-graph.md
+  .github/:
+    type: package
+    stability: stable
+    description: CI/CD + Issue/PR 模板
+    children:
+    - workflows/audit.yml
+    - workflows/test-examples.yml
+    - PULL_REQUEST_TEMPLATE.md
 relations:
-# agentprecept/ → scripts/
-- from: agentprecept/mcp_server.py
-  to: scripts/basic-audit.py
-  type: import
-- from: agentprecept/mcp_server.py
-  to: scripts/sync-graph.py
-  type: import
+# agentprecept/ → scripts/ (import)
 - from: agentprecept/cli.py
   to: scripts/sync-graph.py
   type: import
 - from: agentprecept/cli.py
   to: scripts/basic-audit.py
   type: import
-# AGENTS.md → 代码层
+- from: agentprecept/cli.py
+  to: agentprecept/gnhf_task.py
+  type: import
+- from: agentprecept/mcp_server.py
+  to: scripts/basic-audit.py
+  type: import
+- from: agentprecept/mcp_server.py
+  to: scripts/sync-graph.py
+  type: import
+- from: agentprecept/mcp_server.py
+  to: scripts/design_gate_check.py
+  type: import
+# 规范层 → 代码层 (reference)
 - from: AGENTS.md
   to: agentprecept/cli.py
   type: reference
@@ -118,27 +195,49 @@ relations:
 - from: AGENTS.md
   to: scripts/basic-audit.py
   type: reference
-# docs/ → methodology/ + templates/
+- from: SKILL.md
+  to: AGENTS.md
+  type: reference
+- from: SKILL.md
+  to: agentprecept/
+  type: reference
+# docs/ → methodology/ + templates/ (reference)
 - from: docs/L2_D01_architecture_架构设计.md
   to: methodology/
   type: reference
 - from: docs/INDEX.md
   to: templates/
   type: reference
-# scripts/ → docs/
+- from: docs/mcp-tools.md
+  to: agentprecept/mcp_server.py
+  type: reference
+# scripts/ → docs/ (read/write)
 - from: scripts/sync-graph.py
   to: docs/project-graph.yaml
   type: write
 - from: scripts/basic-audit.py
   to: docs/
   type: read
-# MCP 通道
-- from: mcp_server.py
+- from: scripts/design_gate_check.py
+  to: docs/project-graph.yaml
+  type: read
+# MCP 通道 (read)
+- from: agentprecept/mcp_server.py
   to: docs/HANDOFF.md
   type: read
-- from: mcp_server.py
+- from: agentprecept/mcp_server.py
   to: docs/L4_O01_design-rationale_设计依据.md
   type: read
+# 构建/配置 → 代码 (config)
+- from: pyproject.toml
+  to: agentprecept/
+  type: config
+- from: .github/workflows/audit.yml
+  to: scripts/basic-audit.py
+  type: reference
+- from: CHANGELOG.md
+  to: docs/
+  type: reference
 evolution:
 - id: ADR-001
   topic: 为什么用 MIT 许可证
@@ -150,41 +249,41 @@ evolution:
   date: 2026-06-06
 - id: ADR-003
   topic: 为什么 AGENTS.md 和 SKILL.md 并存
-  decision: AGENTS.md 覆盖所有 Agent 工具；SKILL.md 给支持 Skill 机制的工具（CodeWhale/OpenCode 等）提供一键安装
+  decision: AGENTS.md 覆盖所有 Agent 工具；SKILL.md 给支持 Skill 机制的工具提供一键安装
   date: 2026-06-06
 - id: ADR-004
   topic: 为什么模板不全部预设为 📝
-  decision: ⏳ 待撰写是模板的正确状态——表示"待用户填入"。只有通用性极高的模板（命名规范、设计依据等）设为 📝
+  decision: ⏳ 待撰写是模板的正确状态——表示"待用户填入"。只有通用性极高的模板设为 📝
   date: 2026-06-06
 - id: ADR-005
   topic: 为什么 MCP Server 需要 PYTHONIOENCODING=utf-8
-  decision: Windows GBK 终端下 Python stderr 输出中文导致 MCP 握手消息损坏→Server 注册失败（5 tool 全未注册）。修复：mcp.json 加 env.PYTHONIOENCODING=utf-8 + env.PYTHONUTF8=1
+  decision: Windows GBK 终端下 Python stderr 输出中文导致 MCP 握手消息损坏→Server 注册失败。mcp.json 加 env.PYTHONIOENCODING=utf-8 + env.PYTHONUTF8=1
   date: 2026-06-07
 - id: ADR-006
   topic: 为什么 mcp-tools.md 配置示例从 TOML 改为 mcp.json
-  decision: 原文档 CodeWhale 配置段用了不存在的 [mcp_servers] TOML 格式，实际 CodeWhale 读取 ~/.deepseek/mcp.json。修正为正确的 JSON 格式 + 补充 cwd/env/编码注意事项
+  decision: 原文档用了不存在的 TOML 格式，实际 CodeWhale 读取 ~/.deepseek/mcp.json
   date: 2026-06-07
 - id: ADR-007
   topic: 为什么 MCP Resources 暂不实现
-  decision: Tools 是所有 Agent 工具的最大公约数（全支持），Resources 仅 Claude/CodeWhale 明确支持。加 Resource 时保留 Tool fallback——计划未来版本实现
+  decision: Tools 是所有 Agent 工具的最大公约数（全支持），Resources 仅 Claude/CodeWhale 明确支持
   date: 2026-06-07
 - id: ADR-008
   topic: 为什么从 agent-compass 改名为 AgentPrecept
-  decision: 外部评价指出搜索 "Agent Compass" 70% 指向 Future AGI 商业产品。precept（戒律）比 compass（指南针）更精确覆盖"设计先行+强制拦截"。多候选池对比（AION/Stela/Knot/Herm/DevCompass）后选 AgentPrecept，基于小白+Agent 双群体口述传播测试。
+  decision: 避免与 Future AGI 商业产品混淆。precept（戒律）比 compass（指南针）更精确覆盖"设计先行+强制拦截"
   date: 2026-06-08
 - id: ADR-009
   topic: 为什么 init 从文档复制器升级为能力接入器
-  decision: 当前 init 只复制文件，用户需手动 git init/配 MCP/装 hook/配 CI。改为 6 阶段自动检测+配置，一键接入全部能力。
+  decision: 当前 init 只复制文件，用户需手动配 Git/MCP/Hook/CI。改为 6 阶段一键接入
   date: 2026-06-08
 - id: ADR-010
   topic: 为什么强制拦截分三层
-  decision: AgentPrecept 无法拦截 Agent 工具的 write_file。三层分别在可达节点：MCP tool（软）、git commit（硬可跳过）、CI PR merge（硬不可跳过）。
-  date: 2026-06-08
-- id: ADR-009
-  topic: 为什么术语/内容/体验进自动化审计
-  decision: basic-audit 从 8→12 维时原 14 维框架中的术语一致/内容一致/体验审计被遗忘。维度 13/14/15 进自动化（--gate），维度 16-19 进自选清单。不能代码化的维度在报告末尾提示而非纳入 FAIL。
+  decision: AgentPrecept 无法拦截 Agent 工具的 write_file。三层在 MCP tool（软）、git commit（硬可跳过）、CI PR merge（硬不可跳过）
   date: 2026-06-08
 - id: ADR-011
   topic: 为什么 checklist 项必须对齐 commit 粒度
-  decision: "实战教训——粗粒度 checklist 导致 commit 过大不可独立 revert。标准: 1-3 commit/item，架构边界 = 任务边界。"
+  decision: "粗粒度 checklist 导致 commit 过大不可独立 revert。标准: 1-3 commit/item，架构边界=任务边界"
+  date: 2026-06-08
+- id: ADR-012
+  topic: 为什么术语/内容/体验进自动化审计
+  decision: basic-audit 从 8→15 维时原 14 维框架中术语/内容/体验被遗忘。维度 13/14/15 进自动化，维度 16-19 进自选清单
   date: 2026-06-08

@@ -30,6 +30,7 @@
 - **反馈提示**：HANDOFF 状态为 [CLOSING] 时，Agent 应提示："如果这次体验有用，花 2 分钟在 GitHub 填反馈模板"
 - **分支纪律**：涉及架构/重命名/多文件（>10 文件）的变更必须在独立分支上执行。pre-commit hook 强制拦截 main/master 分支上 >10 文件的 commit（可 `--no-verify` 跳过）；CI gate 维度 11 不可跳过
 - **自选维度检查**：每 5 轮对话检查自选维度（用户旅程/定位审计/复用/社区就绪度）是否退化。`agentprecept audit --gate` 报告末尾有自选清单
+- **版本规则**：严格 semver。PATCH（v0.4.1）修 bug 不增删功能；MINOR（v0.5.0）新增向后兼容功能；MAJOR（v1.0.0）破坏性变更（命令改名/API 变化）
 
 ---
 

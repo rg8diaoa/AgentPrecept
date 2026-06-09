@@ -1,4 +1,4 @@
-# AgentPrecept ![version](https://img.shields.io/badge/version-v0.4.2-blue)
+# AgentPrecept ![version](https://img.shields.io/badge/version-v0.4.4-blue)
 
 > **AgentPrecept（原 agent-compass）与 Future AGI 的 "Agent Compass" 商业产品无关。**
 > 本项目的定位是 AI 编码 Agent 的方法论治理工具集——不是 LLM 可观测性平台。
@@ -191,7 +191,7 @@ Agent 自动读取 AGENTS.md，按 Auto-Pilot 规则运行。MCP tools 在 Agent
 
 ## 实战效果
 
-agentprecept 自身使用 agentprecept 管理——本文档体系即 `agentprecept init` + `agentprecept audit --gate` 的产出。15 维自动化审计 0 FAIL，pre-commit 4 gates 全部在线。
+agentprecept 自身使用 agentprecept 管理——本文档体系即 `agentprecept init` + `agentprecept audit --gate` 的产出。15 维自动化审计 FAIL 0 WARN 0，pre-commit 4 gates 全部在线。
 
 ---
 

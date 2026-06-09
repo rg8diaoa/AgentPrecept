@@ -1,5 +1,20 @@
 # 变更日志
 
+## [0.4.4] — 2026-06-09
+
+### 修复
+
+- **代码块语言标注审计修复**：`check_experience` 改用状态机只检查 opening 标记（closing 标记是标准 Markdown，不应计数）。从 5 个文件 22 个伪 WARN 降至 0
+- **狗粮跳过列表补全**：`check_dogfood` 添加 `agentprecept.egg-info`（重命名产物）到跳过列表
+- **SKILL.md ↔ AGENTS.md 双向同步**：补充防偷懒/审计缓存陷阱/狗粮检查/目标驱动执行/并行安全等 8 条关键规则
+- **代码块语言标注**：HANDOFF/L1_A01/L2_D01 树形图/文件列表/shell 命令代码块添加 `text`/`bash` 语言标注
+
+### 规则
+
+- **发版铁律**：发布到 GitHub/PyPI 前必须 audit --gate FAIL 0 + 等用户确认。Agent 严禁未经确认私自打 tag/push/twine upload
+
+---
+
 ## [0.4.3] — 2026-06-09
 
 ### 修复

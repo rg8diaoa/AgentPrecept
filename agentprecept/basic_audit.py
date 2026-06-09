@@ -14,12 +14,24 @@ def _find_project_root(docs_dir: str) -> Path:
     
     向上遍历直至找到 .git，不超过 .git 边界。
     若未找到 .git 则回退到 docs_dir 的父目录。
+    
+    CWD 不可靠时（如 MCP server 的 cwd ≠ 用户工作区），
+    回退到基于脚本文件位置的路径解析。
     """
-    p = Path(docs_dir).resolve()
-    for parent in [p] + list(p.parents):
+    p = Path(docs_dir)
+    r = p.resolve() if p.is_absolute() else Path.cwd() / p
+    if not r.exists() and not p.is_absolute():
+        # CWD 可能错误（MCP server cwd 通常是 agentprecept 仓库而非用户工作区）
+        # 从当前脚本位置向上推导 workspace 根目录
+        for ancestor in Path(__file__).resolve().parents:
+            candidate = ancestor / p
+            if candidate.exists():
+                r = candidate
+                break
+    for parent in [r] + list(r.parents):
         if (parent / ".git").is_dir():
             return parent
-    return Path(docs_dir).resolve().parent
+    return r.parent
 
 
 def check_naming(docs_dir: str) -> list[dict]:

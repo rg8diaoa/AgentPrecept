@@ -1,0 +1,8 @@
+include agentprecept/AGENTS.md
+include agentprecept/SKILL.md
+recursive-include agentprecept/templates *.md *.yaml
+recursive-include agentprecept/methodology *.md
+recursive-include agentprecept/skills *.md
+recursive-include agentprecept/scripts *.ps1 *.sh *.py *.md
+recursive-include agentprecept/examples *.md
+recursive-include agentprecept/reference *.md

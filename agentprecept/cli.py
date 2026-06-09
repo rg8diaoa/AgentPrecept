@@ -5,7 +5,9 @@ import subprocess
 import json
 from pathlib import Path
 
-ROOT = Path(__file__).parent.parent
+ROOT = Path(__file__).parent
+# 数据文件从包内读；如果包内没有（pip install -e 开发模式），回退到仓库根目录
+_DATA = ROOT if (ROOT / "AGENTS.md").exists() else ROOT.parent
 
 # ===== init (6 阶段) =====
 
@@ -158,16 +160,19 @@ def cmd_init(project=".", yes=False, dry_run=False, status_only=False,
     report = {}
 
     # Phase 1: 骨架
+    import shutil
     if not (project / "AGENTS.md").exists() or yes:
-        (ROOT / "AGENTS.md").replace(project / "AGENTS.md")
-    for tmpl in ["INDEX.md", "L1_A02_naming-convention_命名规范.md",
-                 "L1_B01_glossary_术语表.md", "HANDOFF.md",
-                 "MEMORY.md", "project-graph.yaml",
-                 "L4_O01_design-rationale_设计依据.md"]:
-        src = ROOT / "templates" / tmpl
-        dst = docs / tmpl
-        if src.exists() and not dst.exists():
-            src.replace(dst)
+        shutil.copy2(_DATA / "AGENTS.md", project / "AGENTS.md")
+    templates_dir = _DATA / "templates"
+    if templates_dir.is_dir():
+        for src in sorted(templates_dir.glob("*.md")):
+            dst = docs / src.name
+            if not dst.exists():
+                shutil.copy2(src, dst)
+        for src in sorted(templates_dir.glob("*.yaml")):
+            dst = docs / src.name
+            if not dst.exists():
+                shutil.copy2(src, dst)
     report["AGENTS.md"] = True
     report["docs/ skeleton"] = True
 

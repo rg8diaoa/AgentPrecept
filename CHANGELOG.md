@@ -1,5 +1,14 @@
 # 变更日志
 
+## [0.4.7] — 2026-06-09
+
+### 修复
+
+- **打包缺陷**：pyproject.toml 添加 package_data，数据文件（AGENTS.md/templates/methodology/skills/scripts）现在打入 wheel。`pip install` 后 `init`/`setup` 不再 FileNotFoundError
+- **硬编码模板列表**：`cmd_init` 改为动态扫描 `templates/` 下所有 `.md`/`.yaml`，新增模板自动纳入 init
+- **模板移动 bug**：`src.replace(dst)` 改为 `shutil.copy2(src, dst)`，init 不再搬走源文件
+- **ROOT 自适应**：`_DATA` 变量优先读包内数据文件，回退仓库根（兼容 `pip install -e .` 开发模式）
+
 ## [0.4.4] — 2026-06-09
 
 ### 修复

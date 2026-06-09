@@ -66,7 +66,7 @@ M  docs/HANDOFF.md              # 本文件
 
 ```bash
 git pull
-python scripts/basic-audit.py docs --gate
+agentprecept audit --gate
 # → 确认 FAIL 0 后处理:
 #   R1: 修复 cmd_init 的 replace→copy 问题 (影响所有新项目接入)
 #   R2: mcp-tools.md 追加缓存陷阱提醒

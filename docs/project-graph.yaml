@@ -169,12 +169,12 @@ structure:
     - workflows/test-examples.yml
     - PULL_REQUEST_TEMPLATE.md
 relations:
-# agentprecept/ → scripts/ (import)
+# agentprecept/ internal (import)
 - from: agentprecept/cli.py
-  to: scripts/sync-graph.py
+  to: agentprecept/sync_graph.py
   type: import
 - from: agentprecept/cli.py
-  to: scripts/basic-audit.py
+  to: agentprecept/basic_audit.py
   type: import
 - from: agentprecept/cli.py
   to: agentprecept/gnhf_task.py

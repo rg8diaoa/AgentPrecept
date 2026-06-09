@@ -191,7 +191,7 @@ Agent 自动读取 AGENTS.md，按 Auto-Pilot 规则运行。MCP tools 在 Agent
 
 ## 实战效果
 
-agentprecept 自身使用 agentprecept 管理——本文档体系即 `agentprecept init` + `agentprecept audit --gate` 的产出。15 维自动化审计 FAIL 0 WARN 0，pre-commit 4 gates 全部在线。
+agentprecept 自身使用 agentprecept 管理——本文档体系即 `agentprecept init` + `agentprecept audit --gate` 的产出。15 维自动化审计 FAIL 0，pre-commit 4 gates 全部在线。
 
 ---
 
@@ -227,8 +227,8 @@ agentprecept/
 ├── SKILL.md           ← 一键加载 Skill
 ├── pyproject.toml     ← pip install agentprecept
 │
-├── agentprecept/     ← CLI（init(6阶段)/sync/audit(15维)/setup/hooks/gnhf）+ MCP Server（6 tools）
-├── scripts/           ← sync-graph(6维)/graph-to-mermaid/basic-audit(15维)/ripple_check/design_gate_check/check-naming
+├── agentprecept/     ← CLI + MCP Server + core（init/sync/audit/basic_audit/sync_graph/design_gate_check）
+├── scripts/           ← 辅助脚本 + 向后兼容 stub（graph-to-mermaid/ripple_check/check-naming）
 ├── docs/
 │ ├── project-graph.yaml  ← 项目结构图
 │ ├── HANDOFF.md          ← 会话交接

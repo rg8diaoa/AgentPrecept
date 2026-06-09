@@ -12,7 +12,7 @@ python agentprecept/gnhf_task.py
 # 2. 使用 gnhf 安全执行
 gnhf --agent claude \
      --goal .gnhf/sync-task.md \
-     --verify "python scripts/basic-audit.py docs/" \
+     --verify "agentprecept audit" \
      --max-iterations 1
 
 # 3. 查看结果
@@ -45,7 +45,7 @@ provider = "claude"
 model = "claude-sonnet-4-20250514"
 
 [verify]
-command = "python scripts/basic-audit.py docs/"
+command = "agentprecept audit"
 on-failure = "discard"
 
 [runtime]

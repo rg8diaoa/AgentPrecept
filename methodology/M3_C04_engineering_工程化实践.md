@@ -36,7 +36,7 @@ jobs:
       - name: Run agentprecept audit
         run: |
           # 15 维自动化审计
-          python scripts/basic-audit.py docs/ --gate > audit-report.md
+          agentprecept audit --gate > audit-report.md
           cat audit-report.md
       - name: Check for blocking issues
         run: |
@@ -142,7 +142,7 @@ repos:
 
       - id: check-graph-sync
         name: 检查 project-graph 是否同步
-        entry: python scripts/sync-graph.py --check
+        entry: agentprecept sync --check
         language: python
         files: project-graph.yaml
         stages: [pre-commit]

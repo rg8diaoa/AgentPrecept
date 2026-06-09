@@ -1,6 +1,6 @@
 """从代码自动同步 project-graph.yaml 的结构层和关系层
 
-用法: python scripts/sync-graph.py src/ docs/project-graph.yaml
+用法: python -m agentprecept.sync_graph src/ docs/project-graph.yaml
 
 用 tree 生成结构层（不覆盖 stability 和 description），
 多维度扫描生成关系层（全量替换 relations）：
@@ -405,7 +405,7 @@ def main():
         print()
         print("  💡 建议:")
         print("     1. 手动在 project-graph.yaml 中补充未扫描语言的 relations")
-        print("     2. 运行 python scripts/basic-audit.py docs/ 检查文档完整性")
+        print("     2. 运行 agentprecept audit 检查文档完整性")
         if any(t not in type_counts or type_counts[t] == 0 for t in ("maps_to", "routes", "calls")):
             print("     3. 检查是否有 ORM/API/前端 关系未被 scan 覆盖")
 

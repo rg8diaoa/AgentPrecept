@@ -164,6 +164,11 @@ pip install agentprecept
 cd your-project && agentprecept setup   # 一键初始化 + MCP 配置指南 + 诊断
 ```
 
+> **升级**：先卸载再安装，不要用 `--force-reinstall`（避免残留旧脚本导致 `ModuleNotFoundError`）：
+> ```bash
+> pip uninstall agentprecept -y && pip install -U agentprecept
+> ```
+
 将 `setup` 输出的 JSON 复制到 Agent 工具配置文件（Claude Code → `.mcp.json` / CodeWhale → `~/.deepseek/mcp.json` / Cursor → `.cursor/mcp.json`），重启即用。
 
 ### 开写
@@ -226,7 +231,7 @@ agentprecept/
 ├── AGENTS.md          ← Agent 一看就用
 ├── SKILL.md           ← 一键加载 Skill
 ├── pyproject.toml     ← pip install agentprecept
-├── scripts/           ← 辅助脚本 + 向后兼容 stub（graph-to-mermaid/ripple_check/check-naming）
+├── build-data.ps1      ← 构建辅助（wheel 打包前复制数据文件）
 ├── docs/
 │ ├── project-graph.yaml  ← 项目结构图
 │ ├── HANDOFF.md          ← 会话交接

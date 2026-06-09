@@ -226,9 +226,7 @@ agentprecept/
 ├── AGENTS.md          ← Agent 一看就用
 ├── SKILL.md           ← 一键加载 Skill
 ├── pyproject.toml     ← pip install agentprecept
-│
-├── agentprecept/     ← CLI + MCP Server + core（init/sync/audit/basic_audit/sync_graph/design_gate_check）
-├── scripts/           ← 辅助脚本 + 向后兼容 stub（graph-to-mermaid/ripple_check/check-naming）
+├── build-data.ps1      ← 构建辅助（wheel 打包前复制数据文件）
 ├── docs/
 │ ├── project-graph.yaml  ← 项目结构图
 │ ├── HANDOFF.md          ← 会话交接
@@ -236,12 +234,10 @@ agentprecept/
 │ ├── L4_O01              ← 设计依据（44+ ADR）
 │ └── mcp-tools.md        ← MCP 6 tool API
 ├── skills/            ← 5 个核心 Skill
-│
 ├── methodology/       ← 18 篇方法论（M{1-4}_{A-D}{NN} 四板块体系）
 ├── templates/         ← 37 个模板（16分类全齐，init 核心 8 个）
 ├── examples/          ← Python/Node 示例 + prompt 模板 + first-run
 ├── reference/         ← 审计案例/多维图/横向对比/速查卡片
-│
 └── .github/           ← CI（audit.yml + test-examples.yml）
 ```
 

@@ -124,6 +124,6 @@ L2_D01_graph_model.md               ← 错误：没有中文标题
 
 | 理念 | 实现 | 使用方式 |
 |------|------|----------|
-| 命名规范检查 | `check-naming.py` 自动扫描 | `python scripts/check-naming.py docs/` |
+| 命名规范检查 | `check-naming.py` 自动扫描 | `python -m agentprecept.check_naming docs/` |
 | 审计维度 1 | 命名一致性自动化 | `agentprecept audit --gate` |
 | 模板规范 | `templates/L1_A02_*` 命名规范 | `agentprecept init` 自动复制 |

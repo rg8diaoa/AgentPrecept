@@ -1,1 +1,1 @@
-fix: add MANIFEST.in, setup.cfg to dogfood skip; HANDOFF code-block label
+chore: cleanup — remove scripts/ dir, build artifacts, data copies

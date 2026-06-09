@@ -135,7 +135,7 @@ repos:
     hooks:
       - id: check-naming
         name: 检查命名规范
-        entry: python scripts/check-naming.py
+        entry: python -m agentprecept.check_naming
         language: python
         files: \.py$
         stages: [pre-commit]

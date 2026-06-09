@@ -121,7 +121,7 @@ Agent 必须立即（同一 turn 内）主动询问，不得跳过：
 
 **A — 当前项目安装（全工具通用）**：
 ```powershell
-.\scripts\init.ps1 .
+.\init.ps1 .
 pip install fastmcp -q
 Write-Host "[agentprecept] AGENTS.md + 7 核心文档已就位。"
 ```
@@ -152,7 +152,7 @@ Write-Host "[agentprecept] CodeWhale Skill 安装完成。"
 
 当用户在对话中表达创建新项目/新工具/新应用的意图时——无论措辞如何（"帮我写一个日记应用""搭一个 API 服务""建一个爬虫""我需要一个任务管理工具"）——Agent 必须识别为**新项目创建意图**，不得跳过以下步骤：
 
-1. **骨架初始化**：运行 `scripts/init.ps1 .`（Windows）或 `scripts/init.sh .`（Linux/macOS），产出 AGENTS.md + docs/ 下 7 个核心文档
+1. **骨架初始化**：运行 `init.ps1 .`（Windows）或 `init.sh .`（Linux/macOS），产出 AGENTS.md + docs/ 下 7 个核心文档
 2. **版本控制**：提示用户是否 git init
 3. **默认 checklist**：按 commit 粒度生成初始 checklist。第一项集合不得合并为"项目初始化"一个 item——必须拆为：
    - git init（1 commit）

@@ -50,7 +50,7 @@ agentprecept mode show            # 查看当前模式
 |------|------|
 | CLI | `init`（6阶段）/ `sync`（6维扫描）/ `audit`（15维4-scope）/ `setup` / `hooks` / `gnhf` |
 | MCP | 6 个 tool（query / audit / diff / decision / handoff / design_gate） |
-| 脚本 | agentprecept/ 包内（sync_graph/basic_audit/design_gate_check）+ scripts/ 辅助（ripple_check/graph-to-mermaid/check-naming/init） |
+| 脚本 | agentprecept/ 包内（sync_graph/basic_audit/design_gate/check_naming/ripple_check/graph_to_mermaid） |
 | 规则 | AGENTS.md（284行，Auto-Pilot + 设计先行 + 讨论拦截 + 首次邂逅 + 新项目检测） |
 | 文档 | 方法论 18 篇 / 模板 37 个 / 狗粮层 12 个文件 |
 | 门禁 | 三层强制拦截（L1 MCP / L2 pre-commit hook / L3 CI gate） |
@@ -395,7 +395,7 @@ Phase 5 通过标准:
 
 | 阶段 | 新建文件 | 修改文件 |
 |------|----------|----------|
-| Phase 1 | `core/loop.md` / `core/design-gate.md` / `core/anti-lazy.md` / `core/normal.md` / `docs/L1_C01_phased-plan_实施路线.md` | `AGENTS.md` / `SKILL.md` / `cli.py`（mode + status） / `scripts/init.ps1` / `init.sh` / `docs/INDEX.md` / `docs/L2_D01` / `docs/project-graph.yaml` / `templates/L1_C01` |
+| Phase 1 | `core/loop.md` / `core/design-gate.md` / `core/anti-lazy.md` / `core/normal.md` / `docs/L1_C01_phased-plan_实施路线.md` | `AGENTS.md` / `SKILL.md` / `cli.py`（mode + status） / `init.ps1` / `init.sh` / `docs/INDEX.md` / `docs/L2_D01` / `docs/project-graph.yaml` / `templates/L1_C01` |
 | Phase 2 | `agents/` 目录（9 文件）/ `skills/domain/` / `skills/workflow/` / `skills/governance/` / `skills/index.md` / `core/normal.md`（更新） | `cli.py`（review + skill） / `mcp_server.py`（review_run + skill_search） |
 | Phase 3 | `core/normal.md`（更新）| `cli.py`（compound + diagnose + check） / `mcp_server.py`（compound tool） |
 | Phase 4 | `core/pro.md` | `cli.py`（generate-hook + resume） / `AGENTS.md`（编译引擎支持 pro）|

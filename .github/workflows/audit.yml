@@ -20,4 +20,4 @@ jobs:
       - name: Check naming convention
         run: python scripts/check-naming.py templates/
       - name: Run basic audit (8 维: 命名/引用/编号/骨架/图格式/设计追溯/覆盖率/狗粮)
-        run: python scripts/basic-audit.py docs/
+        run: python -m agentprecept audit docs/

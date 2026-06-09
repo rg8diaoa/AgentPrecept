@@ -124,19 +124,18 @@ gnhf（可选）:
 
 ## 路线图
 
-### ✅ v0.4.2 — 方法论升级（已完成）
-- 全量重命名为 M 体系，18 篇四板块
-- 新增 M1_A02 自然语言编程 + M2_B02 非技术审产出
-- 5 项深化：生命周期进入退出条件 / 文档先行反模式 / Agent 特有安全 / 已有项目渐进路线 / Agent 自管理自检工具
-- AGENTS.md + Hook/CI 检测默认行为
-- audit --gate FAIL 0 ✅
+完整四模式（lite / normal / pro / max）六阶段发展路线见 **`docs/L1_C01_phased-plan_实施路线.md`**。
 
-### v0.5.0 — Agent 自主生长（MINOR）
-- C: 任务级思维框架（AGENTS.md +1 规则）
-- A: Git hook 自动记忆生长（memory-grow.py + gnhf 扩展）
+概要：
 
-### v0.6.0 — 方法论模式（MINOR）
-- B: `agentprecept init --mode agile|waterfall`
+| 版本 | 阶段 | 核心交付 | 新增模式 |
+|------|------|----------|:---:|
+| v0.5.0 | normal 基础设施 | 模式系统 + 规则硬化 + pre-push hook | normal |
+| v0.6.0 | 代理 + 技能 | 代理弹药库 + Skill 系统 | — |
+| v0.7.0 | 沉淀与免疫 | compound + diagnose + 反模式库 | — |
+| v0.8.0 | pro 模式 | 自检循环 + 宿主 hook + 跨会话债务 | pro |
+| v0.9.0 | max 运行时 | serve + ap run + 工作流状态机 | max |
+| v1.0.0 | 生产化 | 测试 + 文档 + PyPI 发布 | — |
 
 ## 关键设计决策
 

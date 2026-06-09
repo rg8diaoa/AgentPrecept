@@ -5,7 +5,6 @@ import subprocess
 import json
 from pathlib import Path
 
-SCRIPTS = Path(__file__).parent.parent / "scripts"
 ROOT = Path(__file__).parent.parent
 
 # ===== init (6 阶段) =====
@@ -20,7 +19,7 @@ def _check_git(project):
 
 def _install_hook(project):
     hook_path = Path(project) / ".git" / "hooks" / "pre-commit"
-    hook_content = """#!/bin/bash
+    hook_content = r"""#!/bin/bash
 # AgentPrecept pre-commit gate
 # Skip: git commit --no-verify
 
@@ -291,11 +290,11 @@ def cmd_gnhf(action="status"):
 # ===== sync / audit / doctor / setup =====
 
 def cmd_sync(src="src", graph="docs/project-graph.yaml"):
-    subprocess.run([sys.executable, str(SCRIPTS / "sync-graph.py"), src, graph])
+    subprocess.run([sys.executable, "-m", "agentprecept.sync_graph", src, graph])
 
 
 def cmd_audit(docs="docs", gate=False, scope_args=None):
-    args = [sys.executable, str(SCRIPTS / "basic-audit.py"), docs]
+    args = [sys.executable, "-m", "agentprecept.basic_audit", docs]
     if gate:
         args.append("--gate")
     if scope_args:
@@ -350,7 +349,7 @@ USAGE = """agentprecept — AI coding agent governance toolkit
     --no-ci            跳过 CI Gate
     --no-gnhf          跳过 gnhf
   sync [src]          从代码同步 project-graph
-  audit [docs]         8 维审计（--gate 开启 10 维）
+  audit [docs]         15 维审计（--gate 全维度）
   doctor              诊断缺失文件
   setup               一键安装（init + MCP + doctor）
   hooks <action>      Git hook 管理 (install/uninstall/status)

@@ -12,20 +12,7 @@ except ImportError:
     print("需要安装 fastmcp: pip install fastmcp", file=sys.stderr)
     sys.exit(1)
 
-_scripts = Path(__file__).resolve().parent.parent / "scripts"
-
-
-def _load_script(name):
-    path = _scripts / f"{name}.py"
-    from importlib import util
-    mod_spec = util.spec_from_file_location(name, path)
-    mod = util.module_from_spec(mod_spec)
-    mod_spec.loader.exec_module(mod)
-    return mod
-
-
-basic_audit = _load_script("basic-audit")
-sync_graph = _load_script("sync-graph")
+from agentprecept import basic_audit, sync_graph
 
 mcp = FastMCP("agentprecept")
 
@@ -130,7 +117,7 @@ def design_gate(module: str = "", operation: str = "modify") -> dict:
     """Agent 准备修改代码前调用。返回模块的前置设计文档状态。"""
     import json, subprocess, sys as _sys
     result = subprocess.run(
-        [_sys.executable, str(_scripts / "design_gate_check.py"), "--module", module, "--json"],
+        [_sys.executable, "-m", "agentprecept.design_gate_check", "--module", module, "--json"],
         capture_output=True, text=True, timeout=10
     )
     if result.returncode not in (0, 1, 2):

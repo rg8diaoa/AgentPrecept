@@ -5,7 +5,7 @@
 ## 自动动作
 
 1. 读 project-graph structure 层
-2. 生成 Mermaid 图（`python scripts/graph-to-mermaid.py`）
+2. 生成 Mermaid 图（`python -m agentprecept.graph_to_mermaid`）
 3. 按 api/services/models 分组标注
 4. critical 模块红色标注
 

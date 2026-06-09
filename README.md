@@ -226,7 +226,7 @@ agentprecept/
 ├── AGENTS.md          ← Agent 一看就用
 ├── SKILL.md           ← 一键加载 Skill
 ├── pyproject.toml     ← pip install agentprecept
-├── scripts/           ← 辅助脚本 + 向后兼容 stub（graph-to-mermaid/ripple_check/check-naming）
+├── build-data.ps1      ← 构建辅助（wheel 打包前复制数据文件）
 ├── docs/
 │ ├── project-graph.yaml  ← 项目结构图
 │ ├── HANDOFF.md          ← 会话交接

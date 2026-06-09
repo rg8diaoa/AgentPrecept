@@ -23,15 +23,15 @@ AgentPrecept/
 │   ├── cli.py              — init(6阶段)/sync/audit(15维)/setup/hooks/gnhf
 │   └── mcp_server.py       — MCP Server（6 个 Tool: query/audit/diff/decision/handoff/design_gate）
 │
-├── 脚本层 (scripts/)                     ← 核心引擎
-│   ├── sync-graph.py       — 多语言 6 维扫描 + design_docs 注释
-│   ├── basic-audit.py      — 15 维 4-scope 自动化审计（--gate）
-│   ├── ripple_check.py     — 涟漪分析（DIRECT/INDIRECT/SAME_PKG）
-│   ├── design_gate_check.py— 设计文档前置检查（MCP + hook 共享）
-│   ├── graph-to-mermaid.py — YAML → Mermaid 可视化
-│   ├── check-naming.py
-│   ├── init.ps1 / init.sh  — 项目骨架生成
-│   └── README.md
+├── CLI + MCP 层 (agentprecept/)          ← 全部功能
+│   ├── cli.py              — init/sync/audit/setup/hooks/gnhf
+│   ├── mcp_server.py       — MCP Server（6 Tools）
+│   ├── basic_audit.py      — 15 维 4-scope 自动化审计
+│   ├── sync_graph.py       — 多语言 6 维扫描
+│   ├── design_gate_check.py— 设计文档前置检查
+│   ├── ripple_check.py     — 涟漪分析
+│   ├── check_naming.py     — 命名规范检查
+│   └── graph_to_mermaid.py — YAML → Mermaid
 │
 ├── 方法论层 (methodology/)               ← 给人类和 Agent 的原理文档
 │   └── 18 篇 M{1-4}_{A-D}{NN} 体系（四板块：入门/协作/工程/运维）

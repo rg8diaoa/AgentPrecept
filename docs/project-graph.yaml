@@ -39,6 +39,26 @@ structure:
     type: document
     stability: stable
     description: MIT 许可证
+  init.ps1:
+    type: script
+    stability: critical
+    description: Windows 骨架初始化脚本（6 阶段一键接入）
+  init.sh:
+    type: script
+    stability: critical
+    description: Linux/macOS 骨架初始化脚本（6 阶段一键接入）
+  build-data.ps1:
+    type: script
+    stability: stable
+    description: 构建辅助——wheel 打包前复制数据文件到 agentprecept/
+  setup.cfg:
+    type: config
+    stability: stable
+    description: setuptools package_data 配置
+  MANIFEST.in:
+    type: config
+    stability: stable
+    description: sdist 打包清单
   Makefile:
     type: config
     stability: stable
@@ -114,24 +134,16 @@ structure:
       - L2_D01
     children:
     - __init__.py
+    - __main__.py
     - cli.py
     - mcp_server.py
-    - gnhf_task.py
-  scripts/:
-    type: package
-    stability: critical
-    description: 核心引擎（sync-graph 6维/basic-audit 15维/ripple_check/design_gate_check/init）
-    design_docs:
-      - L2_D01
-    children:
-    - sync-graph.py
-    - basic-audit.py
+    - basic_audit.py
+    - sync_graph.py
     - design_gate_check.py
-    - check-naming.py
-    - graph-to-mermaid.py
-    - init.ps1
-    - init.sh
-    - README.md
+    - check_naming.py
+    - ripple_check.py
+    - graph_to_mermaid.py
+    - gnhf_task.py
   templates/:
     type: package
     stability: stable
@@ -233,6 +245,12 @@ relations:
   type: read
 # 构建/配置 → 代码 (config)
 - from: pyproject.toml
+  to: agentprecept/
+  type: config
+- from: build-data.ps1
+  to: agentprecept/
+  type: write
+- from: setup.cfg
   to: agentprecept/
   type: config
 - from: .github/workflows/audit.yml

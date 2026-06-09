@@ -24,6 +24,10 @@ Thumbs.db
 .codewhale/
 .deepseek/
 
+# Build artifacts
+build/
+dist/
+
 # agent-compass 开发者元信息（不发布）
 docs/HANDOFF.md
 docs/MEMORY.md

@@ -19,7 +19,10 @@
 - 分支纪律：涉及架构/重命名/多文件（>10 文件）的变更必须在独立分支上执行
 - 自选维度检查：每 5 轮对话检查自选维度是否退化
 - 版本规则：严格 semver，PATCH 修 bug 累积 3+ 发版，MINOR 每个功能独立发版，MAJOR 破坏性变更
+- ⏳ 待补检测：会话首次启动时，若 docs/ 中 ⏳ 待撰写状态的文档超过 3 份，Agent 应主动提醒"有 N 份文档待补充，要我填充吗？"
+- 狗粮检查：agentprecept 自身项目必须通过自检：① L2_D01 反映当前架构 ② init 脚本引用的 templates/ 文件全部存在 ③ project-graph relations 不为空 ④ AGENTS/SKILL/instructions 关键规则一致
 - 批量创建文件 > 15 个时 → 分子代理并行（单个子代理 ≤ 15 文件，超时 180s。依据：世界模拟器 37 文件迁移时 230s 超时）
+- 模板外脑：docs/ 只有核心 8 文件。需要更多模板时从 agentprecept templates/（37 个）和 methodology/（16 篇）按需取用
 - MCP Server：`python -m agentprecept.mcp_server`，6 个 tool（query/audit/diff/decision/handoff/design_gate），配置见 docs/mcp-tools.md
 - audit：`agentprecept audit --gate` 15 维自动化 + 4 维自选清单提示
 - 首次安装 → `agentprecept setup` 一键完成初始化 + MCP 配置指南
@@ -37,6 +40,30 @@ Agent 不得等待提醒、不得跳过、不得事后补做。Auto-Pilot 优先
 ### 讨论阶段拦截
 
 用户提功能建议/讨论方案时→先整理要点→标注[NEEDS_HUMAN_REVIEW]→等确认→再进设计阶段。即使用户说"先试试"也必须先出方案要点。纯技术细节(命名/结构)由 Agent 自行决定，多方案选型/UX变更/外部信息必须问用户。
+
+### 目标驱动执行（Karpathy 原则）
+
+```
+不是 "加验证"     → "写测试覆盖非法输入，然后让它们通过"
+不是 "修复 bug"   → "写测试复现 → 测试通过 → 修复完成"
+每个任务 = 可验证目标 + 验证方法。循环直到验证通过。
+```
+
+### 防偷懒（Anti-Laziness）
+
+- 审计时：必须实际运行 `agentprecept audit`；若 CLI 不可用则运行 `python scripts/basic-audit.py`。不许凭记忆说"之前确认过"
+- 验证时：必须读回写入的文件内容。不许假设"写成功了"
+- 跨文件引用时：必须 `grep` 验证路径存在。不许凭记忆说"应该有"
+- 工具失败时：报告中标注 [无法验证]。不许跳过也不许造假
+- **审计缓存陷阱**：MCP tool 返回 TOOL_RESULT_REF（缓存引用）时，必须重新获取实际结果——不许把缓存引用当成"已审计"。审计结论必须来自本会话的工具实际输出
+- git 操作异常时：index.lock 残留 → `del /f .git\index.lock` (Windows) 或 `rm .git/index.lock`；commit 失败 → 检查未追踪冲突文件
+
+### 并行安全
+
+- 修改共享模块前 → 检查 HANDOFF 并行状态
+- 如果 locked → 等待或选其他模块
+- 如果 free → HANDOFF 加 [LOCKED] 条目
+- `project-graph.yaml` 可选字段：`locked_by` / `locked_until`
 
 ### 首次邂逅检测（Auto-Pilot）
 
@@ -85,6 +112,8 @@ L{Level}_{Category}{NN}_{Slug}_{Title}.md
 ```
 
 分类码 A-P。详见 methodology/M3_C00_naming_命名即导航.md。
+
+**弹性条款**：项目多版本共存、外部生成文件允许偏离格式，偏离时在 HANDOFF 中标注原因。
 
 ### 文档状态
 

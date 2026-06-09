@@ -10,9 +10,10 @@ foreach ($f in "AGENTS.md","SKILL.md","README.md","pyproject.toml") {
     Copy-Item (Join-Path $src $f) $dst -Force
 }
 
-foreach ($d in "templates","methodology","skills","scripts","examples","reference") {
+foreach ($d in "templates","methodology","skills","examples","reference") {
     $from = Join-Path $src $d
     $to   = Join-Path $dst $d
+    if (-not (Test-Path $from)) { continue }
     if (Test-Path $to) { Remove-Item -Recurse -Force $to }
     New-Item -ItemType Directory -Path $to -Force | Out-Null
     Copy-Item "$from\*" $to -Recurse -Force

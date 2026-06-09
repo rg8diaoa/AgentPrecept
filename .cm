@@ -1,7 +1,1 @@
-fix: docs/ ripple fixes — directory tree + glossary methodology refs
-  
-L1_A01: scripts/ description (core → agentprecept/, stubs in scripts/)
-L1_C01: script feature row (split agentprecept/ vs scripts/)
-L1_B01: methodology/03/04/15 → M1_A01/M4_D00/M4_D02
-AGENTS.md + SKILL.md: methodology/04 → M4_D00
-MEMORY.md: ripple-check lesson (code + docs + root files)
+fix: add MANIFEST.in, setup.cfg to dogfood skip; HANDOFF code-block label

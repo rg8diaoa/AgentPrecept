@@ -17,7 +17,7 @@
 
 **规则**：发版铁律 + 波及检查铁律。
 
-```
+```text
 GitHub: v0.4.6 tag (9 commits)
 PyPI:   agentprecept==0.4.6
 wheel:  7 .py 文件

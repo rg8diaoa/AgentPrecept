@@ -326,7 +326,7 @@ def check_dogfood(docs_dir: str) -> list[dict]:
         root_files = set()
         for f in project_root.iterdir():
             name = f.name
-            if name.startswith(".") or name in ("__pycache__", "agent_compass.egg-info", "agentprecept.egg-info", "diag-result.json", "build", "dist", ".pytest_cache"):
+            if name.startswith(".") or name in ("__pycache__", "agent_compass.egg-info", "agentprecept.egg-info", "diag-result.json", "build", "dist", ".pytest_cache", "MANIFEST.in", "setup.cfg", "build-data.ps1", "init.ps1", "init.sh"):
                 continue
             root_files.add(name + "/" if f.is_dir() else name)
         graph_keys = set(structure.keys())

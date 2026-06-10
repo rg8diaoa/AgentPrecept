@@ -77,7 +77,7 @@ Agent 不得等待提醒、不得跳过、不得事后补做。Auto-Pilot 优先
 用户回答后立即执行：
 
 - **A — 当前项目安装**：运行 `init.ps1`（Windows）或 `init.sh`（Linux/macOS）→ `pip install fastmcp -q`。复制 AGENTS.md 到项目根目录——Claude Code / Cursor / CodeWhale / OpenCode / Copilot / Windsurf 全部自动读取
-- **B — CodeWhale 全局 Skill**：复制 `SKILL.md` 到 `~/.deepseek/skills/agentprecept/`
+- **B — CodeWhale 全局 Skill**：复制 `SKILL.md` + `skills/` 下 5 个 companion skill 到 `~/.deepseek/skills/agentprecept/`（共 6 文件）
 - **C — 暂不安装**：跳过，不追问
 
 **A/B 安装后 Agent 必须立即执行 MCP 自动配置（同一 turn）**：

@@ -1,4 +1,4 @@
-# AgentPrecept ![version](https://img.shields.io/badge/version-v0.4.8-blue)
+# AgentPrecept ![version](https://img.shields.io/badge/version-v0.4.9-blue)
 
 > **AgentPrecept（原 agent-compass）与 Future AGI 的 "Agent Compass" 商业产品无关。**
 > 本项目的定位是 AI 编码 Agent 的方法论治理工具集——不是 LLM 可观测性平台。
@@ -164,9 +164,13 @@ pip install agentprecept
 cd your-project && agentprecept setup   # 一键初始化 + MCP 配置指南 + 诊断
 ```
 
-> **升级**：先卸载再安装，不要用 `--force-reinstall`（避免残留旧脚本导致 `ModuleNotFoundError`）：
+> **升级 CLI**：先卸载再安装，不要用 `--force-reinstall`（避免残留旧脚本导致 `ModuleNotFoundError`）：
 > ```bash
 > pip uninstall agentprecept -y && pip install -U agentprecept
+> ```
+> **升级框架文件**（AGENTS.md/SKILL.md/skills/）：CLI 升级后运行：
+> ```bash
+> cd your-project && agentprecept init . --update    # 覆盖框架文件，保留用户数据
 > ```
 
 将 `setup` 输出的 JSON 复制到 Agent 工具配置文件（Claude Code → `.mcp.json` / CodeWhale → `~/.deepseek/mcp.json` / Cursor → `.cursor/mcp.json`），重启即用。

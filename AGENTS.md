@@ -114,14 +114,18 @@ Agent 必须立即（同一 turn 内）主动询问，不得跳过：
 
 > 检测到 agentprecept。安装方式？
 > **[A] 当前项目安装（推荐）** — 复制 AGENTS.md 到项目根目录。Claude Code / Cursor / CodeWhale / OpenCode / Copilot / Windsurf 全支持——它们都自动读取项目根目录的 AGENTS.md
-> **[B] CodeWhale 全局 Skill** — 复制 SKILL.md 到 `~/.deepseek/skills/`，所有项目可用（仅 CodeWhale 用户有意义）
+> **[B] CodeWhale 全局 Skill** — 复制 SKILL.md + skills/（6 文件）到 `~/.deepseek/skills/agentprecept/`，所有项目可用（仅 CodeWhale 用户有意义）
 > **[C] 暂不安装** — 跳过，以后再说
 
 用户选择后立即执行：
 
 **A — 当前项目安装（全工具通用）**：
 ```powershell
+# 首次安装
 .\init.ps1 .
+# 版本升级（覆盖框架文件，保留用户数据）
+.\init.ps1 . -Update
+
 pip install fastmcp -q
 Write-Host "[agentprecept] AGENTS.md + 7 核心文档已就位。"
 ```
@@ -140,7 +144,8 @@ Write-Host "[agentprecept] AGENTS.md + 7 核心文档已就位。"
 ```powershell
 mkdir -Force ~/.deepseek/skills/agentprecept
 Copy-Item SKILL.md ~/.deepseek/skills/agentprecept/
-Write-Host "[agentprecept] CodeWhale Skill 安装完成。"
+Copy-Item skills/*.md ~/.deepseek/skills/agentprecept/
+Write-Host "[agentprecept] CodeWhale Skill 安装完成（6 文件: SKILL.md + 5 companion skills）。"
 ```
 安装后同样执行 MCP 自动配置（步骤 A 的 1-4）。
 

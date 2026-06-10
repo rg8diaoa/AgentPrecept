@@ -1,5 +1,21 @@
 # 变更日志
 
+## [0.4.9] — 2026-06-10
+
+### 安全修复
+
+- **init 幂等保护**：`Copy-Item`/`cp` 无条件覆盖 → 逐文件存在性检查。已存在则 `[SKIP]` 跳过，防止已有项目 HANDOFF/MEMORY/project-graph 被模板覆盖导致数据丢失
+- **init 双模式拆分**：默认模式幂等安装（SKIP 已存在文件）；`-Update`/`--update` 模式覆盖框架文件（AGENTS.md/SKILL.md/skills/），用户数据（docs/ 下 7 文件）永不覆盖
+- **选项 B 安装扩展**：CodeWhale 全局 Skill 安装从单文件（SKILL.md）扩展为 6 文件（SKILL.md + skills/ 下 5 个 companion skill）
+
+### 文档
+
+- **AGENTS.md**：选项 A 补充 `-Update` 升级用法；选项 B 安装命令从 1 文件扩展为 6 文件
+- **SKILL.md**：选项 B 描述同步更新
+- **L4_O01**：追加 init 双模式设计依据
+
+---
+
 ## [0.4.7] — 2026-06-09
 
 ### 修复

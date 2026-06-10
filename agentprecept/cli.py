@@ -63,7 +63,7 @@ if [ "$CHANGED_CODE_FILES" -gt 15 ] 2>/dev/null; then
 fi
 
 # --- Gate 4: NEEDS_HUMAN_REVIEW ---
-REVIEW_TAGGED=$(git diff --cached --name-only | xargs grep -l '\[NEEDS_HUMAN_REVIEW\]' 2>/dev/null)
+REVIEW_TAGGED=$(git diff --cached -U0 | grep '^+.*\[NEEDS_HUMAN_REVIEW\]')
 if [ -n "$REVIEW_TAGGED" ]; then
     echo ""
     echo "[AgentPrecept] WARNING: staged files contain [NEEDS_HUMAN_REVIEW]"
